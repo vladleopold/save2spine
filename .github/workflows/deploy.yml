@@ -40,5 +40,5 @@ jobs:
           project: "js2spine-save2spineo-73"
           entrypoint: "jsr:@deno/nextjs-start"
           root: "."
-          include: .next, public
+          
           
