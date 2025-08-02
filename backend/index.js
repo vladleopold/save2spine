@@ -19,7 +19,9 @@ const projects = [
         "id": 1,
         "title": "",
         "description": "treehouse  - spine. ( 10h )",
-        "images": ["https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUybTgzcmZveWk4YzQxZTN5YWYwemtxcW5wZG0xd2pxeWpxZHZvNmFkciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/BerqIjRJo79qKepITt/giphy.webp"]
+        "images": ["https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUybTgzcmZveWk4YzQxZTN5YWYwemtxcW5wZG0xd2pxeWpxZHZvNmFkciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/BerqIjRJo79qKepITt/giphy.webp"
+          , "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyZndncG9pdTU4ZG5sd2RkZjZ0ajg2N2lrbG91dndmcjFxMms1YnF2OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1oEdjQdlOWqfDnBEP0/giphy.webp"
+        ]
     },
     {
         "id": 2,
@@ -32,14 +34,18 @@ const projects = [
     {
         "id": 3,
         "title": "",
-        "description": "",
-        "images": ["http://spine-animator.ho.ua/gif/casinoxinst.gif"]
+        "description": "health and damge  - spine ( 6h )",
+        "images": ["https://media1.giphy.com/media/v1.Y2lkPTZjMDliOTUyMTIyaW50YmJqdmdjZ2VxcHg5MTlrcmw5amdyczR2bmx2cG5xcXJnZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/tYeXaF0YNoYijlDzLv/giphy.webp"
+            , "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUycWY0MnN2Y3FjbWU4dWhucnBlM2pnNm5zcjh0d2ZzdzJ6Nzg4c2M3YSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4lOcXKbyMQTHYYHBeg/giphy.webp"
+            , "https://media1.giphy.com/media/v1.Y2lkPTZjMDliOTUydGhkZGhzbDJrZW40ajQxc3Z5a2xxNDhwcmVqZHFheGJxamM0Z2swcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4Bf7khDZyamqsPXqTJ/giphy.webp"
+            , "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUycno1MXA3NnV1aXZ2cWNvdGozeWd4ZW5ldjhyaG1iOXc5aDVqMjQ2dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Fx2QfvGT2z1LWnpM4F/giphy.webp"
+        ]
     },
     {
         "id": 4,
         "title": "",
-        "description": "rodeo  - spine ( 5h )",
-        "images": ["https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUybmRhaXdxY3B3cmpra2w2em1ibGI2Z283bmI0OXBma3BzY2E3OWg0MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cMy5GaRRTmz01HMbyC/giphy.webp"]
+        "description": "slot high symbol  - spine ( 8h )",
+        "images": ["https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyODBhNW12NGNpOWh2am05czFsMnM3N2h6NzlpM2VjaXJndzg0N2d5ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/a9Cx1jkCyHGQmcTadG/giphy.webp"]
     },
     {
         "id": 5,
