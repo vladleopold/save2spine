@@ -13,15 +13,15 @@ const projects = [
     "id": 1,
     "title": "",
     "description": "treehouse  - spine. ( 10h )",
-    "images": ["http://spine-animator.ho.ua/gif/treehouse.webm", ""]
+    "images": ["http://https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUybTgzcmZveWk4YzQxZTN5YWYwemtxcW5wZG0xd2pxeWpxZHZvNmFkciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/BerqIjRJo79qKepITt/giphy.webp", ""]
   },
   {
     "id": 2,
     "title": "",
-    "description": "",
-    "images": ["http://spine-animator.ho.ua/gif/chicken.gif",
-      "http://spine-animator.ho.ua/gif/chicken_mesh.gif",
-    "http://spine-animator.ho.ua/gif/chicken_skel.gif"]
+    "description": "chicken - spine ( 8h )",
+    "images": ["http://spine-https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUydW13dDNuYnRobm1ycDlhNWtsYW91bmFldDN6YzBid3gwOHltNjg1byZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/TZZFoJ2KTCKag8SHCG/giphy.webp.ho.ua/gif/chicken.gif",
+      "https://media4.giphy.com/media/v1.Y2lkPTZjMDliOTUyMWVwYjVwOWhvdzA1NG83c3l3MHphdG9rcW93dWFvcnBnMm9oYm45eiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cjw9Af81qWURmBaYv6/giphy.webp",
+    "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdnpxaGIyb3VoNXg3a3FhNW5tY2N2MzRyaGtycGRyM210MzZ0cDU2cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/IaXx3aUshgmAOsv4Di/giphy.webp"]
   },
   {
     "id": 3,
@@ -33,7 +33,7 @@ const projects = [
     "id": 4,
     "title": "",
     "description": "rodeo  - spine ( 5h )",
-    "images": ["http://spine-animator.ho.ua/gif/rodeo.gif", ""]
+    "images": ["https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUybmRhaXdxY3B3cmpra2w2em1ibGI2Z283bmI0OXBma3BzY2E3OWg0MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cMy5GaRRTmz01HMbyC/giphy.webp", ""]
   },
   {
     "id": 5,
@@ -104,8 +104,8 @@ const projects = [
   {
     "id": 15,
     "title": "",
-    "description": "",
-    "images": ["", ""]
+    "description": "emmybomb",
+    "images": ["https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdm55bTlpZXIyc3pwZHA3cHU5dzdhNWFiNGZrZDFhN242aDk1dWdmdyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zCbTuEC6A9h9Ny5tAX/giphy.webp", ""]
   },
   {
     "id": 16,
