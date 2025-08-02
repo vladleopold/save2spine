@@ -64,29 +64,31 @@ const projects = [
         "id": 7,
         "title": "idle slot symbol. - spine",
         "description": "",
-        "images": ["http://spine-animator.ho.ua/gif/giphy.webp"]
+        "images": ["https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUybTY3YmplcDU0bHN0azluZGhxZTI0MzRhbHV2eDU2Mmhkam1yZDAxbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cEwGaZHpaekqQ7joaP/giphy.webp"]
     },
     {
         "id": 8,
         "title": "",
         "description": "hammer. - spine",
-        "images": ["http://spine-animator.ho.ua/gif/hammer.gif"]
+        "images": ["https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzk1eXl2aXhvdmg2NGFsdHFzZzQwdTQxY2YycG80bDl5aThyMHZrdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Yoyk8VjdEY3EH9DD14/giphy.webp"]
     },
     {
         "id": 9,
         "title": "",
-        "description": "knowledge  - spine ",
-        "images": ["http://spine-animator.ho.ua/gif/knowledge3.gif",
-            "http://spine-animator.ho.ua/gif/knowledge1.gif",
-            "http://spine-animator.ho.ua/gif/knowledge2.gif"
+        "description": "knowledge  - spine ( 8h ) ",
+        "images": ["https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyZzBpdnJ1NXJta2UybjhtMnNqZHBhMGloZXgxbHl1dTJkbG5ybjBhayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/KOUksd5twlFDRmBM67/giphy.webp",
+            "https://media4.giphy.com/media/v1.Y2lkPTZjMDliOTUyNWltb2RsZGdqYmx0cWdpdXRmdDE1NWJ2YTU4OHI3YW11MTc3cTN6NyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/oYEzt0WBCERnj5B53D/giphy.webp",
+            "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExOTVjNm91dDVueDNiYWJ1N202NzE5dzJpbndkdXF2eDBzNXdpbzlqdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Nyb4aYLjI7x5qOmRu4/giphy.webp"
         ]
     },
     {
         "id": 10,
         "title": "",
-        "description": "",
-        "images": ["http://spine-animator.ho.ua/gif/cats.webp",
-            "http://spine-animator.ho.ua/gif/knowledge4.webp"]
+        "description": "pets cards  - spine ( 4h )",
+        "images": ["https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyeXk1aDQ1ZmFzNG8wZjJpOWhocHA5aXJ2bmdqeHByb3g0aWRsaTE1cSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Vs3SXgqVHKq2c3PYWR/giphy.webp",
+            "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXc3OWg5cmNxdDZyZDVza2lsMXJvc3FuZWhwc3F3ZnM2NXhhb2V5ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2kzZSnsldkTnRvXKPg/giphy.webp",
+            "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyMnhpa20yaGRyczBhNHUyNmM3cHh0cjFvaXA1OHZvejAyamFwNms1MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/X8K3Ytja5MJ2BR26Lu/giphy.webp"
+        ]
     },
     {
         "id": 11,
@@ -98,8 +100,8 @@ const projects = [
     {
         "id": 12,
         "title": "",
-        "description": "",
-        "images": []
+        "description": "french fontans hall  - spine ( 8h )",
+        "images": ["https://media1.giphy.com/media/v1.Y2lkPTZjMDliOTUydzBmczBnemR4Mmk1aXI5dm14c2xwc3dvZ2gzczVna2J0bnd5ajlvcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/oC9P648C0N9ULGUTmX/giphy.webp"]
     },
     {
         "id": 13,
