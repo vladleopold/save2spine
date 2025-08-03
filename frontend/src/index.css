@@ -49,9 +49,10 @@
   position: fixed;
   top: 0;
   left: 0;
-  margin: 10%;
+  margin-left: 10%;
+  margin-right: 10%;
   width: 80%;
-  height: 90vh; /* Устанавливаем высоту на весь экран */
+  height: 100vh; /* Устанавливаем высоту на весь экран */
   display: flex;
   flex-direction: column;
   background-color: white;
