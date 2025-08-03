@@ -102,3 +102,37 @@
   object-fit: cover;
   border-radius: 8px;
 }
+
+/* Стили для кнопок переключения категорий */
+.prev-button,
+.next-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.prev-button {
+  left: 10px;
+}
+
+.next-button {
+  right: 10px;
+}
+
+/* Ограничение по высоте для выбранных изображений */
+.selected-image {
+  max-height: 70vh; /* Ограничиваем высоту до 70% высоты окна */
+  width: auto;
+  object-fit: contain; /* Сохраняем пропорции изображения */
+}

@@ -88,7 +88,11 @@ const projects = [
         "id": 10,
         "title": "",
         "description": "pets cards  - spine ( 4h )",
-        "images": ["https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyeXk1aDQ1ZmFzNG8wZjJpOWhocHA5aXJ2bmdqeHByb3g0aWRsaTE1cSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Vs3SXgqVHKq2c3PYWR/giphy.webp",
+        "images": [
+            {
+                "src": "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyeXk1aDQ1ZmFzNG8wZjJpOWhocHA5aXJ2bmdqeHByb3g0aWRsaTE1cSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Vs3SXgqVHKq2c3PYWR/giphy.webp",
+                "isSelected": true // Указываем, что это изображение выделено
+            },
             "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXc3OWg5cmNxdDZyZDVza2lsMXJvc3FuZWhwc3F3ZnM2NXhhb2V5ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2kzZSnsldkTnRvXKPg/giphy.webp",
             "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyMnhpa20yaGRyczBhNHUyNmM3cHh0cjFvaXA1OHZvejAyamFwNms1MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/X8K3Ytja5MJ2BR26Lu/giphy.webp"
         ]
@@ -243,7 +247,12 @@ const projects = [
         "id": 35,
         "title": "",
         "description": "",
-        "images": []
+        "images": [
+            {
+                "src": "https://example.com/image.jpg",
+                "isSelected": true // Указываем, что это изображение выделено
+            }
+        ]
     },
     {
         "id": 36,
