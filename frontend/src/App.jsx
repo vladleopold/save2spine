@@ -165,6 +165,17 @@ export default function App() {
     trackMouse: true
   });
 
+  useEffect(() => {
+    if (activeProject !== null) {
+      const articlePopup = document.querySelector('.article-popup');
+      if (articlePopup) {
+        // Скроллим на 250px вниз и сразу возвращаемся в начало
+        articlePopup.scrollTo({ top: 250, behavior: 'smooth' });
+        articlePopup.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  }, [activeProject]);
+
   return (
     <div className="p-4 relative z-10">
       <ParticlesBackground />
@@ -193,8 +204,13 @@ export default function App() {
             .filter(({ validImages }) => validImages.length > 0)
             .map(({ project, idx, validImages }) => {
               const src = validImages[0];
+              const isFullWidth = project.isFullWidth; // Условие для полноразмерного изображения
               return (
-                <div key={project.id} onClick={() => openProject(idx)}>
+                <div
+                  key={project.id}
+                  onClick={() => openProject(idx)}
+                  className={isFullWidth ? 'full-width-image' : ''} // Применяем класс для полноразмерного изображения
+                >
                   <img
                     src={src}
                     alt={project.description || 'project'}
@@ -211,48 +227,43 @@ export default function App() {
         </Masonry>
       )}
 
-      {/* Popup: все фото проекта в столбик + свайп для смены проекта */}
+      {/* Новое модальное окно "страница/статья" с дополнительными картинками, описанием и заголовком */}
       {activeProject !== null && projects[activeProject] && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center z-50 overflow-auto"
-          onClick={closePopup}
-          {...swipeHandlers}
-        >
+        <>
+          <div className="article-popup-overlay" onClick={closePopup}></div>
           <div
-            className="bg-white rounded-lg p-4 max-w-xl w-full flex flex-col items-center relative"
-            onClick={e => e.stopPropagation()}
+            className="article-popup"
+            {...swipeHandlers}
+            onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex w-full justify-between mb-2">
-              <button
-                onClick={() => setActiveProject((prev) => (prev - 1 + projects.length) % projects.length)}
-                className="bg-gray-200 rounded px-3 py-1"
-                aria-label="Предыдущий проект"
-              >
-                ←
-              </button>
-              <button onClick={closePopup} className="bg-red-600 text-white rounded px-3 py-1">Закрыть</button>
-              <button
-                onClick={() => setActiveProject((prev) => (prev + 1) % projects.length)}
-                className="bg-gray-200 rounded px-3 py-1"
-                aria-label="Следующий проект"
-              >
-                →
-              </button>
-            </div>
-            <h2 className="font-bold text-xl mb-2">{projects[activeProject].title}</h2>
-            <p className="text-gray-700 mb-4 text-center">{projects[activeProject].description}</p>
-            <div className="flex flex-col gap-4 w-full items-center">
-              {getValidImages(activeProject).map((src, idx) => {
-                const isJoyvi1 = src.includes('joyvi1.gif');
-                return (
-                  <div key={idx} style={isJoyvi1 ? { maxWidth: 300, width: '100%' } : { width: '100%' }}>
-                    <FadeImg src={src} />
-                  </div>
-                );
-              })}
+            <button
+              className="close-button"
+              onClick={closePopup}
+              aria-label="Закрыть"
+            >
+              ×
+            </button>
+            <h2 className="font-bold text-2xl mb-4">
+              {projects[activeProject].title}
+            </h2>
+            <p className="mb-4">{projects[activeProject].description}</p>
+            <img
+              src={getValidImages(activeProject)[0]}
+              alt={projects[activeProject].title || 'Изображение'}
+              className="mb-4"
+            />
+            <div className="additional-images">
+              {getValidImages(activeProject).slice(1).map((src, idx) => (
+                <img
+                  key={idx}
+                  src={src}
+                  alt={`Дополнительное изображение ${idx + 1}`}
+                  className="mb-4"
+                />
+              ))}
             </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

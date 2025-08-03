@@ -29,11 +29,13 @@ const projects = [
         "description": "chicken - spine ( 8h )",
         "images": ["https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUydW13dDNuYnRobm1ycDlhNWtsYW91bmFldDN6YzBid3gwOHltNjg1byZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/TZZFoJ2KTCKag8SHCG/giphy.webp",
             "https://media4.giphy.com/media/v1.Y2lkPTZjMDliOTUyMWVwYjVwOWhvdzA1NG83c3l3MHphdG9rcW93dWFvcnBnMm9oYm45eiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cjw9Af81qWURmBaYv6/giphy.webp",
-            "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdnpxaGIyb3VoNXg3a3FhNW5tY2N2MzRyaGtycGRyM210MzZ0cDU2cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/IaXx3aUshgmAOsv4Di/giphy.webp"]
+            "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdnpxaGIyb3VoNXg3a3FhNW5tY2N2MzRyaGtycGRyM210MzZ0cDU2cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/IaXx3aUshgmAOsv4Di/giphy.webp"
+        , "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyMXg2MnZybmlzMjVuaHgycW1leTkxODl1MHp6dzB6MjZwZXEyODJhaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3zLTv0ikwgmqjWLdqE/giphy.webp"
+        ]
     },
         {
         "id": 3,
-        "title": "idle slot symbol. - spine",
+        "title": "idle slot symbol. - spine  ( 1h )",
         "description": "",
         "images": ["https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUybTY3YmplcDU0bHN0azluZGhxZTI0MzRhbHV2eDU2Mmhkam1yZDAxbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cEwGaZHpaekqQ7joaP/giphy.webp"]
     },
@@ -70,7 +72,7 @@ const projects = [
     {
         "id": 8,
         "title": "",
-        "description": "hammer. - spine",
+        "description": "hammer. - spine  ( 4h )",
         "images": ["https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzk1eXl2aXhvdmg2NGFsdHFzZzQwdTQxY2YycG80bDl5aThyMHZrdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Yoyk8VjdEY3EH9DD14/giphy.webp"]
     },
     {
@@ -119,19 +121,19 @@ const projects = [
     {
         "id": 15,
         "title": "",
-        "description": "emmybomb",
+        "description": "emmybomb  - spine ( 8h )",
         "images": ["https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdm55bTlpZXIyc3pwZHA3cHU5dzdhNWFiNGZrZDFhN242aDk1dWdmdyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zCbTuEC6A9h9Ny5tAX/giphy.webp"]
     },
     {
         "id": 16,
-        "title": "",
-        "description": "",
+        "title": "start and end game animation - spine ( 5h )",
+        "description": "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyeHI4cnJhcW9mYjBiYTNobjZvcGEzdmllMnk4MWl6em1uc3NuOGFlNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/YvioIzaF6qmxG31x7s/giphy.webp",
         "images": []
     },
     {
         "id": 17,
-        "title": "",
-        "description": "",
+        "title": "music player - spine ( 4h )",
+        "description": "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyenZ5NGtxbzBreTh1MHB0cnd1bGJqanBxNzQ3N2lpajNxbmx5dmlkMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/PNpH7UFLQNxpEHVNSU/giphy.webp",
         "images": []
     },
     {
@@ -247,7 +249,8 @@ const projects = [
         "id": 36,
         "title": "",
         "description": "",
-        "images": ["http://spine-animator.ho.ua/gif/joyvi1.gif"]
+        "images": ["http://spine-animator.ho.ua/gif/joyvi1.gif"],
+        "isFullWidth": true // Указываем, что этот проект должен занимать все колонки
     },
     {
         "id": 37,
