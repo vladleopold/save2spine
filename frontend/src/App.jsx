@@ -251,6 +251,7 @@ export default function App() {
               src={getValidImages(activeProject)[0]}
               alt={projects[activeProject].title || 'Изображение'}
               className="mb-4"
+              {...swipeHandlers}
             />
             <div className="additional-images">
               {getValidImages(activeProject).slice(1).map((src, idx) => (
@@ -259,6 +260,7 @@ export default function App() {
                   src={src}
                   alt={`Дополнительное изображение ${idx + 1}`}
                   className="mb-4"
+                  {...swipeHandlers}
                 />
               ))}
             </div>
