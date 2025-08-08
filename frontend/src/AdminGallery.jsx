@@ -110,11 +110,29 @@ function AdminGallery() {
                             cursor: 'grab'
                           }}
                         >
-                          <td
-                            style={{ padding: '2px 8px', fontWeight: 'bold', color: '#22c55e', cursor: 'pointer', textDecoration: 'underline' }}
-                            onClick={() => handleIdClick(id)}
-                          >{id}</td>
-                          <td style={{ padding: '2px 8px', color: '#555' }}>{description}</td>
+                          <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#22c55e' }}>
+                            {id}
+                          </td>
+                          <td style={{ padding: '2px 8px', color: '#555', display: 'flex', alignItems: 'center', gap: 8 }}>
+                            {description}
+                            <button
+                              title="Редактировать"
+                              style={{
+                                background: 'none',
+                                border: 'none',
+                                cursor: 'pointer',
+                                padding: 0,
+                                marginLeft: 8,
+                                display: 'flex',
+                                alignItems: 'center'
+                              }}
+                              onClick={() => handleIdClick(id)}
+                            >
+                              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14.85 2.85a1.2 1.2 0 0 1 1.7 1.7l-1.1 1.1-1.7-1.7 1.1-1.1zm-2.2 2.2l1.7 1.7-8.1 8.1c-.1.1-.2.2-.3.3l-2.1.7c-.3.1-.6-.2-.5-.5l.7-2.1c.1-.1.2-.2.3-.3l8.1-8.1z" fill="#22c55e"/>
+                              </svg>
+                            </button>
+                          </td>
                         </tr>
                       )}
                     </Draggable>
