@@ -17,6 +17,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06); /* Тень для попапа */
   z-index: 1000;
   overflow: auto; /* Прокрутка для содержимого */
+  border-radius: 8px; /* Скругленные углы */
 }
 
 /* Стили для изображений внутри модального окна */
@@ -49,10 +50,9 @@
   position: fixed;
   top: 0;
   left: 0;
-  margin-left: 10%;
-  margin-right: 10%;
+  margin: 10%;
   width: 80%;
-  height: 100vh; /* Устанавливаем высоту на весь экран */
+  height: 90vh; /* Устанавливаем высоту на весь экран */
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -101,38 +101,4 @@
   height: auto;
   object-fit: cover;
   border-radius: 8px;
-}
-
-/* Стили для кнопок переключения категорий */
-.prev-button,
-.next-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  z-index: 1001;
-}
-
-.prev-button {
-  left: 10px;
-}
-
-.next-button {
-  right: 10px;
-}
-
-/* Ограничение по высоте для выбранных изображений */
-.selected-image {
-  max-height: 70vh; /* Ограничиваем высоту до 70% высоты окна */
-  width: auto;
-  object-fit: contain; /* Сохраняем пропорции изображения */
 }

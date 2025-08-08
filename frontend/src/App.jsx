@@ -243,20 +243,6 @@ export default function App() {
             >
               ×
             </button>
-            <button
-              className="prev-button"
-              onClick={() => setActiveProject((prev) => (prev - 1 + projects.length) % projects.length)}
-              aria-label="Предыдущая категория"
-            >
-              ←
-            </button>
-            <button
-              className="next-button"
-              onClick={() => setActiveProject((prev) => (prev + 1) % projects.length)}
-              aria-label="Следующая категория"
-            >
-              →
-            </button>
             <h2 className="font-bold text-2xl mb-4">
               {projects[activeProject].title}
             </h2>
@@ -265,7 +251,6 @@ export default function App() {
               src={getValidImages(activeProject)[0]}
               alt={projects[activeProject].title || 'Изображение'}
               className="mb-4"
-              {...swipeHandlers}
             />
             <div className="additional-images">
               {getValidImages(activeProject).slice(1).map((src, idx) => (
@@ -274,7 +259,6 @@ export default function App() {
                   src={src}
                   alt={`Дополнительное изображение ${idx + 1}`}
                   className="mb-4"
-                  {...swipeHandlers}
                 />
               ))}
             </div>
