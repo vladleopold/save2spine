@@ -158,21 +158,23 @@ export default function App() {
     setActiveImage((prev) => (prev - 1 + validImages.length) % validImages.length);
   };
 
-// swipeable handlers для фото (переключение фото)
-const swipeHandlers = useSwipeable({
-  onSwipedLeft: () => {
-    if (activeProject !== null && getValidImages(activeProject).length > 1) {
-      setActiveImage((prev) => (prev + 1) % getValidImages(activeProject).length);
+  // swipeable handlers для popup
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => setActiveProject((prev) => (prev + 1) % projects.length),
+    onSwipedRight: () => setActiveProject((prev) => (prev - 1 + projects.length) % projects.length),
+    trackMouse: true
+  });
+
+  useEffect(() => {
+    if (activeProject !== null) {
+      const articlePopup = document.querySelector('.article-popup');
+      if (articlePopup) {
+        // Скроллим на 250px вниз и сразу возвращаемся в начало
+        articlePopup.scrollTo({ top: 250, behavior: 'smooth' });
+        articlePopup.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
-  },
-  onSwipedRight: () => {
-    if (activeProject !== null && getValidImages(activeProject).length > 1) {
-      setActiveImage((prev) => (prev - 1 + getValidImages(activeProject).length) % getValidImages(activeProject).length);
-    }
-  },
-  preventDefaultTouchmoveEvent: true,
-  trackMouse: true
-});
+  }, [activeProject]);
 
   return (
     <div className="p-4 relative z-10">
@@ -180,7 +182,7 @@ const swipeHandlers = useSwipeable({
       <div className="flex items-center justify-between mb-4 relative z-10">
         <h1 className="text-2xl font-bold">spine animator portfolio</h1>
         <a
-          href="https://drive.google.com/file/d/1_h0KVlLw2ClgD8xeSn8lNfJpy7jyml1L/view?usp=sharing"
+          href="https://www.google.com/"
           target="_blank"
           rel="noopener noreferrer"
           className="text-2xl font-bold bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition-colors duration-200"
@@ -202,8 +204,13 @@ const swipeHandlers = useSwipeable({
             .filter(({ validImages }) => validImages.length > 0)
             .map(({ project, idx, validImages }) => {
               const src = validImages[0];
+              const isFullWidth = project.isFullWidth; // Условие для полноразмерного изображения
               return (
-                <div key={project.id} onClick={() => openProject(idx)}>
+                <div
+                  key={project.id}
+                  onClick={() => openProject(idx)}
+                  className={isFullWidth ? 'full-width-image' : ''} // Применяем класс для полноразмерного изображения
+                >
                   <img
                     src={src}
                     alt={project.description || 'project'}
@@ -220,13 +227,10 @@ const swipeHandlers = useSwipeable({
         </Masonry>
       )}
 
-      {/* Popup: все фото проекта в столбик + свайп для смены проекта */}
+      {/* Новое модальное окно "страница/статья" с дополнительными картинками, описанием и заголовком */}
       {activeProject !== null && projects[activeProject] && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center z-50 overflow-auto"
-          onClick={closePopup}
-          {...swipeHandlers}
-        >
+        <>
+          <div className="article-popup-overlay" onClick={closePopup}></div>
           <div
             className="article-popup"
             {...swipeHandlers}
@@ -239,6 +243,20 @@ const swipeHandlers = useSwipeable({
             >
               ×
             </button>
+            <button
+              className="prev-button"
+              onClick={() => setActiveProject((prev) => (prev - 1 + projects.length) % projects.length)}
+              aria-label="Предыдущая категория"
+            >
+              ←
+            </button>
+            <button
+              className="next-button"
+              onClick={() => setActiveProject((prev) => (prev + 1) % projects.length)}
+              aria-label="Следующая категория"
+            >
+              →
+            </button>
             <h2 className="font-bold text-2xl mb-4">
               {projects[activeProject].title}
             </h2>
@@ -247,6 +265,7 @@ const swipeHandlers = useSwipeable({
               src={getValidImages(activeProject)[0]}
               alt={projects[activeProject].title || 'Изображение'}
               className="mb-4"
+              {...swipeHandlers}
             />
             <div className="additional-images">
               {getValidImages(activeProject).slice(1).map((src, idx) => (
@@ -255,11 +274,12 @@ const swipeHandlers = useSwipeable({
                   src={src}
                   alt={`Дополнительное изображение ${idx + 1}`}
                   className="mb-4"
+                  {...swipeHandlers}
                 />
               ))}
             </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
