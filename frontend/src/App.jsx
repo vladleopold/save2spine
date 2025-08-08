@@ -158,22 +158,29 @@ export default function App() {
     setActiveImage((prev) => (prev - 1 + validImages.length) % validImages.length);
   };
 
-  // swipeable handlers для popup
-  const swipeHandlers = useSwipeable({
+  // swipeable handlers для popup (переключение категорий)
+  const popupSwipeHandlers = useSwipeable({
+    onSwipedLeft: () => {
+      setActiveProject((prev) => (prev + 1) % projects.length);
+      setActiveImage(0);
+    },
+    onSwipedRight: () => {
+      setActiveProject((prev) => (prev - 1 + projects.length) % projects.length);
+      setActiveImage(0);
+    },
+    trackMouse: true
+  });
+
+  // swipeable handlers для фото (переключение фото)
+  const imageSwipeHandlers = useSwipeable({
     onSwipedLeft: () => {
       if (activeProject !== null && getValidImages(activeProject).length > 1) {
         setActiveImage((prev) => (prev + 1) % getValidImages(activeProject).length);
-      } else {
-        setActiveProject((prev) => (prev + 1) % projects.length);
-        setActiveImage(0);
       }
     },
     onSwipedRight: () => {
       if (activeProject !== null && getValidImages(activeProject).length > 1) {
         setActiveImage((prev) => (prev - 1 + getValidImages(activeProject).length) % getValidImages(activeProject).length);
-      } else {
-        setActiveProject((prev) => (prev - 1 + projects.length) % projects.length);
-        setActiveImage(0);
       }
     },
     trackMouse: true
@@ -247,7 +254,7 @@ export default function App() {
           <div className="article-popup-overlay" onClick={closePopup}></div>
           <div
             className="article-popup"
-            {...swipeHandlers}
+            {...popupSwipeHandlers}
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -279,7 +286,7 @@ export default function App() {
               src={getValidImages(activeProject)[activeImage]}
               alt={projects[activeProject].title || 'Изображение'}
               className="mb-4"
-              {...swipeHandlers}
+              {...imageSwipeHandlers}
             />
             <div className="additional-images">
               {getValidImages(activeProject).map((src, idx) => (
