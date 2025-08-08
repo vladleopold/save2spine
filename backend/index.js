@@ -139,90 +139,6 @@ const projects = [
         "images": []
     },
     {
-        "id": 18,
-        "title": "",
-        "description": "",
-        "images": []
-    },
-    {
-        "id": 19,
-        "title": "",
-        "description": "",
-        "images": []
-    },
-    {
-        "id": 20,
-        "title": "",
-        "description": "",
-        "images": []
-    },
-    {
-        "id": 21,
-        "title": "",
-        "description": "",
-        "images": []
-    },
-    {
-        "id": 22,
-        "title": "",
-        "description": "",
-        "images": []
-    },
-    {
-        "id": 23,
-        "title": "",
-        "description": "",
-        "images": []
-    },
-    {
-        "id": 24,
-        "title": "",
-        "description": "",
-        "images": []
-    },
-    {
-        "id": 25,
-        "title": "",
-        "description": "",
-        "images": []
-    },
-    {
-        "id": 26,
-        "title": "",
-        "description": "",
-        "images": []
-    },
-    {
-        "id": 27,
-        "title": "",
-        "description": "",
-        "images": []
-    },
-    {
-        "id": 28,
-        "title": "",
-        "description": "",
-        "images": []
-    },
-    {
-        "id": 29,
-        "title": "",
-        "description": "",
-        "images": []
-    },
-    {
-        "id": 30,
-        "title": "",
-        "description": "",
-        "images": []
-    },
-    {
-        "id": 31,
-        "title": "",
-        "description": "",
-        "images": []
-    },
-    {
         "id": 32,
         "title": "",
         "description": "",
@@ -240,12 +156,6 @@ const projects = [
         "description": "facebook game - js",
         "images": ["http://spine-animator.ho.ua/gif/facebook.gif",
             "facebook_g"]
-    },
-    {
-        "id": 35,
-        "title": "",
-        "description": "",
-        "images": []
     },
     {
         "id": 36,
