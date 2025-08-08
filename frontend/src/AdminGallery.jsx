@@ -145,27 +145,36 @@ function AdminGallery() {
           </Droppable>
         </DragDropContext>
       </div>
-      <div style={{ flex: 1, background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)' }}>
-        <h2 style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>add/edit item</h2>
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: 12 }}>
-            <label>id: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
-          </div>
-          <div style={{ marginBottom: 12 }}>
-            <label>title: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
-          </div>
-          <div style={{ marginBottom: 12 }}>
-            <label>description: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
-          </div>
-          <div style={{ marginBottom: 12 }}>
-            <label>images (через запятую): <input name="images" type="text" value={form.images} onChange={handleChange} required style={{ width: '100%' }} /></label>
-          </div>
-          <div style={{ marginBottom: 12 }}>
-            <label><input name="isFullWidth" type="checkbox" checked={form.isFullWidth} onChange={handleChange} /> Широкий блок (занимает всю ширину)</label>
-          </div>
-          <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
-        </form>
-        {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
+      <div style={{ flex: 1, background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', display: 'flex', flexDirection: 'column', minHeight: 500 }}>
+        <div style={{ flex: '0 0 auto' }}>
+          <h2 style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>add/edit item</h2>
+          <form onSubmit={handleSubmit}>
+            <div style={{ marginBottom: 12 }}>
+              <label>id: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
+            </div>
+            <div style={{ marginBottom: 12 }}>
+              <label>title: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
+            </div>
+            <div style={{ marginBottom: 12 }}>
+              <label>description: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
+            </div>
+            <div style={{ marginBottom: 12 }}>
+              <label>images (через запятую): <input name="images" type="text" value={form.images} onChange={handleChange} required style={{ width: '100%' }} /></label>
+            </div>
+            <div style={{ marginBottom: 12 }}>
+              <label><input name="isFullWidth" type="checkbox" checked={form.isFullWidth} onChange={handleChange} /> Широкий блок (занимает всю ширину)</label>
+            </div>
+            <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
+          </form>
+          {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
+        </div>
+        <div style={{ flex: '1 1 auto', marginTop: 32, background: '#fffbe6', borderRadius: 8, padding: 16, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+          <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8, color: '#ff9800' }}>Заметки / записник</h3>
+          <textarea
+            placeholder="Оставьте текст на потом, ваши заметки..."
+            style={{ width: '100%', minHeight: 80, resize: 'vertical', borderRadius: 6, border: '1px solid #ffd580', padding: 8, fontSize: 15, background: '#fffbe6', color: '#333' }}
+          />
+        </div>
       </div>
     </div>
   );
