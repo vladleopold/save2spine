@@ -3,7 +3,9 @@ const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+
 app.use(cors());
+app.use(express.json());
 
 
 
@@ -283,12 +285,7 @@ const projects = [
         "images": ["http://spine-animator.ho.ua/gif/sqheigh.gif",
             "http://spine-animator.ho.ua/gif/high_symbols.gif"]
     },
-    {
-        "id": 42,
-        "title": "",
-        "description": "",
-        "images": []
-    },
+    {"id": 42,"title": "","description": "","images": [""]},
     {
         "id": 43,
         "title": "",
@@ -324,17 +321,28 @@ const projects = [
 ];
 
 // Эндпоинт для получения проектов с фото
+
+// Получить проекты
 app.get("/api/images", (req, res) => {
-  // Фильтруем пустые строки и невалидные значения в images
-  const cleanProjects = projects
-    .map(project => ({
-      ...project,
-      images: Array.isArray(project.images)
-        ? project.images.filter(src => typeof src === 'string' && src.trim() !== '')
-        : []
-    }))
-    .filter(project => project.images.length > 0);
-  res.json(cleanProjects);
+    const cleanProjects = projects
+        .map(project => ({
+            ...project,
+            images: Array.isArray(project.images)
+                ? project.images.filter(src => typeof src === 'string' && src.trim() !== '')
+                : []
+        }))
+        .filter(project => project.images.length > 0);
+    res.json(cleanProjects);
+});
+
+// Добавить новый проект (админка)
+app.post("/api/images", (req, res) => {
+    const { id, title, description, images, isFullWidth } = req.body;
+    if (typeof id !== 'number' || !Array.isArray(images)) {
+        return res.status(400).json({ error: "Некорректные данные" });
+    }
+    projects.push({ id, title, description, images, isFullWidth });
+    res.json({ success: true, project: { id, title, description, images, isFullWidth } });
 });
 
 app.listen(PORT, () => {

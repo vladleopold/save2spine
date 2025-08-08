@@ -9,7 +9,7 @@
   left: 50%; /* Центрирование по горизонтали */
   transform: translate(-50%, -50%); /* Сдвиг для точного центрирования */
   width: 90vw; /* Ширина чуть меньше видимой области */
-  height: 90vh; /* Высота чуть меньше видимой области */
+  height: 100vh; /* Высота чуть меньше видимой области */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -50,9 +50,9 @@
   position: fixed;
   top: 0;
   left: 0;
-  margin: 10%;
+  /*margin: 10%;*/
   width: 80%;
-  height: 90vh; /* Устанавливаем высоту на весь экран */
+  height: 100vh; /* Устанавливаем высоту на весь экран */
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -63,7 +63,7 @@
 
 .article-popup img {
   width: 100%;
-  height: auto;
+  height: 100vh;
   object-fit: cover;
   margin-bottom: 20px;
 }
