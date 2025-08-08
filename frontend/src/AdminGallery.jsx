@@ -96,4 +96,4 @@ function AdminGallery() {
   );
 }
 
-/*export default AdminGallery;*/
+export default AdminGallery;
