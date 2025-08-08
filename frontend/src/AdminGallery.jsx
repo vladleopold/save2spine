@@ -10,7 +10,7 @@ function AdminGallery() {
   const [usedIds, setUsedIds] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/images')
+    fetch('https://portfolio-backend-23pv.onrender.com/api/images')
       .then(res => res.json())
       .then(data => setUsedIds(data.map(p => ({ id: p.id, description: p.description }))))
       .catch(() => setUsedIds([]));
@@ -35,7 +35,7 @@ function AdminGallery() {
       isFullWidth: form.isFullWidth
     };
     try {
-      const res = await fetch('http://localhost:3000/api/images', {
+      const res = await fetch('https://portfolio-backend-23pv.onrender.com/api/images', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
