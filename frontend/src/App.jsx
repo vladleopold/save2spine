@@ -158,19 +158,6 @@ export default function App() {
     setActiveImage((prev) => (prev - 1 + validImages.length) % validImages.length);
   };
 
-  // swipeable handlers для popup (переключение категорий)
-  const popupSwipeHandlers = useSwipeable({
-    onSwipedLeft: () => {
-      setActiveProject((prev) => (prev + 1) % projects.length);
-      setActiveImage(0);
-    },
-    onSwipedRight: () => {
-      setActiveProject((prev) => (prev - 1 + projects.length) % projects.length);
-      setActiveImage(0);
-    },
-    trackMouse: true
-  });
-
   // swipeable handlers для фото (переключение фото)
   const imageSwipeHandlers = useSwipeable({
     onSwipedLeft: () => {
@@ -183,6 +170,23 @@ export default function App() {
         setActiveImage((prev) => (prev - 1 + getValidImages(activeProject).length) % getValidImages(activeProject).length);
       }
     },
+    preventDefaultTouchmoveEvent: true,
+    trackMouse: true
+  });
+
+  // swipeable handlers для попапа (переключение фото)
+  const popupSwipeHandlers = useSwipeable({
+    onSwipedLeft: () => {
+      if (activeProject !== null && getValidImages(activeProject).length > 1) {
+        setActiveImage((prev) => (prev + 1) % getValidImages(activeProject).length);
+      }
+    },
+    onSwipedRight: () => {
+      if (activeProject !== null && getValidImages(activeProject).length > 1) {
+        setActiveImage((prev) => (prev - 1 + getValidImages(activeProject).length) % getValidImages(activeProject).length);
+      }
+    },
+    preventDefaultTouchmoveEvent: true,
     trackMouse: true
   });
 
