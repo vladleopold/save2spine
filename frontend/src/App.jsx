@@ -182,7 +182,7 @@ export default function App() {
       <div className="flex items-center justify-between mb-4 relative z-10">
         <h1 className="text-2xl font-bold">spine animator portfolio</h1>
         <a
-          href="https://www.google.com/"
+          href="https://drive.google.com/file/d/1_h0KVlLw2ClgD8xeSn8lNfJpy7jyml1L/view?usp=sharing"
           target="_blank"
           rel="noopener noreferrer"
           className="text-2xl font-bold bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition-colors duration-200"
