@@ -88,7 +88,7 @@ function AdminGallery() {
   return (
     <div style={{ display: 'flex', maxWidth: 900, margin: '40px auto', gap: 32 }}>
       <div style={{ minWidth: 220, background: '#f6f6f6', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', height: 'fit-content' }}>
-        <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Используемые id (drag & drop)</h3>
+        <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>all items</h3>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="ids-list">
             {(provided) => (
@@ -145,7 +145,7 @@ function AdminGallery() {
         </DragDropContext>
       </div>
       <div style={{ flex: 1, background: '#fff', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)' }}>
-        <h2 style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>Добавить/редактировать проект</h2>
+        <h2 style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>add/edit item</h2>
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: 12 }}>
             <label>id: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
