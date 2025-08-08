@@ -12,11 +12,18 @@ function AdminGallery() {
   const [status, setStatus] = useState('');
   const [usedIds, setUsedIds] = useState([]);
 
+  const [projects, setProjects] = useState([]);
   useEffect(() => {
     fetch('https://portfolio-backend-23pv.onrender.com/api/images')
       .then(res => res.json())
-      .then(data => setUsedIds(data.map(p => ({ id: p.id, description: p.description }))))
-      .catch(() => setUsedIds([]));
+      .then(data => {
+        setProjects(data);
+        setUsedIds(data.map(p => ({ id: p.id, description: p.description })));
+      })
+      .catch(() => {
+        setProjects([]);
+        setUsedIds([]);
+      });
   }, [status]);
 
   const handleChange = e => {
@@ -64,6 +71,20 @@ function AdminGallery() {
     setUsedIds(items);
   };
 
+  // Клик по id: загрузить проект в форму
+  const handleIdClick = (id) => {
+    const project = projects.find(p => p.id === id);
+    if (project) {
+      setForm({
+        id: project.id,
+        title: project.title || '',
+        description: project.description || '',
+        images: Array.isArray(project.images) ? project.images.join(', ') : '',
+        isFullWidth: !!project.isFullWidth
+      });
+    }
+  };
+
   return (
     <div style={{ display: 'flex', maxWidth: 900, margin: '40px auto', gap: 32 }}>
       <div style={{ minWidth: 220, background: '#f6f6f6', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', height: 'fit-content' }}>
@@ -89,7 +110,10 @@ function AdminGallery() {
                             cursor: 'grab'
                           }}
                         >
-                          <td style={{ padding: '2px 8px', fontWeight: 'bold' }}>{id}</td>
+                          <td
+                            style={{ padding: '2px 8px', fontWeight: 'bold', color: '#22c55e', cursor: 'pointer', textDecoration: 'underline' }}
+                            onClick={() => handleIdClick(id)}
+                          >{id}</td>
                           <td style={{ padding: '2px 8px', color: '#555' }}>{description}</td>
                         </tr>
                       )}
@@ -103,7 +127,7 @@ function AdminGallery() {
         </DragDropContext>
       </div>
       <div style={{ flex: 1, background: '#fff', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)' }}>
-        <h2 style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>Добавить проект в галерею</h2>
+        <h2 style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>Добавить/редактировать проект</h2>
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: 12 }}>
             <label>id: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
@@ -120,7 +144,7 @@ function AdminGallery() {
           <div style={{ marginBottom: 12 }}>
             <label><input name="isFullWidth" type="checkbox" checked={form.isFullWidth} onChange={handleChange} /> Широкий блок (занимает всю ширину)</label>
           </div>
-          <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Добавить</button>
+          <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
         </form>
         {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
       </div>
