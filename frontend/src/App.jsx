@@ -158,6 +158,7 @@ export default function App() {
     setActiveImage((prev) => (prev - 1 + validImages.length) % validImages.length);
   };
 
+<<<<<<< HEAD
   // swipeable handlers для фото (переключение фото)
   const imageSwipeHandlers = useSwipeable({
     onSwipedLeft: () => {
@@ -187,6 +188,12 @@ export default function App() {
       }
     },
     preventDefaultTouchmoveEvent: true,
+=======
+  // swipeable handlers для popup
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => setActiveProject((prev) => (prev + 1) % projects.length),
+    onSwipedRight: () => setActiveProject((prev) => (prev - 1 + projects.length) % projects.length),
+>>>>>>> parent of 3a1522a (свайп)
     trackMouse: true
   });
 
@@ -273,13 +280,14 @@ export default function App() {
             </h2>
             <p className="mb-4">{projects[activeProject].description}</p>
             <img
-              src={getValidImages(activeProject)[activeImage]}
+              src={getValidImages(activeProject)[0]}
               alt={projects[activeProject].title || 'Изображение'}
               className="mb-4"
 <<<<<<< HEAD
               {...imageSwipeHandlers}
             />
             <div className="additional-images">
+<<<<<<< HEAD
               {getValidImages(activeProject).map((src, idx) => (
                 idx !== activeImage && (
                   <img
@@ -293,14 +301,21 @@ export default function App() {
 =======
             />
             <div className="additional-images">
+=======
+>>>>>>> parent of 3a1522a (свайп)
               {getValidImages(activeProject).slice(1).map((src, idx) => (
                 <img
                   key={idx}
                   src={src}
                   alt={`Дополнительное изображение ${idx + 1}`}
                   className="mb-4"
+<<<<<<< HEAD
                 />
 >>>>>>> parent of 6d366f8 (front edit)
+=======
+                  {...swipeHandlers}
+                />
+>>>>>>> parent of 3a1522a (свайп)
               ))}
             </div>
           </div>
