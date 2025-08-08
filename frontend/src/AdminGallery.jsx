@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from 'react';
+
 function AdminGallery() {
   const [form, setForm] = useState({
     id: '',
