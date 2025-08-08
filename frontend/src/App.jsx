@@ -268,20 +268,6 @@ export default function App() {
             >
               ×
             </button>
-            <button
-              className="prev-button"
-              onClick={() => setActiveProject((prev) => (prev - 1 + projects.length) % projects.length)}
-              aria-label="Предыдущая категория"
-            >
-              ←
-            </button>
-            <button
-              className="next-button"
-              onClick={() => setActiveProject((prev) => (prev + 1) % projects.length)}
-              aria-label="Следующая категория"
-            >
-              →
-            </button>
             <h2 className="font-bold text-2xl mb-4">
               {projects[activeProject].title}
             </h2>
@@ -290,6 +276,7 @@ export default function App() {
               src={getValidImages(activeProject)[activeImage]}
               alt={projects[activeProject].title || 'Изображение'}
               className="mb-4"
+<<<<<<< HEAD
               {...imageSwipeHandlers}
             />
             <div className="additional-images">
@@ -303,6 +290,17 @@ export default function App() {
                     onClick={() => setActiveImage(idx)}
                   />
                 )
+=======
+            />
+            <div className="additional-images">
+              {getValidImages(activeProject).slice(1).map((src, idx) => (
+                <img
+                  key={idx}
+                  src={src}
+                  alt={`Дополнительное изображение ${idx + 1}`}
+                  className="mb-4"
+                />
+>>>>>>> parent of 6d366f8 (front edit)
               ))}
             </div>
           </div>
