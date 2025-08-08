@@ -252,6 +252,8 @@ export default function App() {
               alt={projects[activeProject].title || 'Изображение'}
               className="mb-4"
               {...swipeHandlers}
+              draggable={false}
+              style={{ userSelect: 'none', WebkitUserDrag: 'none' }}
             />
             <div className="additional-images">
               {getValidImages(activeProject).slice(1).map((src, idx) => (
@@ -261,6 +263,8 @@ export default function App() {
                   alt={`Дополнительное изображение ${idx + 1}`}
                   className="mb-4"
                   {...swipeHandlers}
+                  draggable={false}
+                  style={{ userSelect: 'none', WebkitUserDrag: 'none' }}
                 />
               ))}
             </div>
