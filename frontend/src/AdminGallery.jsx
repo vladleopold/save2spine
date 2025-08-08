@@ -128,8 +128,9 @@ function AdminGallery() {
                               }}
                               onClick={() => handleIdClick(id)}
                             >
-                              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M14.85 2.85a1.2 1.2 0 0 1 1.7 1.7l-1.1 1.1-1.7-1.7 1.1-1.1zm-2.2 2.2l1.7 1.7-8.1 8.1c-.1.1-.2.2-.3.3l-2.1.7c-.3.1-.6-.2-.5-.5l.7-2.1c.1-.1.2-.2.3-.3l8.1-8.1z" fill="#22c55e"/>
+                              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 17l2.1-6.3a1 1 0 0 1 .25-0.4l8.1-8.1a1.5 1.5 0 0 1 2.1 2.1l-8.1 8.1a1 1 0 0 1-0.4.25L3 17z" stroke="#ff9800" strokeWidth="2.5" fill="#ff9800"/>
+                                <rect x="13.5" y="2.5" width="3" height="1.5" rx="0.75" transform="rotate(45 13.5 2.5)" fill="#ff9800" />
                               </svg>
                             </button>
                           </td>
@@ -144,7 +145,7 @@ function AdminGallery() {
           </Droppable>
         </DragDropContext>
       </div>
-      <div style={{ flex: 1, background: '#fff', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)' }}>
+      <div style={{ flex: 1, background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)' }}>
         <h2 style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>add/edit item</h2>
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: 12 }}>
