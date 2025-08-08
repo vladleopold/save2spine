@@ -197,17 +197,6 @@ export default function App() {
     trackMouse: true
   });
 
-  useEffect(() => {
-    if (activeProject !== null) {
-      const articlePopup = document.querySelector('.article-popup');
-      if (articlePopup) {
-        // Скроллим на 250px вниз и сразу возвращаемся в начало
-        articlePopup.scrollTo({ top: 250, behavior: 'smooth' });
-        articlePopup.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    }
-  }, [activeProject]);
-
   return (
     <div className="p-4 relative z-10">
       <ParticlesBackground />
@@ -236,13 +225,8 @@ export default function App() {
             .filter(({ validImages }) => validImages.length > 0)
             .map(({ project, idx, validImages }) => {
               const src = validImages[0];
-              const isFullWidth = project.isFullWidth; // Условие для полноразмерного изображения
               return (
-                <div
-                  key={project.id}
-                  onClick={() => openProject(idx)}
-                  className={isFullWidth ? 'full-width-image' : ''} // Применяем класс для полноразмерного изображения
-                >
+                <div key={project.id} onClick={() => openProject(idx)}>
                   <img
                     src={src}
                     alt={project.description || 'project'}
@@ -259,13 +243,16 @@ export default function App() {
         </Masonry>
       )}
 
-      {/* Новое модальное окно "страница/статья" с дополнительными картинками, описанием и заголовком */}
+      {/* Popup: все фото проекта в столбик + свайп для смены проекта */}
       {activeProject !== null && projects[activeProject] && (
-        <>
-          <div className="article-popup-overlay" onClick={closePopup}></div>
+        <div
+          className="fixed inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center z-50 overflow-auto"
+          onClick={closePopup}
+          {...swipeHandlers}
+        >
           <div
             className="article-popup"
-            {...popupSwipeHandlers}
+            {...swipeHandlers}
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -283,43 +270,19 @@ export default function App() {
               src={getValidImages(activeProject)[0]}
               alt={projects[activeProject].title || 'Изображение'}
               className="mb-4"
-<<<<<<< HEAD
-              {...imageSwipeHandlers}
             />
             <div className="additional-images">
-<<<<<<< HEAD
-              {getValidImages(activeProject).map((src, idx) => (
-                idx !== activeImage && (
-                  <img
-                    key={idx}
-                    src={src}
-                    alt={`Дополнительное изображение ${idx + 1}`}
-                    className="mb-4"
-                    onClick={() => setActiveImage(idx)}
-                  />
-                )
-=======
-            />
-            <div className="additional-images">
-=======
->>>>>>> parent of 3a1522a (свайп)
               {getValidImages(activeProject).slice(1).map((src, idx) => (
                 <img
                   key={idx}
                   src={src}
                   alt={`Дополнительное изображение ${idx + 1}`}
                   className="mb-4"
-<<<<<<< HEAD
                 />
->>>>>>> parent of 6d366f8 (front edit)
-=======
-                  {...swipeHandlers}
-                />
->>>>>>> parent of 3a1522a (свайп)
               ))}
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
