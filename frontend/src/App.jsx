@@ -160,8 +160,22 @@ export default function App() {
 
   // swipeable handlers для popup
   const swipeHandlers = useSwipeable({
-    onSwipedLeft: () => setActiveProject((prev) => (prev + 1) % projects.length),
-    onSwipedRight: () => setActiveProject((prev) => (prev - 1 + projects.length) % projects.length),
+    onSwipedLeft: () => {
+      if (activeProject !== null && getValidImages(activeProject).length > 1) {
+        setActiveImage((prev) => (prev + 1) % getValidImages(activeProject).length);
+      } else {
+        setActiveProject((prev) => (prev + 1) % projects.length);
+        setActiveImage(0);
+      }
+    },
+    onSwipedRight: () => {
+      if (activeProject !== null && getValidImages(activeProject).length > 1) {
+        setActiveImage((prev) => (prev - 1 + getValidImages(activeProject).length) % getValidImages(activeProject).length);
+      } else {
+        setActiveProject((prev) => (prev - 1 + projects.length) % projects.length);
+        setActiveImage(0);
+      }
+    },
     trackMouse: true
   });
 
@@ -262,20 +276,22 @@ export default function App() {
             </h2>
             <p className="mb-4">{projects[activeProject].description}</p>
             <img
-              src={getValidImages(activeProject)[0]}
+              src={getValidImages(activeProject)[activeImage]}
               alt={projects[activeProject].title || 'Изображение'}
               className="mb-4"
               {...swipeHandlers}
             />
             <div className="additional-images">
-              {getValidImages(activeProject).slice(1).map((src, idx) => (
-                <img
-                  key={idx}
-                  src={src}
-                  alt={`Дополнительное изображение ${idx + 1}`}
-                  className="mb-4"
-                  {...swipeHandlers}
-                />
+              {getValidImages(activeProject).map((src, idx) => (
+                idx !== activeImage && (
+                  <img
+                    key={idx}
+                    src={src}
+                    alt={`Дополнительное изображение ${idx + 1}`}
+                    className="mb-4"
+                    onClick={() => setActiveImage(idx)}
+                  />
+                )
               ))}
             </div>
           </div>
