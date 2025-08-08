@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 function AdminGallery() {
   const [form, setForm] = useState({
@@ -54,23 +55,52 @@ function AdminGallery() {
     }
   };
 
+  // Drag-and-drop reorder logic
+  const onDragEnd = (result) => {
+    if (!result.destination) return;
+    const items = Array.from(usedIds);
+    const [reordered] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reordered);
+    setUsedIds(items);
+  };
+
   return (
     <div style={{ display: 'flex', maxWidth: 900, margin: '40px auto', gap: 32 }}>
-      <div style={{ minWidth: 180, background: '#f6f6f6', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', height: 'fit-content' }}>
-        <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Используемые id</h3>
-        <table style={{ width: '100%', fontSize: 15 }}>
-          <thead>
-            <tr><th style={{ textAlign: 'left' }}>id</th><th style={{ textAlign: 'left' }}>описание</th></tr>
-          </thead>
-          <tbody>
-            {usedIds.map(({ id, description }) => (
-              <tr key={id}>
-                <td style={{ padding: '2px 8px', fontWeight: 'bold' }}>{id}</td>
-                <td style={{ padding: '2px 8px', color: '#555' }}>{description}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div style={{ minWidth: 220, background: '#f6f6f6', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', height: 'fit-content' }}>
+        <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Используемые id (drag & drop)</h3>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="ids-list">
+            {(provided) => (
+              <table style={{ width: '100%', fontSize: 15 }} ref={provided.innerRef} {...provided.droppableProps}>
+                <thead>
+                  <tr><th style={{ textAlign: 'left' }}>id</th><th style={{ textAlign: 'left' }}>описание</th></tr>
+                </thead>
+                <tbody>
+                  {usedIds.map(({ id, description }, idx) => (
+                    <Draggable key={id} draggableId={id.toString()} index={idx}>
+                      {(provided, snapshot) => (
+                        <tr
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          style={{
+                            ...provided.draggableProps.style,
+                            background: snapshot.isDragging ? '#e0ffe0' : 'inherit',
+                            cursor: 'grab'
+                          }}
+                        >
+                          <td style={{ padding: '2px 8px', fontWeight: 'bold' }}>{id}</td>
+                          <td style={{ padding: '2px 8px', color: '#555' }}>{description}</td>
+                        </tr>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </tbody>
+              </table>
+            )}
+          </Droppable>
+        </DragDropContext>
       </div>
       <div style={{ flex: 1, background: '#fff', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)' }}>
         <h2 style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>Добавить проект в галерею</h2>
