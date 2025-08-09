@@ -5,6 +5,30 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 function Admin() {
+  // Для фильтрации id и автозаполнения формы
+  const [filteredIds, setFilteredIds] = useState([]);
+  useEffect(() => {
+    // Фильтруем id по выбранной странице (если в backend есть поле page)
+    if (!selectedPage) {
+      setFilteredIds([]);
+      return;
+    }
+    setFilteredIds(usedIds.filter(item => {
+      // Если нет поля page, показываем все
+      return !item.page || item.page === selectedPage;
+    }));
+    // Автозаполнение формы первым найденным id
+    const first = usedIds.find(item => (!item.page || item.page === selectedPage));
+    if (first) {
+      setForm({
+        id: first.id || '',
+        title: first.title || '',
+        description: first.description || '',
+        images: Array.isArray(first.images) ? first.images.join(',') : (first.images || ''),
+        isFullWidth: !!first.isFullWidth
+      });
+    }
+  }, [selectedPage, usedIds]);
   // Заглушки для проектов
   const [projects, setProjects] = useState([]);
   const [devProjects, setDevProjects] = useState([]);
@@ -24,7 +48,7 @@ function Admin() {
       })
       .catch(() => setUsedIds([]));
   }, []);
-  const getUsedIds = () => usedIds;
+  const getUsedIds = () => filteredIds;
   const onDragEnd = () => {};
   const handleIdClick = (id) => {};
   const [newPageName, setNewPageName] = useState('');
