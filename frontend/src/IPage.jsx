@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 import React, { useState, useEffect } from 'react';
 
@@ -142,4 +143,11 @@ export default function IPage() {
       {/* Popup и прочее можно добавить по аналогии с App.jsx */}
     </div>
   );
+=======
+import App from './App.jsx';
+
+export default function IPage() {
+  // Просто рендерим App (главную галерею) как отдельную страницу
+  return <App />;
+>>>>>>> aa1bbf4 (i page)
 }
