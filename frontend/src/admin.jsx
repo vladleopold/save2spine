@@ -5,8 +5,26 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 function Admin() {
+  // --- Заглушки и импорты для работы редактора ---
+  const [status, setStatus] = useState('');
+  const [newPageName, setNewPageName] = useState('');
+  const [customPages, setCustomPages] = useState([]);
+  const [newPageTemplate, setNewPageTemplate] = useState('page');
+  const [selectedPage, setSelectedPage] = useState('home');
+  const [form, setForm] = useState({
+    id: '',
+    title: '',
+    description: '',
+    images: '',
+    isFullWidth: false
+  });
   // Для фильтрации id и автозаполнения формы
   const [filteredIds, setFilteredIds] = useState([]);
+  // Тестовые данные для usedIds (для диагностики)
+  const [usedIds, setUsedIds] = useState([
+    { id: 1, description: 'Тестовый проект 1', title: 'Test 1', images: ['https://via.placeholder.com/150'], isFullWidth: false },
+    { id: 2, description: 'Тестовый проект 2', title: 'Test 2', images: ['https://via.placeholder.com/150'], isFullWidth: true }
+  ]);
   useEffect(() => {
     // Фильтруем id по выбранной странице (если в backend есть поле page)
     if (!selectedPage) {
