@@ -14,7 +14,17 @@ function Admin() {
     const { name, value, type, checked } = e.target;
     setForm(f => ({ ...f, [name]: type === 'checkbox' ? checked : value }));
   };
-  const getUsedIds = () => [];
+  const [usedIds, setUsedIds] = useState([]);
+  useEffect(() => {
+    fetch('https://portfolio-backend-23pv.onrender.com/api/images')
+      .then(res => res.json())
+      .then(data => {
+        // data должен быть массивом объектов с id и description
+        setUsedIds(Array.isArray(data) ? data.map(item => ({ id: item.id, description: item.description })) : []);
+      })
+      .catch(() => setUsedIds([]));
+  }, []);
+  const getUsedIds = () => usedIds;
   const onDragEnd = () => {};
   const handleIdClick = (id) => {};
   const [newPageName, setNewPageName] = useState('');
