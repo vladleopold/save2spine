@@ -5,6 +5,9 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 function Admin() {
+  // Заглушки для проектов
+  const [projects, setProjects] = useState([]);
+  const [devProjects, setDevProjects] = useState([]);
   // --- Заглушки и импорты для работы редактора ---
   const [status, setStatus] = useState('');
   const handleChange = (e) => {
@@ -59,25 +62,7 @@ function Admin() {
       await fetch(mainPath, { method: 'PUT', body: newCode });
     } catch {}
   };
-    // home
-    fetch('https://portfolio-backend-23pv.onrender.com/api/images')
-      .then(res => res.json())
-      .then(data => {
-        setProjects(data);
-      })
-      .catch(() => setProjects([]));
-    // dev
-    fetch('https://portfolio-backend-23pv.onrender.com/api/dev')
-      .then(res => res.json())
-      .then(data => {
-        setDevProjects(data);
-      })
-      .catch(() => setDevProjects([]));
-    setForm(f => ({
-      ...f,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
+  // ...удалено: fetch и setForm вне useEffect...
 
   const handleSubmit = async e => {
     e.preventDefault();
