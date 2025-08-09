@@ -2,6 +2,43 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 function AdminGallery() {
+  // Для J страницы
+  const [jItems, setJItems] = useState([]);
+  useEffect(() => {
+    if (selectedPage === 'j') {
+      fetch('/api/j-items')
+        .then(res => res.json())
+        .then(data => setJItems(data))
+        .catch(() => setJItems([]));
+    }
+  }, [selectedPage, status]);
+
+  const handleJSubmit = async e => {
+    e.preventDefault();
+    setStatus('');
+    const payload = {
+      title: form.title,
+      description: form.description,
+      images: form.images.split(',').map(s => s.trim()).filter(Boolean),
+      isFullWidth: form.isFullWidth
+    };
+    try {
+      const res = await fetch('/api/j-items', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStatus('Успешно добавлено!');
+        setForm({ id: '', title: '', description: '', images: '', isFullWidth: false });
+      } else {
+        setStatus('Ошибка: ' + (data.error || 'Не удалось добавить'));
+      }
+    } catch (err) {
+      setStatus('Ошибка сети');
+    }
+  };
   // Данные для dev-портфолио (локально, если нет API)
   const devProjectsLocal = [
     {
@@ -150,7 +187,7 @@ function AdminGallery() {
             ))}
           </select>
         </div>
-        {selectedPage === 'dev' ? (
+  {selectedPage === 'dev' ? (
           <>
             <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Dev-портфолио проекты</h3>
             <table style={{ width: '100%', fontSize: 15 }}>
@@ -188,7 +225,54 @@ function AdminGallery() {
               </tbody>
             </table>
           </>
-        ) : (
+        ) : selectedPage === 'j' ? (
+          <div>
+            <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>J страница: проекты</h3>
+            <table style={{ width: '100%', fontSize: 15, marginBottom: 24 }}>
+              <thead>
+                <tr>
+                  <th style={{ textAlign: 'left' }}>id</th>
+                  <th style={{ textAlign: 'left' }}>название</th>
+                  <th style={{ textAlign: 'left' }}>описание</th>
+                  <th style={{ textAlign: 'left' }}>картинки</th>
+                </tr>
+              </thead>
+              <tbody>
+                {jItems.map((p) => (
+                  <tr key={p.id} style={{ cursor: 'pointer' }} onClick={() => {
+                    setForm({
+                      id: p.id,
+                      title: p.title,
+                      description: p.description,
+                      images: Array.isArray(p.images) ? p.images.join(', ') : '',
+                      isFullWidth: !!p.isFullWidth
+                    });
+                  }}>
+                    <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>{p.id}</td>
+                    <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{p.title}</td>
+                    <td style={{ padding: '2px 8px', color: '#555' }}>{p.description}</td>
+                    <td style={{ padding: '2px 8px' }}>{Array.isArray(p.images) ? p.images.join(', ') : ''}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <form onSubmit={handleJSubmit} style={{ marginBottom: 16 }}>
+              <div style={{ marginBottom: 12 }}>
+                <label>title: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
+              </div>
+              <div style={{ marginBottom: 12 }}>
+                <label>description: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
+              </div>
+              <div style={{ marginBottom: 12 }}>
+                <label>images (через запятую): <input name="images" type="text" value={form.images} onChange={handleChange} style={{ width: '100%' }} /></label>
+              </div>
+              <div style={{ marginBottom: 12 }}>
+                <label><input name="isFullWidth" type="checkbox" checked={form.isFullWidth} onChange={handleChange} /> Широкий блок (занимает всю ширину)</label>
+              </div>
+              <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
+            </form>
+            {status && <div style={{ marginTop: 8, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
+          </div>
           <>
             <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>all items</h3>
             <DragDropContext onDragEnd={onDragEnd}>
