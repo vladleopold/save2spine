@@ -110,7 +110,7 @@ function AdminGallery() {
                             cursor: 'grab'
                           }}
                         >
-                          <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#22c55e' }}>
+                          <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>
                             {id}
                           </td>
                           <td style={{ padding: '2px 8px', color: '#555', display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -147,7 +147,7 @@ function AdminGallery() {
       </div>
       <div style={{ flex: 1, background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', display: 'flex', flexDirection: 'column', minHeight: 500 }}>
         <div style={{ flex: '0 0 auto' }}>
-          <h2 style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>add/edit item</h2>
+          <h2 style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 16, color: "#398dd3" }}>add/edit item</h2>
           <form onSubmit={handleSubmit}>
             <div style={{ marginBottom: 12 }}>
               <label>id: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
@@ -168,11 +168,11 @@ function AdminGallery() {
           </form>
           {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
         </div>
-        <div style={{ flex: '1 1 auto', marginTop: 32, background: '#fffbe6', borderRadius: 8, padding: 16, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
-          <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8, color: '#ff9800' }}>Заметки / записник</h3>
+        <div style={{ flex: '1 1 auto', marginTop: 32, background: '#fffff0', borderRadius: 8, padding: 16, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+          <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8, color: '#FFD000' }}>keepnote</h3>
           <textarea
-            placeholder="Оставьте текст на потом, ваши заметки..."
-            style={{ width: '100%', minHeight: 80, resize: 'vertical', borderRadius: 6, border: '1px solid #ffd580', padding: 8, fontSize: 15, background: '#fffbe6', color: '#333' }}
+            placeholder="text..."
+            style={{ width: '100%', minHeight: 80, resize: 'vertical', borderRadius: 6, border: '1px solid rgb(238 159 159)', padding: 8, fontSize: 15, background: 'rgb(255 251 251)', color: '#333' }}
           />
         </div>
       </div>
