@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+// Классический UI без drag-and-drop
 
 function AdminGallery() {
   // Корневые страницы
@@ -12,16 +12,24 @@ function AdminGallery() {
   const [selectedPage, setSelectedPage] = useState('home');
   // --- UI для выбора страницы (селектор)
   // --- useState для jItems (J страница)
-  const [jItems, setJItems] = useState([]);
+  const [items, setItems] = useState([]);
 
   // --- useEffect для загрузки jItems
   useEffect(() => {
+    let url = '';
     if (selectedPage === 'j') {
-      fetch('/api/j-items')
-        .then(res => res.json())
-        .then(data => setJItems(data))
-        .catch(() => setJItems([]));
+      url = '/api/j-items';
+    } else if (selectedPage === 'dev') {
+      url = 'https://portfolio-backend-23pv.onrender.com/api/dev-projects';
+    } else if (selectedPage === 'x') {
+      url = 'https://portfolio-backend-23pv.onrender.com/api/infographic-steps';
+    } else {
+      url = 'https://portfolio-backend-23pv.onrender.com/api/images';
     }
+    fetch(url)
+      .then(res => res.json())
+      .then(data => setItems(Array.isArray(data) ? data : []))
+      .catch(() => setItems([]));
   }, [selectedPage, status]);
 
   // --- handleJSubmit для J страницы
@@ -64,159 +72,36 @@ function AdminGallery() {
     </div>
   );
 
-  let leftBlock;
-  if (selectedPage === 'dev') {
-    leftBlock = (
-      <>
-        <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Dev-портфолио проекты</h3>
-        <table style={{ width: '100%', fontSize: 15 }}>
-          <thead>
-            <tr>
-              <th style={{ textAlign: 'left' }}>id</th>
-              <th style={{ textAlign: 'left' }}>название</th>
-              <th style={{ textAlign: 'left' }}>описание</th>
-              <th style={{ textAlign: 'left' }}>ссылка</th>
-              <th style={{ textAlign: 'left' }}>картинка</th>
+  // Универсальный список для всех страниц
+  const leftBlock = (
+    <>
+      <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Элементы страницы</h3>
+      <table style={{ width: '100%', fontSize: 15, marginBottom: 24 }}>
+        <thead>
+          <tr>
+            <th style={{ textAlign: 'left' }}>id</th>
+            <th style={{ textAlign: 'left' }}>название</th>
+            <th style={{ textAlign: 'left' }}>описание</th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((item) => (
+            <tr key={item.id} style={{ cursor: 'pointer' }} onClick={() => setForm({
+              id: item.id,
+              title: item.title || '',
+              description: item.description || '',
+              images: Array.isArray(item.images) ? item.images.join(', ') : '',
+              isFullWidth: !!item.isFullWidth
+            })}>
+              <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>{item.id}</td>
+              <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{item.title}</td>
+              <td style={{ padding: '2px 8px', color: '#555' }}>{item.description}</td>
             </tr>
-          </thead>
-          <tbody>
-            {devProjectsLocal.map((p) => (
-              <tr key={p.id} style={{ cursor: 'pointer' }} onClick={() => {
-                setForm({
-                  id: p.id,
-                  title: p.title,
-                  description: p.description,
-                  images: '',
-                  isFullWidth: false
-                });
-              }}>
-                <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>{p.id}</td>
-                <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{p.title}</td>
-                <td style={{ padding: '2px 8px', color: '#555' }}>{p.description}</td>
-                <td style={{ padding: '2px 8px' }}>
-                  <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ color: '#ff9800', textDecoration: 'underline' }}>ссылка</a>
-                </td>
-                <td style={{ padding: '2px 8px' }}>
-                  <img src={p.img} alt={p.title} style={{ maxWidth: 60, borderRadius: 4 }} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </>
-    );
-  } else if (selectedPage === 'j') {
-    leftBlock = (
-      <div>
-        <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>J страница: проекты</h3>
-        <table style={{ width: '100%', fontSize: 15, marginBottom: 24 }}>
-          <thead>
-            <tr>
-              <th style={{ textAlign: 'left' }}>id</th>
-              <th style={{ textAlign: 'left' }}>название</th>
-              <th style={{ textAlign: 'left' }}>описание</th>
-              <th style={{ textAlign: 'left' }}>картинки</th>
-            </tr>
-          </thead>
-          <tbody>
-            {jItems.map((p) => (
-              <tr key={p.id} style={{ cursor: 'pointer' }} onClick={() => {
-                setForm({
-                  id: p.id,
-                  title: p.title,
-                  description: p.description,
-                  images: Array.isArray(p.images) ? p.images.join(', ') : '',
-                  isFullWidth: !!p.isFullWidth
-                });
-              }}>
-                <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>{p.id}</td>
-                <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{p.title}</td>
-                <td style={{ padding: '2px 8px', color: '#555' }}>{p.description}</td>
-                <td style={{ padding: '2px 8px' }}>{Array.isArray(p.images) ? p.images.join(', ') : ''}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <form onSubmit={handleJSubmit} style={{ marginBottom: 16 }}>
-          <div style={{ marginBottom: 12 }}>
-            <label>title: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
-          </div>
-          <div style={{ marginBottom: 12 }}>
-            <label>description: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
-          </div>
-          <div style={{ marginBottom: 12 }}>
-            <label>images (через запятую): <input name="images" type="text" value={form.images} onChange={handleChange} style={{ width: '100%' }} /></label>
-          </div>
-          <div style={{ marginBottom: 12 }}>
-            <label><input name="isFullWidth" type="checkbox" checked={form.isFullWidth} onChange={handleChange} /> Широкий блок (занимает всю ширину)</label>
-          </div>
-          <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
-        </form>
-        {status && <div style={{ marginTop: 8, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
-      </div>
-    );
-  } else {
-    leftBlock = (
-      <>
-        <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>all items</h3>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="ids-list">
-            {(provided) => (
-              <table style={{ width: '100%', fontSize: 15 }} ref={provided.innerRef} {...provided.droppableProps}>
-                <thead>
-                  <tr><th style={{ textAlign: 'left' }}>id</th><th style={{ textAlign: 'left' }}>описание</th></tr>
-                </thead>
-                <tbody>
-                  {usedIds.map(({ id, description }, idx) => (
-                    <Draggable key={id} draggableId={id.toString()} index={idx}>
-                      {(provided, snapshot) => (
-                        <tr
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={{
-                            ...provided.draggableProps.style,
-                            background: snapshot.isDragging ? '#e0ffe0' : 'inherit',
-                            cursor: 'grab'
-                          }}
-                        >
-                          <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>
-                            {id}
-                          </td>
-                          <td style={{ padding: '2px 8px', color: '#555', display: 'flex', alignItems: 'center', gap: 8 }}>
-                            {description}
-                            <button
-                              title="Редактировать"
-                              style={{
-                                background: 'none',
-                                border: 'none',
-                                cursor: 'pointer',
-                                padding: 0,
-                                marginLeft: 8,
-                                display: 'flex',
-                                alignItems: 'center'
-                              }}
-                              onClick={() => handleIdClick(id)}
-                            >
-                              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M3 17l2.1-6.3a1 1 0 0 1 .25-0.4l8.1-8.1a1.5 1.5 0 0 1 2.1 2.1l-8.1 8.1a1 1 0 0 1-0.4.25L3 17z" stroke="#ff9800" strokeWidth="2.5" fill="#ff9800"/>
-                                <rect x="13.5" y="2.5" width="3" height="1.5" rx="0.75" transform="rotate(45 13.5 2.5)" fill="#ff9800" />
-                              </svg>
-                            </button>
-                          </td>
-                        </tr>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </tbody>
-              </table>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </>
-    );
-  }
+          ))}
+        </tbody>
+      </table>
+    </>
+  );
   // Данные для dev-портфолио (локально, если нет API)
   const devProjectsLocal = [
     {
@@ -347,93 +232,37 @@ function AdminGallery() {
   };
 
   return (
-  <div style={{ display: 'flex', gap: 24, minHeight: 600 }}>
-    <div style={{position:'absolute',top:8,right:8,background:'#fffbe6',border:'1px solid #ffe58f',borderRadius:6,padding:8,fontSize:13,zIndex:1000}}>
-      <div>selectedPage: <b>{selectedPage}</b></div>
-      <div>jItems: {Array.isArray(jItems) ? jItems.length : 'нет'}</div>
-      <div>projects: {Array.isArray(projects) ? projects.length : 'нет'}</div>
-      <div>usedIds: {Array.isArray(usedIds) ? usedIds.length : 'нет'}</div>
-    </div>
-    <div style={{ flex: 2, display: 'flex', flexDirection: 'column' }}>
-      {pageSelector}
+    <div style={{ maxWidth: 900, margin: '40px auto', background: '#fff', borderRadius: 12, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', padding: 32 }}>
+      <div style={{ marginBottom: 24 }}>
+        <label style={{ fontWeight: 'bold', marginRight: 8 }}>Страница:</label>
+        <select value={selectedPage} onChange={e => setSelectedPage(e.target.value)} style={{ fontSize: 16, padding: '4px 12px', borderRadius: 6 }}>
+          {rootPages.map(p => (
+            <option key={p.value} value={p.value}>{p.label}</option>
+          ))}
+        </select>
+      </div>
       <h1 style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 24, color: '#22c55e' }}>Админка: редактирование страниц</h1>
-      <div style={{ flex: 1 }}>{leftBlock}</div>
+      {leftBlock}
+      <form onSubmit={handleSubmit} style={{ marginBottom: 16 }}>
+        <div style={{ marginBottom: 12 }}>
+          <label>id: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
+        </div>
+        <div style={{ marginBottom: 12 }}>
+          <label>title: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
+        </div>
+        <div style={{ marginBottom: 12 }}>
+          <label>description: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
+        </div>
+        <div style={{ marginBottom: 12 }}>
+          <label>images (через запятую): <input name="images" type="text" value={form.images} onChange={handleChange} style={{ width: '100%' }} /></label>
+        </div>
+        <div style={{ marginBottom: 12 }}>
+          <label><input name="isFullWidth" type="checkbox" checked={form.isFullWidth} onChange={handleChange} /> Широкий блок (занимает всю ширину)</label>
+        </div>
+        <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
+      </form>
+      {status && <div style={{ marginTop: 8, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
     </div>
-    <div style={{ flex: 1, background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', display: 'flex', flexDirection: 'column', minHeight: 500 }}>
-      <div style={{ flex: '0 0 auto' }}>
-        {selectedPage === 'home' && (
-          <>
-            <h2 style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 16, color: '#22c55e' }}>Редактирование главной страницы</h2>
-            <div style={{ marginBottom: 16, color: '#555' }}>Здесь вы можете добавить или изменить контент главной страницы сайта.</div>
-            <form onSubmit={handleSubmit}>
-              <div style={{ marginBottom: 12 }}>
-                <label>id: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
-              </div>
-              <div style={{ marginBottom: 12 }}>
-                <label>title: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
-              </div>
-              <div style={{ marginBottom: 12 }}>
-                <label>description: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
-              </div>
-              <div style={{ marginBottom: 12 }}>
-                <label>images (через запятую): <input name="images" type="text" value={form.images} onChange={handleChange} required style={{ width: '100%' }} /></label>
-              </div>
-              <div style={{ marginBottom: 12 }}>
-                <label><input name="isFullWidth" type="checkbox" checked={form.isFullWidth} onChange={handleChange} /> Широкий блок (занимает всю ширину)</label>
-              </div>
-              <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
-            </form>
-            {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
-          </>
-        )}
-        {selectedPage === 'dev' && (
-          <>
-            <h2 style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 16, color: '#ff9800' }}>Редактирование портфолио Unity</h2>
-            <div style={{ marginBottom: 16, color: '#555' }}>Добавьте или измените демо-проекты для портфолио Unity.</div>
-            {/* Можно добавить отдельную форму для проектов, если потребуется */}
-          </>
-        )}
-        {selectedPage === 'x' && (
-          <>
-            <h2 style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 16, color: '#398dd3' }}>Редактирование инфографики</h2>
-            <div style={{ marginBottom: 16, color: '#555' }}>Соберите инфографику шаг за шагом по шаблону.</div>
-            {/* Можно добавить отдельную форму для инфографики, если потребуется */}
-          </>
-        )}
-        {selectedPage !== 'home' && selectedPage !== 'dev' && selectedPage !== 'x' && (
-          <>
-            <h2 style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 16, color: '#398dd3' }}>add/edit item</h2>
-            <form onSubmit={handleSubmit}>
-              <div style={{ marginBottom: 12 }}>
-                <label>id: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
-              </div>
-              <div style={{ marginBottom: 12 }}>
-                <label>title: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
-              </div>
-              <div style={{ marginBottom: 12 }}>
-                <label>description: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
-              </div>
-              <div style={{ marginBottom: 12 }}>
-                <label>images (через запятую): <input name="images" type="text" value={form.images} onChange={handleChange} required style={{ width: '100%' }} /></label>
-              </div>
-              <div style={{ marginBottom: 12 }}>
-                <label><input name="isFullWidth" type="checkbox" checked={form.isFullWidth} onChange={handleChange} /> Широкий блок (занимает всю ширину)</label>
-              </div>
-              <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
-            </form>
-            {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
-          </>
-        )}
-      </div>
-      <div style={{ flex: '1 1 auto', marginTop: 32, background: '#fffff0', borderRadius: 8, padding: 16, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
-        <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8, color: '#FFD000' }}>keepnote</h3>
-        <textarea
-          placeholder="text..."
-          style={{ width: '100%', minHeight: 80, resize: 'vertical', borderRadius: 6, border: '1px solid rgb(238 159 159)', padding: 8, fontSize: 15, background: 'rgb(255 251 251)', color: '#333' }}
-        />
-      </div>
-    </div>
-  </div>
   );
 }
 
