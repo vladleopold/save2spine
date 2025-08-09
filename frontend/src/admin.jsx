@@ -18,41 +18,16 @@ function Admin() {
     images: '',
     isFullWidth: false
   });
-  // Для фильтрации id и автозаполнения формы
-  const [filteredIds, setFilteredIds] = useState([]);
-  // Тестовые данные для usedIds (для диагностики)
-  const [usedIds, setUsedIds] = useState([
-    { id: 1, description: 'Тестовый проект 1', title: 'Test 1', images: ['https://via.placeholder.com/150'], isFullWidth: false },
-    { id: 2, description: 'Тестовый проект 2', title: 'Test 2', images: ['https://via.placeholder.com/150'], isFullWidth: true }
-  ]);
+  const [usedIds, setUsedIds] = useState([]);
   useEffect(() => {
-    // Фильтруем id по выбранной странице (если в backend есть поле page)
-    if (!selectedPage) {
-      setFilteredIds([]);
-      setForm({ id: '', title: '', description: '', images: '', isFullWidth: false });
-      return;
-    }
-    const filtered = usedIds.filter(item => {
-      // Если нет поля page, показываем все
-      return !item.page || item.page === selectedPage;
-    });
-    setFilteredIds(filtered);
-    // Автозаполнение формы первым найденным id
-    if (filtered.length > 0) {
-      const first = filtered[0];
-      setForm({
-        id: first.id || '',
-        title: first.title || '',
-        description: first.description || '',
-        images: Array.isArray(first.images) ? first.images.join(',') : (first.images || ''),
-        isFullWidth: !!first.isFullWidth
-      });
-    } else {
-      setForm({ id: '', title: '', description: '', images: '', isFullWidth: false });
-    }
-    // Отладочный вывод
-    console.log('selectedPage:', selectedPage, 'filteredIds:', filtered);
-  }, [selectedPage, usedIds]);
+    fetch('https://portfolio-backend-23pv.onrender.com/api/images')
+      .then(res => res.json())
+      .then(data => {
+        setUsedIds(Array.isArray(data) ? data.map(item => ({ id: item.id, description: item.description })) : []);
+      })
+      .catch(() => setUsedIds([]));
+  }, []);
+  const getUsedIds = () => usedIds;
   // Заглушки для проектов
   const [projects, setProjects] = useState([]);
   const [devProjects, setDevProjects] = useState([]);
