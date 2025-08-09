@@ -111,62 +111,96 @@ function AdminGallery() {
             ))}
           </select>
         </div>
-        <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>all items</h3>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="ids-list">
-            {(provided) => (
-              <table style={{ width: '100%', fontSize: 15 }} ref={provided.innerRef} {...provided.droppableProps}>
-                <thead>
-                  <tr><th style={{ textAlign: 'left' }}>id</th><th style={{ textAlign: 'left' }}>описание</th></tr>
-                </thead>
-                <tbody>
-                  {usedIds.map(({ id, description }, idx) => (
-                    <Draggable key={id} draggableId={id.toString()} index={idx}>
-                      {(provided, snapshot) => (
-                        <tr
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={{
-                            ...provided.draggableProps.style,
-                            background: snapshot.isDragging ? '#e0ffe0' : 'inherit',
-                            cursor: 'grab'
-                          }}
-                        >
-                          <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>
-                            {id}
-                          </td>
-                          <td style={{ padding: '2px 8px', color: '#555', display: 'flex', alignItems: 'center', gap: 8 }}>
-                            {description}
-                            <button
-                              title="Редактировать"
+        {selectedPage === 'dev' ? (
+          <>
+            <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Dev-портфолио проекты</h3>
+            <table style={{ width: '100%', fontSize: 15 }}>
+              <thead>
+                <tr>
+                  <th style={{ textAlign: 'left' }}>id</th>
+                  <th style={{ textAlign: 'left' }}>название</th>
+                  <th style={{ textAlign: 'left' }}>описание</th>
+                  <th style={{ textAlign: 'left' }}>ссылка</th>
+                  <th style={{ textAlign: 'left' }}>картинка</th>
+                </tr>
+              </thead>
+              <tbody>
+                {projects.map((p, idx) => (
+                  <tr key={p.id || idx}>
+                    <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>{p.id || idx + 1}</td>
+                    <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{p.title}</td>
+                    <td style={{ padding: '2px 8px', color: '#555' }}>{p.description || p.desc}</td>
+                    <td style={{ padding: '2px 8px' }}>
+                      {p.link ? <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ color: '#ff9800', textDecoration: 'underline' }}>ссылка</a> : '-'}
+                    </td>
+                    <td style={{ padding: '2px 8px' }}>
+                      {p.img ? <img src={p.img} alt={p.title} style={{ maxWidth: 60, borderRadius: 4 }} /> : '-'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        ) : (
+          <>
+            <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>all items</h3>
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="ids-list">
+                {(provided) => (
+                  <table style={{ width: '100%', fontSize: 15 }} ref={provided.innerRef} {...provided.droppableProps}>
+                    <thead>
+                      <tr><th style={{ textAlign: 'left' }}>id</th><th style={{ textAlign: 'left' }}>описание</th></tr>
+                    </thead>
+                    <tbody>
+                      {usedIds.map(({ id, description }, idx) => (
+                        <Draggable key={id} draggableId={id.toString()} index={idx}>
+                          {(provided, snapshot) => (
+                            <tr
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
                               style={{
-                                background: 'none',
-                                border: 'none',
-                                cursor: 'pointer',
-                                padding: 0,
-                                marginLeft: 8,
-                                display: 'flex',
-                                alignItems: 'center'
+                                ...provided.draggableProps.style,
+                                background: snapshot.isDragging ? '#e0ffe0' : 'inherit',
+                                cursor: 'grab'
                               }}
-                              onClick={() => handleIdClick(id)}
                             >
-                              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M3 17l2.1-6.3a1 1 0 0 1 .25-0.4l8.1-8.1a1.5 1.5 0 0 1 2.1 2.1l-8.1 8.1a1 1 0 0 1-0.4.25L3 17z" stroke="#ff9800" strokeWidth="2.5" fill="#ff9800"/>
-                                <rect x="13.5" y="2.5" width="3" height="1.5" rx="0.75" transform="rotate(45 13.5 2.5)" fill="#ff9800" />
-                              </svg>
-                            </button>
-                          </td>
-                        </tr>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </tbody>
-              </table>
-            )}
-          </Droppable>
-        </DragDropContext>
+                              <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>
+                                {id}
+                              </td>
+                              <td style={{ padding: '2px 8px', color: '#555', display: 'flex', alignItems: 'center', gap: 8 }}>
+                                {description}
+                                <button
+                                  title="Редактировать"
+                                  style={{
+                                    background: 'none',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    padding: 0,
+                                    marginLeft: 8,
+                                    display: 'flex',
+                                    alignItems: 'center'
+                                  }}
+                                  onClick={() => handleIdClick(id)}
+                                >
+                                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 17l2.1-6.3a1 1 0 0 1 .25-0.4l8.1-8.1a1.5 1.5 0 0 1 2.1 2.1l-8.1 8.1a1 1 0 0 1-0.4.25L3 17z" stroke="#ff9800" strokeWidth="2.5" fill="#ff9800"/>
+                                    <rect x="13.5" y="2.5" width="3" height="1.5" rx="0.75" transform="rotate(45 13.5 2.5)" fill="#ff9800" />
+                                  </svg>
+                                </button>
+                              </td>
+                            </tr>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </tbody>
+                  </table>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </>
+        )}
       </div>
       <div style={{ flex: 1, background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', display: 'flex', flexDirection: 'column', minHeight: 500 }}>
         <div style={{ flex: '0 0 auto' }}>
