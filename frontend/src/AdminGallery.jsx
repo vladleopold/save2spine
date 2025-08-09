@@ -2,50 +2,34 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 function AdminGallery() {
-  // Данные для dev-портфолио (локально, если нет API)
-  const devProjectsLocal = [
-    {
-      id: 1,
-      title: 'Unity Кот-симулятор',
-      description: 'Погладь кота, пока он не убежит в реальный мир. Встроенный генератор мемов и случайных мурлыканий.',
-      img: 'https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif',
-      link: 'https://unity.com/cat-simulator'
-    },
-    {
-      id: 2,
-      title: 'Гравитация для чайников',
-      description: 'Платформер, где гравитация меняется по настроению игрока. Иногда вверх — это вниз, а иногда вообще вбок.',
-      img: 'https://media.giphy.com/media/3o6ZtpxSZbQRRnwCKQ/giphy.gif',
-      link: 'https://unity.com/gravity-fun'
-    },
-    {
-      id: 3,
-      title: 'Битва багов',
-      description: 'Мультиплеерная арена, где игроки сражаются за звание самого креативного баг-репортера. Побеждает тот, кто вылетит последним.',
-      img: 'https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif',
-      link: 'https://unity.com/bug-battle'
-    },
-    {
-      id: 4,
-      title: 'Симулятор кофе-брейка',
-      description: 'Только ты, Unity и бесконечная чашка кофе. Главная цель — не пролить на клавиатуру!',
-      img: 'https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif',
-      link: 'https://unity.com/coffee-break'
-    },
-    {
-      id: 5,
-      title: 'Пингвин против Unity Editor',
-      description: 'Пингвин пытается собрать билд, но Editor сопротивляется. Кто победит — холод или баги?',
-      img: 'https://media.giphy.com/media/2wYQbQpU5hI4A/giphy.gif',
-      link: 'https://unity.com/penguin-vs-editor'
-    }
-  ];
   // Корневые страницы
   const rootPages = [
     { value: 'home', label: 'Главная' },
-    { value: 'dev', label: 'Dev-портфолио' },
-    { value: 'x', label: 'Инфографика' }
+    { value: 'x', label: 'x' }
   ];
+
+  // Для выбора проекта dev-портфолио
+  const [selectedDevId, setSelectedDevId] = useState(null);
+
+  // Автоматически подставлять данные выбранного проекта в форму
+  useEffect(() => {
+    if (selectedPage === 'dev' && selectedDevId) {
+      const p = projects.find(pr => pr.id === selectedDevId);
+      if (p) {
+        setForm({
+          id: p.id,
+          title: p.title || '',
+          description: p.description || '',
+          link: p.link || '',
+          img: p.img || '',
+          images: '',
+          isFullWidth: p.isFullWidth || false
+        });
+      }
+    }
+    // Если выбран другой раздел — сбрасываем форму
+    if (selectedPage !== 'dev') setSelectedDevId(null);
+  }, [selectedPage, selectedDevId, projects]);
   const [selectedPage, setSelectedPage] = useState('home');
   const [form, setForm] = useState({
     id: '',
@@ -150,43 +134,7 @@ function AdminGallery() {
           </select>
         </div>
         {selectedPage === 'dev' ? (
-          <>
-            <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Dev-портфолио проекты</h3>
-            <table style={{ width: '100%', fontSize: 15 }}>
-              <thead>
-                <tr>
-                  <th style={{ textAlign: 'left' }}>id</th>
-                  <th style={{ textAlign: 'left' }}>название</th>
-                  <th style={{ textAlign: 'left' }}>описание</th>
-                  <th style={{ textAlign: 'left' }}>ссылка</th>
-                  <th style={{ textAlign: 'left' }}>картинка</th>
-                </tr>
-              </thead>
-              <tbody>
-                {devProjectsLocal.map((p) => (
-                  <tr key={p.id} style={{ cursor: 'pointer' }} onClick={() => {
-                    setForm({
-                      id: p.id,
-                      title: p.title,
-                      description: p.description,
-                      images: '', // Можно добавить поле для картинок, если потребуется
-                      isFullWidth: false
-                    });
-                  }}>
-                    <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>{p.id}</td>
-                    <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{p.title}</td>
-                    <td style={{ padding: '2px 8px', color: '#555' }}>{p.description}</td>
-                    <td style={{ padding: '2px 8px' }}>
-                      <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ color: '#ff9800', textDecoration: 'underline' }}>ссылка</a>
-                    </td>
-                    <td style={{ padding: '2px 8px' }}>
-                      <img src={p.img} alt={p.title} style={{ maxWidth: 60, borderRadius: 4 }} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </>
+          <></>
         ) : (
           <>
             <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>all items</h3>
@@ -275,13 +223,7 @@ function AdminGallery() {
               {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
             </>
           )}
-          {selectedPage === 'dev' && (
-            <>
-              <h2 style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 16, color: '#ff9800' }}>Редактирование портфолио Unity</h2>
-              <div style={{ marginBottom: 16, color: '#555' }}>Добавьте или измените демо-проекты для портфолио Unity.</div>
-              {/* Можно добавить отдельную форму для проектов, если потребуется */}
-            </>
-          )}
+  {/* dev-портфолио редактирование отсутствует. Оставлена только главная страница и x. */}
           {selectedPage === 'x' && (
             <>
               <h2 style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 16, color: '#398dd3' }}>Редактирование инфографики</h2>
