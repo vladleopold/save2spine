@@ -278,29 +278,76 @@ function AdminGallery() {
             </>
           )}
           {selectedPage === 'dev' && (
-            <>
-              <h2 style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 16, color: '#ff9800' }}>Редактирование портфолио Unity</h2>
-              <div style={{ marginBottom: 16, color: '#555' }}>Добавьте или измените демо-проекты для портфолио Unity.</div>
-              <form onSubmit={handleDevSubmit} style={{ background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
-                <div style={{ marginBottom: 12 }}>
-                  <label>ID: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
-                </div>
-                <div style={{ marginBottom: 12 }}>
-                  <label>Название: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
-                </div>
-                <div style={{ marginBottom: 12 }}>
-                  <label>Описание: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
-                </div>
-                <div style={{ marginBottom: 12 }}>
-                  <label>Ссылка: <input name="link" type="text" value={form.link} onChange={handleChange} style={{ width: '100%' }} /></label>
-                </div>
-                <div style={{ marginBottom: 12 }}>
-                  <label>Картинка: <input name="img" type="text" value={form.img} onChange={handleChange} style={{ width: '100%' }} /></label>
-                </div>
-                <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
-              </form>
-              {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
-            </>
+            <div style={{ display: 'flex', gap: 32 }}>
+              {/* Таблица проектов слева */}
+              <div style={{ flex: '0 0 380px', background: '#f6f6f6', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Dev-портфолио проекты</h3>
+                <table style={{ width: '100%', fontSize: 15 }}>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Название</th>
+                      <th>Описание</th>
+                      <th>Ссылка</th>
+                      <th>Картинка</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {devProjectsLocal.map((p) => (
+                      <tr key={p.id}>
+                        <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>{p.id}</td>
+                        <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{p.title}</td>
+                        <td style={{ padding: '2px 8px', color: '#555' }}>{p.description}</td>
+                        <td style={{ padding: '2px 8px' }}>
+                          <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ color: '#ff9800', textDecoration: 'underline' }}>ссылка</a>
+                        </td>
+                        <td style={{ padding: '2px 8px' }}>
+                          <img src={p.img} alt={p.title} style={{ maxWidth: 60, borderRadius: 4 }} />
+                        </td>
+                        <td style={{ padding: '2px 8px' }}>
+                          <button
+                            title="Редактировать"
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                            onClick={() => setForm({
+                              id: p.id,
+                              title: p.title,
+                              description: p.description,
+                              link: p.link,
+                              img: p.img,
+                              images: '',
+                              isFullWidth: false
+                            })}
+                          >✏️</button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {/* Форма редактирования справа */}
+              <div style={{ flex: '1 1 auto', marginLeft: 32 }}>
+                <form onSubmit={handleDevSubmit} style={{ background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+                  <div style={{ marginBottom: 12 }}>
+                    <label>ID: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
+                  </div>
+                  <div style={{ marginBottom: 12 }}>
+                    <label>Название: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
+                  </div>
+                  <div style={{ marginBottom: 12 }}>
+                    <label>Описание: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
+                  </div>
+                  <div style={{ marginBottom: 12 }}>
+                    <label>Ссылка: <input name="link" type="text" value={form.link} onChange={handleChange} style={{ width: '100%' }} /></label>
+                  </div>
+                  <div style={{ marginBottom: 12 }}>
+                    <label>Картинка: <input name="img" type="text" value={form.img} onChange={handleChange} style={{ width: '100%' }} /></label>
+                  </div>
+                  <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
+                </form>
+                {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
+              </div>
+            </div>
           )}
           {selectedPage === 'x' && (
             <>
