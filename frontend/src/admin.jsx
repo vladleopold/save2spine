@@ -5,6 +5,15 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 function Admin() {
+  // --- Заглушки и импорты для работы редактора ---
+  const [status, setStatus] = useState('');
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setForm(f => ({ ...f, [name]: type === 'checkbox' ? checked : value }));
+  };
+  const getUsedIds = () => [];
+  const onDragEnd = () => {};
+  const handleIdClick = (id) => {};
   const [newPageName, setNewPageName] = useState('');
   const [customPages, setCustomPages] = useState([]);
   const [newPageTemplate, setNewPageTemplate] = useState('page');
