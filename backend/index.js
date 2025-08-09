@@ -28,56 +28,21 @@ const iItems = [
             'https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyMXg2MnZybmlzMjVuaHgycW1leTkxODl1MHp6dzB6MjZwZXEyODJhaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3zLTv0ikwgmqjWLdqE/giphy.webp'
         ],
         isFullWidth: false
-    },
-    {
-        id: 4,
-        title: 'idle slot symbol. - spine  ( 1h )',
-        description: '',
-        images: ['https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUybTY3YmplcDU0bHN0azluZGhxZTI0MzRhbHV2eDU2Mmhkam1yZDAxbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cEwGaZHpaekqQ7joaP/giphy.webp'],
-        isFullWidth: false
-    },
-    {
-        id: 5,
-        title: '',
-        description: 'slot high symbol  - spine ( 8h )',
-        images: ['https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyODBhNW12NGNpOWh2am05czFsMnM3N2h6NzlpM2VjaXJndzg0N2d5ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/a9Cx1jkCyHGQmcTadG/giphy.webp'],
-        isFullWidth: false
-    },
-    {
-        id: 6,
-        title: '',
-        description: '',
-        images: ['https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmhuYXBobDZwbjZuZDFjMnZuYTBxaW96bHNidTY4NHZiYmhhM2E0aSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4lOcXKbyMQTHYYHBeg/giphy.gif'],
-        isFullWidth: false
-    },
-    {
-        id: 7,
-        title: '',
-        description: 'health and damge  - spine ( 6h )',
-        images: [
-            'https://media1.giphy.com/media/v1.Y2lkPTZjMDliOTUyMTIyaW50YmJqdmdjZ2VxcHg5MTlrcmw5amdyczR2bmx2cG5xcXJnZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/tYeXaF0YNoYijlDzLv/giphy.webp',
-            'https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUycWY0MnN2Y3FjbWU4dWhucnBlM2pnNm5zcjh0d2ZzdzJ6Nzg4c2M3YSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4lOcXKbyMQTHYYHBeg/giphy.webp',
-            'https://media1.giphy.com/media/v1.Y2lkPTZjMDliOTUydGhkZGhzbDJrZW40ajQxc3Z5a2xxNDhwcmVqZHFheGJxamM0Z2swcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4Bf7khDZyamqsPXqTJ/giphy.webp',
-            'https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUycno1MXA3NnV1aXZ2cWNvdGozeWd4ZW5ldjhyaG1iOXc5aDVqMjQ2dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Fx2QfvGT2z1LWnpM4F/giphy.webp'
-        ],
-        isFullWidth: false
-    },
-    {
-        id: 8,
-        title: '',
-        description: 'dark ritual slot - After Effects ( 25h )',
-        images: [
-            'http://spine-animator.ho.ua/gif/dr1.gif',
-            'http://spine-animator.ho.ua/gif/dr2.gif'
-        ],
-        isFullWidth: false
     }
 ];
-
-// Получить i-items
-app.get('/api/i-items', (req, res) => {
-    res.json(iItems);
+app.get("/api/i-items", (req, res) => {
+    const cleanProjects = projects
+        .map(project => ({
+            ...project,
+            images: Array.isArray(project.images)
+                ? project.images.filter(src => typeof src === 'string' && src.trim() !== '')
+                : []
+        }))
+        .filter(project => project.images.length > 0);
+    res.json(cleanProjects);
 });
+//////////////////////
+
 
 // Добавить новый i-item
 app.post('/api/i-items', (req, res) => {
