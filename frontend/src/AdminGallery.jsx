@@ -181,45 +181,62 @@ function AdminGallery() {
         </div>
         {selectedPage === 'dev' ? (
               
-            <div>
-              <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Dev-портфолио проекты</h3>
-              <table style={{ width: '100%', fontSize: 15 }}>
-                <thead>
-                  <tr>
-                    <th style={{ textAlign: 'left' }}>id</th>
-                    <th style={{ textAlign: 'left' }}>название</th>
-                    <th style={{ textAlign: 'left' }}>описание</th>
-                    <th style={{ textAlign: 'left' }}>ссылка</th>
-                    <th style={{ textAlign: 'left' }}>картинка</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {devProjectsLocal.map((p) => (
-                    <tr key={p.id} style={{ cursor: 'pointer' }} onClick={() => {
-                      setForm({
-                        id: p.id,
-                        title: p.title,
-                        description: p.description,
-                        link: p.link,
-                        img: p.img,
-                        images: '',
-                        isFullWidth: false
-                      });
-                    }}>
-                      <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>{p.id}</td>
-                      <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{p.title}</td>
-                      <td style={{ padding: '2px 8px', color: '#555' }}>{p.description}</td>
-                      <td style={{ padding: '2px 8px' }}>
-                        <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ color: '#ff9800', textDecoration: 'underline' }}>ссылка</a>
-                      </td>
-                      <td style={{ padding: '2px 8px' }}>
-                        <img src={p.img} alt={p.title} style={{ maxWidth: 60, borderRadius: 4 }} />
-                      </td>
+            <div style={{ display: 'flex', gap: 32 }}>
+              {/* Левая часть: таблица проектов */}
+              <div style={{ flex: '0 0 380px', background: '#f6f6f6', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Dev-портфолио проекты</h3>
+                <table style={{ width: '100%', fontSize: 15 }}>
+                  <thead>
+                    <tr>
+                      <th style={{ textAlign: 'left' }}>id</th>
+                      <th style={{ textAlign: 'left' }}>название</th>
+                      <th style={{ textAlign: 'left' }}>описание</th>
+                      <th style={{ textAlign: 'left' }}>ссылка</th>
+                      <th style={{ textAlign: 'left' }}>картинка</th>
+                      <th style={{ textAlign: 'left' }}></th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-              <div style={{ margin: '24px 0', background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)' }}>
+                  </thead>
+                  <tbody>
+                    {devProjectsLocal.map((p) => (
+                      <tr key={p.id}>
+                        <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>{p.id}</td>
+                        <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{p.title}</td>
+                        <td style={{ padding: '2px 8px', color: '#555' }}>{p.description}</td>
+                        <td style={{ padding: '2px 8px' }}>
+                          <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ color: '#ff9800', textDecoration: 'underline' }}>ссылка</a>
+                        </td>
+                        <td style={{ padding: '2px 8px' }}>
+                          <img src={p.img} alt={p.title} style={{ maxWidth: 60, borderRadius: 4 }} />
+                        </td>
+                        <td style={{ padding: '2px 8px' }}>
+                          <button
+                            title="Редактировать"
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                            onClick={() => {
+                              setForm({
+                                id: p.id,
+                                title: p.title,
+                                description: p.description,
+                                link: p.link,
+                                img: p.img,
+                                images: '',
+                                isFullWidth: false
+                              });
+                            }}
+                          >
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M3 17l2.1-6.3a1 1 0 0 1 .25-0.4l8.1-8.1a1.5 1.5 0 0 1 2.1 2.1l-8.1 8.1a1 1 0 0 1-0.4.25L3 17z" stroke="#ff9800" strokeWidth="2.5" fill="#ff9800"/>
+                              <rect x="13.5" y="2.5" width="3" height="1.5" rx="0.75" transform="rotate(45 13.5 2.5)" fill="#ff9800" />
+                            </svg>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {/* Правая часть: форма редактирования */}
+              <div style={{ flex: 1, background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)' }}>
                 <h4 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 16, color: '#ff9800' }}>Редактировать проект</h4>
                 <form onSubmit={handleDevSubmit}>
                   <div style={{ marginBottom: 12 }}>
