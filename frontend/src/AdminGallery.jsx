@@ -348,6 +348,12 @@ function AdminGallery() {
 
   return (
   <div style={{ display: 'flex', gap: 24, minHeight: 600 }}>
+    <div style={{position:'absolute',top:8,right:8,background:'#fffbe6',border:'1px solid #ffe58f',borderRadius:6,padding:8,fontSize:13,zIndex:1000}}>
+      <div>selectedPage: <b>{selectedPage}</b></div>
+      <div>jItems: {Array.isArray(jItems) ? jItems.length : 'нет'}</div>
+      <div>projects: {Array.isArray(projects) ? projects.length : 'нет'}</div>
+      <div>usedIds: {Array.isArray(usedIds) ? usedIds.length : 'нет'}</div>
+    </div>
     <div style={{ flex: 2, display: 'flex', flexDirection: 'column' }}>
       {pageSelector}
       <h1 style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 24, color: '#22c55e' }}>Админка: редактирование страниц</h1>
