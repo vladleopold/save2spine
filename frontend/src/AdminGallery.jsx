@@ -8,6 +8,29 @@ function AdminGallery() {
     { value: 'dev', label: 'Dev-портфолио' },
     { value: 'x', label: 'x' }
   ];
+
+  // Для выбора проекта dev-портфолио
+  const [selectedDevId, setSelectedDevId] = useState(null);
+
+  // Автоматически подставлять данные выбранного проекта в форму
+  useEffect(() => {
+    if (selectedPage === 'dev' && selectedDevId) {
+      const p = projects.find(pr => pr.id === selectedDevId);
+      if (p) {
+        setForm({
+          id: p.id,
+          title: p.title || '',
+          description: p.description || '',
+          link: p.link || '',
+          img: p.img || '',
+          images: '',
+          isFullWidth: p.isFullWidth || false
+        });
+      }
+    }
+    // Если выбран другой раздел — сбрасываем форму
+    if (selectedPage !== 'dev') setSelectedDevId(null);
+  }, [selectedPage, selectedDevId, projects]);
   const [selectedPage, setSelectedPage] = useState('home');
   const [form, setForm] = useState({
     id: '',
@@ -206,56 +229,39 @@ function AdminGallery() {
             {/* Список проектов слева */}
             <div style={{ flex: '0 0 380px', background: '#f6f6f6', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
               <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Dev-портфолио проекты</h3>
-              <table style={{ width: '100%', fontSize: 15 }}>
-                <thead>
-                  <tr>
-                    <th>Название</th>
-                    <th>Описание</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {projects.map((p) => (
-                    <tr key={p.id}>
-                      <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{p.title}</td>
-                      <td style={{ padding: '2px 8px', color: '#555' }}>{p.description}</td>
-                      <td style={{ padding: '2px 8px' }}>
-                        <button
-                          title="Редактировать проект"
-                          style={{ background: '#ffd000', border: 'none', borderRadius: 6, cursor: 'pointer', padding: '4px 12px', fontWeight: 'bold', color: '#222' }}
-                          onClick={() => setForm({
-                            id: p.id,
-                            title: p.title || '',
-                            description: p.description || '',
-                            link: p.link || '',
-                            img: p.img || '',
-                            images: '',
-                            isFullWidth: p.isFullWidth || false
-                          })}
-                        >Редактировать</button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {projects.map((p) => (
+                  <li key={p.id} style={{ marginBottom: 8, display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: selectedDevId === p.id ? '#e0f7fa' : 'transparent', borderRadius: 6, padding: '4px 8px' }}>
+                    <span style={{ color: '#398dd3', fontWeight: 'bold' }}>{p.title}</span>
+                    <button
+                      style={{ background: '#ffd000', border: 'none', borderRadius: 6, cursor: 'pointer', padding: '4px 12px', fontWeight: 'bold', color: '#222', marginLeft: 8 }}
+                      onClick={() => setSelectedDevId(p.id)}
+                    >Редактировать</button>
+                  </li>
+                ))}
+              </ul>
             </div>
             {/* Форма редактирования справа */}
             <div style={{ flex: '1 1 auto', marginLeft: 32 }}>
-              <form onSubmit={handleDevSubmit} style={{ background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
-                <div style={{ marginBottom: 12 }}>
-                  <label>Название: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
-                </div>
-                <div style={{ marginBottom: 12 }}>
-                  <label>Описание: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
-                </div>
-                <div style={{ marginBottom: 12 }}>
-                  <label>Ссылка: <input name="link" type="text" value={form.link || ''} onChange={handleChange} style={{ width: '100%' }} /></label>
-                </div>
-                <div style={{ marginBottom: 12 }}>
-                  <label>Картинка: <input name="img" type="text" value={form.img || ''} onChange={handleChange} style={{ width: '100%' }} /></label>
-                </div>
-                <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
-              </form>
+              {selectedDevId ? (
+                <form onSubmit={handleDevSubmit} style={{ background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+                  <div style={{ marginBottom: 12 }}>
+                    <label>Название: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
+                  </div>
+                  <div style={{ marginBottom: 12 }}>
+                    <label>Описание: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
+                  </div>
+                  <div style={{ marginBottom: 12 }}>
+                    <label>Ссылка: <input name="link" type="text" value={form.link || ''} onChange={handleChange} style={{ width: '100%' }} /></label>
+                  </div>
+                  <div style={{ marginBottom: 12 }}>
+                    <label>Картинка: <input name="img" type="text" value={form.img || ''} onChange={handleChange} style={{ width: '100%' }} /></label>
+                  </div>
+                  <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
+                </form>
+              ) : (
+                <div style={{ color: '#888', fontSize: 16, marginTop: 32 }}>Выберите проект для редактирования</div>
+              )}
               {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
             </div>
           </div>
