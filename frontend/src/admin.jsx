@@ -1,11 +1,11 @@
-//import Admin from './Admin.jsx';
-
-// This file has been removed as part of the update.
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 function Admin() {
-  // --- Заглушки и импорты для работы редактора ---
+  // Заглушки для проектов
+  const [projects, setProjects] = useState([]);
+  const [devProjects, setDevProjects] = useState([]);
+  // --- Импорты и состояние для редактора ---
   const [status, setStatus] = useState('');
   const [newPageName, setNewPageName] = useState('');
   const [customPages, setCustomPages] = useState([]);
@@ -28,45 +28,13 @@ function Admin() {
       .catch(() => setUsedIds([]));
   }, []);
   const getUsedIds = () => usedIds;
-  // Заглушки для проектов
-  const [projects, setProjects] = useState([]);
-  const [devProjects, setDevProjects] = useState([]);
-  // --- Заглушки и импорты для работы редактора ---
-  const [status, setStatus] = useState('');
+  const onDragEnd = () => {};
+  const handleIdClick = (id) => {};
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm(f => ({ ...f, [name]: type === 'checkbox' ? checked : value }));
   };
-  // Тестовые данные для usedIds (для диагностики)
-  const [usedIds, setUsedIds] = useState([
-    { id: 1, description: 'Тестовый проект 1', title: 'Test 1', images: ['https://via.placeholder.com/150'], isFullWidth: false },
-    { id: 2, description: 'Тестовый проект 2', title: 'Test 2', images: ['https://via.placeholder.com/150'], isFullWidth: true }
-  ]);
-  // useEffect для fetch временно закомментирован
-  // useEffect(() => {
-  //   fetch('https://portfolio-backend-23pv.onrender.com/api/images')
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       setUsedIds(Array.isArray(data) ? data.map(item => ({ id: item.id, description: item.description })) : []);
-  //     })
-  //     .catch(() => setUsedIds([]));
-  // }, []);
-  // Для диагностики временно возвращаем все id
-  const getUsedIds = () => usedIds;
-  const onDragEnd = () => {};
-  const handleIdClick = (id) => {};
-  const [newPageName, setNewPageName] = useState('');
-  const [customPages, setCustomPages] = useState([]);
-  const [newPageTemplate, setNewPageTemplate] = useState('page');
-  const [selectedPage, setSelectedPage] = useState('home');
-  const [form, setForm] = useState({
-    id: '',
-    title: '',
-    description: '',
-    images: '',
-    isFullWidth: false
-  });
-  // ...existing code...
+
   // Добавление новой страницы
   const handleAddPage = async () => {
     const name = newPageName.trim();
@@ -118,14 +86,19 @@ function Admin() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-      // ...existing code...
+      if (res.ok) {
+        setStatus('Сохранено');
+        setForm({ id: '', title: '', description: '', images: '', isFullWidth: false });
+        setUsedIds(prev => [...prev, { id: payload.id, description: payload.description }]);
+      } else {
+        const text = await res.text();
+        setStatus(`Ошибка: ${text}`);
+      }
     } catch (err) {
       setStatus('Ошибка сети');
     }
   }
   
-  // ...existing code...
-
   return (
     <div style={{ display: 'flex', maxWidth: 900, margin: '40px auto', gap: 32 }}>
       <div style={{ minWidth: 220, background: '#f6f6f6', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', height: 'fit-content' }}>
