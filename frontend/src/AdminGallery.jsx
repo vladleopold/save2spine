@@ -28,8 +28,10 @@ function AdminGallery() {
       url = 'https://portfolio-backend-23pv.onrender.com/api/dev-projects';
     } else if (selectedPage === 'x') {
       url = 'https://portfolio-backend-23pv.onrender.com/api/infographic-steps';
+    } else if (selectedPage === 'j') {
+      url = 'https://portfolio-backend-23pv.onrender.com/api/j-items';
     } else if (selectedPage === 'i') {
-      url = '/api/i-items';
+      url = 'https://portfolio-backend-23pv.onrender.com/api/i-items';
     } else {
       url = 'https://portfolio-backend-23pv.onrender.com/api/images';
     }
