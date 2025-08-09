@@ -44,7 +44,8 @@ function AdminGallery() {
   const rootPages = [
     { value: 'home', label: 'Главная' },
     { value: 'dev', label: 'Dev-портфолио' },
-    { value: 'x', label: 'Инфографика' }
+    { value: 'x', label: 'Инфографика' },
+    { value: 'j', label: 'J страница' }
   ];
   const [selectedPage, setSelectedPage] = useState('home');
   const [form, setForm] = useState({

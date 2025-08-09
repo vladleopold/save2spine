@@ -2,16 +2,37 @@
 const jItems = [
     {
         id: 1,
-        title: 'J demo 1',
-        description: 'Описание J demo 1',
-        images: ['https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif'],
+        title: 'Калькулятор пончиков',
+        description: 'Считает, сколько пончиков можно съесть до потери сознания. Встроенный режим "Экстренный сахар".',
+        images: ['https://media.giphy.com/media/3o6Zt6ML6BklcajjsA/giphy.gif'],
         isFullWidth: false
     },
     {
         id: 2,
-        title: 'J demo 2',
-        description: 'Описание J demo 2',
-        images: ['https://media.giphy.com/media/3o6ZtpxSZbQRRnwCKQ/giphy.gif'],
+        title: 'Генератор отмазок для дедлайна',
+        description: 'Нажми кнопку — получи новую причину, почему проект не сдан. Работает даже на начальников!',
+        images: ['https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif'],
+        isFullWidth: false
+    },
+    {
+        id: 3,
+        title: 'Симулятор кота-программиста',
+        description: 'Пиши код лапками, случайно удаляй файлы и требуй корм каждые 5 минут.',
+        images: ['https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif'],
+        isFullWidth: false
+    },
+    {
+        id: 4,
+        title: 'Пингвин-менеджер задач',
+        description: 'Пингвин раздаёт задачи, а потом уходит плавать. Идеальный тимлид!',
+        images: ['https://media.giphy.com/media/2wYQbQpU5hI4A/giphy.gif'],
+        isFullWidth: false
+    },
+    {
+        id: 5,
+        title: 'Тетрис для интровертов',
+        description: 'Фигуры исчезают сами, если на них слишком долго смотреть. Никто не мешает — даже ты сам.',
+        images: ['https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif'],
         isFullWidth: false
     }
 ];
