@@ -55,6 +55,7 @@ function AdminGallery() {
       </select>
     </div>
   );
+
   let leftBlock;
   if (selectedPage === 'dev') {
     leftBlock = (
@@ -349,6 +350,7 @@ function AdminGallery() {
   <div style={{ display: 'flex', gap: 24 }}>
     <div style={{ flex: 2 }}>
       {pageSelector}
+      <h1 style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 24, color: '#22c55e' }}>Админка: редактирование страниц</h1>
       {leftBlock}
     </div>
     <div style={{ flex: 1, background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', display: 'flex', flexDirection: 'column', minHeight: 500 }}>
