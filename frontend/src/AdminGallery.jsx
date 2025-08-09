@@ -180,7 +180,7 @@ function AdminGallery() {
           </select>
         </div>
         {selectedPage === 'dev' ? (
-            {/* Форма редактирования dev-проекта */}
+              
             <div style={{ margin: '24px 0', background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)' }}>
               <h4 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 16, color: '#ff9800' }}>Редактировать проект</h4>
               <form onSubmit={async e => {
