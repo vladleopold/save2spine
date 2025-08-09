@@ -44,16 +44,20 @@ function Admin() {
     const { name, value, type, checked } = e.target;
     setForm(f => ({ ...f, [name]: type === 'checkbox' ? checked : value }));
   };
-  const [usedIds, setUsedIds] = useState([]);
-  useEffect(() => {
-    fetch('https://portfolio-backend-23pv.onrender.com/api/images')
-      .then(res => res.json())
-      .then(data => {
-        // data должен быть массивом объектов с id и description
-        setUsedIds(Array.isArray(data) ? data.map(item => ({ id: item.id, description: item.description })) : []);
-      })
-      .catch(() => setUsedIds([]));
-  }, []);
+  // Тестовые данные для usedIds (для диагностики)
+  const [usedIds, setUsedIds] = useState([
+    { id: 1, description: 'Тестовый проект 1', title: 'Test 1', images: ['https://via.placeholder.com/150'], isFullWidth: false },
+    { id: 2, description: 'Тестовый проект 2', title: 'Test 2', images: ['https://via.placeholder.com/150'], isFullWidth: true }
+  ]);
+  // useEffect для fetch временно закомментирован
+  // useEffect(() => {
+  //   fetch('https://portfolio-backend-23pv.onrender.com/api/images')
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       setUsedIds(Array.isArray(data) ? data.map(item => ({ id: item.id, description: item.description })) : []);
+  //     })
+  //     .catch(() => setUsedIds([]));
+  // }, []);
   // Для диагностики временно возвращаем все id
   const getUsedIds = () => usedIds;
   const onDragEnd = () => {};
