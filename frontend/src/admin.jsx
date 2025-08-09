@@ -11,15 +11,17 @@ function Admin() {
     // Фильтруем id по выбранной странице (если в backend есть поле page)
     if (!selectedPage) {
       setFilteredIds([]);
+      setForm({ id: '', title: '', description: '', images: '', isFullWidth: false });
       return;
     }
-    setFilteredIds(usedIds.filter(item => {
+    const filtered = usedIds.filter(item => {
       // Если нет поля page, показываем все
       return !item.page || item.page === selectedPage;
-    }));
+    });
+    setFilteredIds(filtered);
     // Автозаполнение формы первым найденным id
-    const first = usedIds.find(item => (!item.page || item.page === selectedPage));
-    if (first) {
+    if (filtered.length > 0) {
+      const first = filtered[0];
       setForm({
         id: first.id || '',
         title: first.title || '',
@@ -27,7 +29,11 @@ function Admin() {
         images: Array.isArray(first.images) ? first.images.join(',') : (first.images || ''),
         isFullWidth: !!first.isFullWidth
       });
+    } else {
+      setForm({ id: '', title: '', description: '', images: '', isFullWidth: false });
     }
+    // Отладочный вывод
+    console.log('selectedPage:', selectedPage, 'filteredIds:', filtered);
   }, [selectedPage, usedIds]);
   // Заглушки для проектов
   const [projects, setProjects] = useState([]);
@@ -48,7 +54,8 @@ function Admin() {
       })
       .catch(() => setUsedIds([]));
   }, []);
-  const getUsedIds = () => filteredIds;
+  // Для диагностики временно возвращаем все id
+  const getUsedIds = () => usedIds;
   const onDragEnd = () => {};
   const handleIdClick = (id) => {};
   const [newPageName, setNewPageName] = useState('');
