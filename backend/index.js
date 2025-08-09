@@ -39,9 +39,8 @@ app.get("/api/i-items", (req, res) => {
                 : []
         }))
         .filter(project => project.images.length > 0);
-    res.json(cleanProjects);
+    res.json(iItems);
 });
-//////////////////////
 
 
 // Добавить новый i-item
