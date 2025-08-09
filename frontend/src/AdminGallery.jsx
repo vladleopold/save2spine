@@ -2,6 +2,59 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 function AdminGallery() {
+  // --- UI для выбора страницы (селектор)
+  // --- useState для jItems (J страница)
+  const [jItems, setJItems] = useState([]);
+
+  // --- useEffect для загрузки jItems
+  useEffect(() => {
+    if (selectedPage === 'j') {
+      fetch('/api/j-items')
+        .then(res => res.json())
+        .then(data => setJItems(data))
+        .catch(() => setJItems([]));
+    }
+  }, [selectedPage, status]);
+
+  // --- handleJSubmit для J страницы
+  const handleJSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('');
+    const payload = {
+      id: Number(form.id),
+      title: form.title,
+      description: form.description,
+      images: form.images.split(',').map(s => s.trim()).filter(Boolean),
+      isFullWidth: form.isFullWidth
+    };
+    try {
+      const res = await fetch('/api/j-items', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStatus('Успешно добавлено!');
+        setForm({ id: '', title: '', description: '', images: '', isFullWidth: false });
+      } else {
+        setStatus('Ошибка: ' + (data.error || 'Не удалось добавить'));
+      }
+    } catch (err) {
+      setStatus('Ошибка сети');
+    }
+  };
+  // --- Селектор страниц (UI)
+  const pageSelector = (
+    <div style={{ marginBottom: 24 }}>
+      <label style={{ fontWeight: 'bold', marginRight: 8 }}>Страница:</label>
+      <select value={selectedPage} onChange={e => setSelectedPage(e.target.value)} style={{ fontSize: 16, padding: '4px 12px', borderRadius: 6 }}>
+        {rootPages.map(p => (
+          <option key={p.value} value={p.value}>{p.label}</option>
+        ))}
+      </select>
+    </div>
+  );
   let leftBlock;
   if (selectedPage === 'dev') {
     leftBlock = (
@@ -295,6 +348,7 @@ function AdminGallery() {
   return (
   <div style={{ display: 'flex', gap: 24 }}>
     <div style={{ flex: 2 }}>
+      {pageSelector}
       {leftBlock}
     </div>
     <div style={{ flex: 1, background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', display: 'flex', flexDirection: 'column', minHeight: 500 }}>
