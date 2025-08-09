@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 import React, { useState, useEffect } from 'react';
 
@@ -144,10 +145,15 @@ export default function IPage() {
     </div>
   );
 =======
+=======
+>>>>>>> aa1bbf4 (i page)
 import App from './App.jsx';
 
 export default function IPage() {
   // Просто рендерим App (главную галерею) как отдельную страницу
   return <App />;
+<<<<<<< HEAD
+>>>>>>> aa1bbf4 (i page)
+=======
 >>>>>>> aa1bbf4 (i page)
 }
