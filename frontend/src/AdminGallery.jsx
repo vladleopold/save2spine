@@ -169,7 +169,9 @@ function AdminGallery() {
                       id: p.id,
                       title: p.title,
                       description: p.description,
-                      images: '', // Можно добавить поле для картинок, если потребуется
+                      link: p.link,
+                      img: p.img,
+                      images: '',
                       isFullWidth: false
                     });
                   }}>
@@ -279,7 +281,25 @@ function AdminGallery() {
             <>
               <h2 style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 16, color: '#ff9800' }}>Редактирование портфолио Unity</h2>
               <div style={{ marginBottom: 16, color: '#555' }}>Добавьте или измените демо-проекты для портфолио Unity.</div>
-              {/* Можно добавить отдельную форму для проектов, если потребуется */}
+              <form onSubmit={handleDevSubmit} style={{ background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+                <div style={{ marginBottom: 12 }}>
+                  <label>ID: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label>Название: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label>Описание: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label>Ссылка: <input name="link" type="text" value={form.link} onChange={handleChange} style={{ width: '100%' }} /></label>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label>Картинка: <input name="img" type="text" value={form.img} onChange={handleChange} style={{ width: '100%' }} /></label>
+                </div>
+                <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
+              </form>
+              {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
             </>
           )}
           {selectedPage === 'x' && (
