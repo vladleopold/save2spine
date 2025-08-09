@@ -231,37 +231,33 @@ function AdminGallery() {
     }
   };
 
+  // Явный тестовый UI для проверки рендера
+  const testData = [
+    { id: 1, title: 'Тестовый проект', description: 'Описание теста' },
+    { id: 2, title: 'Еще один', description: 'Второе описание' }
+  ];
   return (
-    <div style={{ maxWidth: 900, margin: '40px auto', background: '#fff', borderRadius: 12, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', padding: 32 }}>
-      <div style={{ marginBottom: 24 }}>
-        <label style={{ fontWeight: 'bold', marginRight: 8 }}>Страница:</label>
-        <select value={selectedPage} onChange={e => setSelectedPage(e.target.value)} style={{ fontSize: 16, padding: '4px 12px', borderRadius: 6 }}>
-          {rootPages.map(p => (
-            <option key={p.value} value={p.value}>{p.label}</option>
+    <div style={{ maxWidth: 700, margin: '40px auto', background: '#fff', borderRadius: 12, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', padding: 32 }}>
+      <h1 style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 24, color: '#22c55e' }}>ТЕСТОВАЯ АДМИНКА</h1>
+      <div style={{ marginBottom: 24, color: '#d00', fontWeight: 'bold' }}>Если вы видите этот текст — компонент точно работает!</div>
+      <table style={{ width: '100%', fontSize: 15, marginBottom: 24 }}>
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>title</th>
+            <th>description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {testData.map(row => (
+            <tr key={row.id}>
+              <td>{row.id}</td>
+              <td>{row.title}</td>
+              <td>{row.description}</td>
+            </tr>
           ))}
-        </select>
-      </div>
-      <h1 style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 24, color: '#22c55e' }}>Админка: редактирование страниц</h1>
-      {leftBlock}
-      <form onSubmit={handleSubmit} style={{ marginBottom: 16 }}>
-        <div style={{ marginBottom: 12 }}>
-          <label>id: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
-        </div>
-        <div style={{ marginBottom: 12 }}>
-          <label>title: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
-        </div>
-        <div style={{ marginBottom: 12 }}>
-          <label>description: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
-        </div>
-        <div style={{ marginBottom: 12 }}>
-          <label>images (через запятую): <input name="images" type="text" value={form.images} onChange={handleChange} style={{ width: '100%' }} /></label>
-        </div>
-        <div style={{ marginBottom: 12 }}>
-          <label><input name="isFullWidth" type="checkbox" checked={form.isFullWidth} onChange={handleChange} /> Широкий блок (занимает всю ширину)</label>
-        </div>
-        <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
-      </form>
-      {status && <div style={{ marginTop: 8, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
+        </tbody>
+      </table>
     </div>
   );
 }
