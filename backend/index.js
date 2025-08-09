@@ -1,17 +1,130 @@
-// Массив для страницы /j
-const jItems = [
+// Массив для страницы /i
+const iItems = [
     {
         id: 1,
-        title: 'J demo 1',
-        description: 'Описание J demo 1',
-        images: ['https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif'],
+        title: '',
+        description: 'rodeo  - spine ( 5h )',
+        images: ['https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUybmRhaXdxY3B3cmpra2w2em1ibGI2Z283bmI0OXBma3BzY2E3OWg0MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cMy5GaRRTmz01HMbyC/giphy.webp'],
         isFullWidth: false
     },
     {
         id: 2,
-        title: 'J demo 2',
-        description: 'Описание J demo 2',
-        images: ['https://media.giphy.com/media/3o6ZtpxSZbQRRnwCKQ/giphy.gif'],
+        title: '',
+        description: 'treehouse  - spine. ( 10h )',
+        images: [
+            'https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUybTgzcmZveWk4YzQxZTN5YWYwemtxcW5wZG0xd2pxeWpxZHZvNmFkciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/BerqIjRJo79qKepITt/giphy.webp',
+            'https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyZndncG9pdTU4ZG5sd2RkZjZ0ajg2N2lrbG91dndmcjFxMms1YnF2OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1oEdjQdlOWqfDnBEP0/giphy.webp'
+        ],
+        isFullWidth: false
+    },
+    {
+        id: 3,
+        title: '',
+        description: 'chicken - spine ( 8h )',
+        images: [
+            'https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUydW13dDNuYnRobm1ycDlhNWtsYW91bmFldDN6YzBid3gwOHltNjg1byZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/TZZFoJ2KTCKag8SHCG/giphy.webp',
+            'https://media4.giphy.com/media/v1.Y2lkPTZjMDliOTUyMWVwYjVwOWhvdzA1NG83c3l3MHphdG9rcW93dWFvcnBnMm9oYm45eiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cjw9Af81qWURmBaYv6/giphy.webp',
+            'https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdnpxaGIyb3VoNXg3a3FhNW5tY2N2MzRyaGtycGRyM210MzZ0cDU2cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/IaXx3aUshgmAOsv4Di/giphy.webp',
+            'https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyMXg2MnZybmlzMjVuaHgycW1leTkxODl1MHp6dzB6MjZwZXEyODJhaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3zLTv0ikwgmqjWLdqE/giphy.webp'
+        ],
+        isFullWidth: false
+    },
+    {
+        id: 4,
+        title: 'idle slot symbol. - spine  ( 1h )',
+        description: '',
+        images: ['https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUybTY3YmplcDU0bHN0azluZGhxZTI0MzRhbHV2eDU2Mmhkam1yZDAxbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cEwGaZHpaekqQ7joaP/giphy.webp'],
+        isFullWidth: false
+    },
+    {
+        id: 5,
+        title: '',
+        description: 'slot high symbol  - spine ( 8h )',
+        images: ['https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyODBhNW12NGNpOWh2am05czFsMnM3N2h6NzlpM2VjaXJndzg0N2d5ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/a9Cx1jkCyHGQmcTadG/giphy.webp'],
+        isFullWidth: false
+    },
+    {
+        id: 6,
+        title: '',
+        description: '',
+        images: ['https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmhuYXBobDZwbjZuZDFjMnZuYTBxaW96bHNidTY4NHZiYmhhM2E0aSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4lOcXKbyMQTHYYHBeg/giphy.gif'],
+        isFullWidth: false
+    },
+    {
+        id: 7,
+        title: '',
+        description: 'health and damge  - spine ( 6h )',
+        images: [
+            'https://media1.giphy.com/media/v1.Y2lkPTZjMDliOTUyMTIyaW50YmJqdmdjZ2VxcHg5MTlrcmw5amdyczR2bmx2cG5xcXJnZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/tYeXaF0YNoYijlDzLv/giphy.webp',
+            'https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUycWY0MnN2Y3FjbWU4dWhucnBlM2pnNm5zcjh0d2ZzdzJ6Nzg4c2M3YSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4lOcXKbyMQTHYYHBeg/giphy.webp',
+            'https://media1.giphy.com/media/v1.Y2lkPTZjMDliOTUydGhkZGhzbDJrZW40ajQxc3Z5a2xxNDhwcmVqZHFheGJxamM0Z2swcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4Bf7khDZyamqsPXqTJ/giphy.webp',
+            'https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUycno1MXA3NnV1aXZ2cWNvdGozeWd4ZW5ldjhyaG1iOXc5aDVqMjQ2dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Fx2QfvGT2z1LWnpM4F/giphy.webp'
+        ],
+        isFullWidth: false
+    },
+    {
+        id: 8,
+        title: '',
+        description: 'dark ritual slot - After Effects ( 25h )',
+        images: [
+            'http://spine-animator.ho.ua/gif/dr1.gif',
+            'http://spine-animator.ho.ua/gif/dr2.gif'
+        ],
+        isFullWidth: false
+    }
+];
+
+// Получить i-items
+app.get('/api/i-items', (req, res) => {
+    res.json(iItems);
+});
+
+// Добавить новый i-item
+app.post('/api/i-items', (req, res) => {
+    const { title, description, images, isFullWidth } = req.body;
+    if (!Array.isArray(images)) {
+        return res.status(400).json({ error: 'Некорректные данные' });
+    }
+    const id = iItems.length ? Math.max(...iItems.map(i => i.id)) + 1 : 1;
+    const newItem = { id, title, description, images, isFullWidth };
+    iItems.push(newItem);
+    res.json({ success: true, item: newItem });
+});
+// Массив для страницы /j
+const jItems = [
+    {
+        id: 1,
+        title: 'Калькулятор пончиков',
+        description: 'Считает, сколько пончиков можно съесть до потери сознания. Встроенный режим "Экстренный сахар".',
+        images: ['https://media.giphy.com/media/3o6Zt6ML6BklcajjsA/giphy.gif'],
+        isFullWidth: false
+    },
+    {
+        id: 2,
+        title: 'Генератор отмазок для дедлайна',
+        description: 'Нажми кнопку — получи новую причину, почему проект не сдан. Работает даже на начальников!',
+        images: ['https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif'],
+        isFullWidth: false
+    },
+    {
+        id: 3,
+        title: 'Симулятор кота-программиста',
+        description: 'Пиши код лапками, случайно удаляй файлы и требуй корм каждые 5 минут.',
+        images: ['https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif'],
+        isFullWidth: false
+    },
+    {
+        id: 4,
+        title: 'Пингвин-менеджер задач',
+        description: 'Пингвин раздаёт задачи, а потом уходит плавать. Идеальный тимлид!',
+        images: ['https://media.giphy.com/media/2wYQbQpU5hI4A/giphy.gif'],
+        isFullWidth: false
+    },
+    {
+        id: 5,
+        title: 'Тетрис для интровертов',
+        description: 'Фигуры исчезают сами, если на них слишком долго смотреть. Никто не мешает — даже ты сам.',
+        images: ['https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif'],
         isFullWidth: false
     }
 ];

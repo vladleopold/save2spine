@@ -42,9 +42,10 @@ function AdminGallery() {
   ];
   // Корневые страницы
   const rootPages = [
-    { value: 'home', label: 'Главная' },
-    { value: 'dev', label: 'Dev-портфолио' },
-    { value: 'x', label: 'Инфографика' }
+  { value: 'home', label: 'Главная' },
+  { value: 'dev', label: 'Dev-портфолио' },
+  { value: 'x', label: 'Инфографика' },
+  { value: 'i', label: 'I страница' }
   ];
   const [selectedPage, setSelectedPage] = useState('home');
   const [form, setForm] = useState({
@@ -65,7 +66,7 @@ function AdminGallery() {
     } else if (selectedPage === 'x') {
       url = 'https://portfolio-backend-23pv.onrender.com/api/infographic-steps';
     } else {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/images';
+          url = '/api/i-items';
     }
     fetch(url)
       .then(res => res.json())
@@ -113,6 +114,20 @@ function AdminGallery() {
     } catch (err) {
       setStatus('Ошибка сети');
     }
+        if (selectedPage === 'i') {
+          const res = await fetch('/api/i-items', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (data.success) {
+            setStatus('Успешно добавлено!');
+            setForm({ id: '', title: '', description: '', images: '', isFullWidth: false });
+          } else {
+            setStatus('Ошибка: ' + (data.error || 'Не удалось добавить'));
+          }
+        }
   };
 
   // Drag-and-drop reorder logic
