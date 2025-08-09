@@ -1,3 +1,37 @@
+// Массив для страницы /j
+const jItems = [
+    {
+        id: 1,
+        title: 'J demo 1',
+        description: 'Описание J demo 1',
+        images: ['https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif'],
+        isFullWidth: false
+    },
+    {
+        id: 2,
+        title: 'J demo 2',
+        description: 'Описание J demo 2',
+        images: ['https://media.giphy.com/media/3o6ZtpxSZbQRRnwCKQ/giphy.gif'],
+        isFullWidth: false
+    }
+];
+
+// Получить j-items
+app.get('/api/j-items', (req, res) => {
+    res.json(jItems);
+});
+
+// Добавить новый j-item
+app.post('/api/j-items', (req, res) => {
+    const { title, description, images, isFullWidth } = req.body;
+    if (!title || !Array.isArray(images)) {
+        return res.status(400).json({ error: 'Некорректные данные' });
+    }
+    const id = jItems.length ? Math.max(...jItems.map(i => i.id)) + 1 : 1;
+    const newItem = { id, title, description, images, isFullWidth };
+    jItems.push(newItem);
+    res.json({ success: true, item: newItem });
+});
 const express = require("express");
 const cors = require("cors");
 const app = express();
