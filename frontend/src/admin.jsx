@@ -1,7 +1,11 @@
+//import Admin from './Admin.jsx';
+
+// This file has been removed as part of the update.
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
-function AdminGallery() {
+function Admin() {
+  const [selectedPage, setSelectedPage] = useState('home');
   const [form, setForm] = useState({
     id: '',
     title: '',
@@ -13,17 +17,22 @@ function AdminGallery() {
   const [usedIds, setUsedIds] = useState([]);
 
   const [projects, setProjects] = useState([]);
+  const [devProjects, setDevProjects] = useState([]);
   useEffect(() => {
+    // home
     fetch('https://portfolio-backend-23pv.onrender.com/api/images')
       .then(res => res.json())
       .then(data => {
         setProjects(data);
-        setUsedIds(data.map(p => ({ id: p.id, description: p.description })));
       })
-      .catch(() => {
-        setProjects([]);
-        setUsedIds([]);
-      });
+      .catch(() => setProjects([]));
+    // dev
+    fetch('https://portfolio-backend-23pv.onrender.com/api/dev')
+      .then(res => res.json())
+      .then(data => {
+        setDevProjects(data);
+      })
+      .catch(() => setDevProjects([]));
   }, [status]);
 
   const handleChange = e => {
@@ -62,18 +71,31 @@ function AdminGallery() {
     }
   };
 
+  // Получить список id для выбранной страницы
+  const getUsedIds = () => {
+    if (selectedPage === 'dev') {
+      return devProjects.map(p => ({ id: p.id, description: p.description }));
+    }
+    return projects.map(p => ({ id: p.id, description: p.description }));
+  };
+
   // Drag-and-drop reorder logic
   const onDragEnd = (result) => {
     if (!result.destination) return;
-    const items = Array.from(usedIds);
+    const items = Array.from(getUsedIds());
     const [reordered] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reordered);
-    setUsedIds(items);
+    // setUsedIds(items); // не сохраняем, только визуально
   };
 
   // Клик по id: загрузить проект в форму
   const handleIdClick = (id) => {
-    const project = projects.find(p => p.id === id);
+    let project = null;
+    if (selectedPage === 'dev') {
+      project = devProjects.find(p => p.id === id);
+    } else {
+      project = projects.find(p => p.id === id);
+    }
     if (project) {
       setForm({
         id: project.id,
@@ -88,6 +110,14 @@ function AdminGallery() {
   return (
     <div style={{ display: 'flex', maxWidth: 900, margin: '40px auto', gap: 32 }}>
       <div style={{ minWidth: 220, background: '#f6f6f6', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', height: 'fit-content' }}>
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ fontWeight: 'bold', fontSize: 16, marginRight: 8 }}>Страница:</label>
+          <select value={selectedPage} onChange={e => setSelectedPage(e.target.value)} style={{ fontSize: 15, padding: '4px 12px', borderRadius: 6, border: '1px solid #ddd' }}>
+            <option value="home">Главная</option>
+            <option value="dev">Dev-портфолио</option>
+            <option value="x">Инфографика</option>
+          </select>
+        </div>
         <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>all items</h3>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="ids-list">
@@ -97,7 +127,7 @@ function AdminGallery() {
                   <tr><th style={{ textAlign: 'left' }}>id</th><th style={{ textAlign: 'left' }}>описание</th></tr>
                 </thead>
                 <tbody>
-                  {usedIds.map(({ id, description }, idx) => (
+                  {getUsedIds().map(({ id, description }, idx) => (
                     <Draggable key={id} draggableId={id.toString()} index={idx}>
                       {(provided, snapshot) => (
                         <tr
@@ -110,7 +140,7 @@ function AdminGallery() {
                             cursor: 'grab'
                           }}
                         >
-                          <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>
+                          <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#22c55e' }}>
                             {id}
                           </td>
                           <td style={{ padding: '2px 8px', color: '#555', display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -180,4 +210,4 @@ function AdminGallery() {
   );
 }
 
-export default AdminGallery;
+export default Admin;

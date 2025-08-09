@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function InfographicPage() {
+export default function Xx() {
   return (
     <div style={{ maxWidth: 900, margin: '40px auto', background: '#fff', borderRadius: 18, boxShadow: '0 4px 32px rgba(0,0,0,0.10)', padding: 40 }}>
       <h1 style={{ fontSize: 36, fontWeight: 'bold', marginBottom: 32, color: '#22c55e', textAlign: 'center' }}>

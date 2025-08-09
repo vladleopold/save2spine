@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function DevPortfolio() {
+function Dev() {
   const projects = [
     {
       title: 'Unity Кот-симулятор',
@@ -53,3 +53,4 @@ export default function DevPortfolio() {
     </div>
   );
 }
+export default Dev;
