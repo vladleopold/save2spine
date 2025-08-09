@@ -112,45 +112,7 @@ function AdminGallery() {
           </select>
         </div>
         {selectedPage === 'dev' ? (
-          <>
-            <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Dev-портфолио проекты</h3>
-            <table style={{ width: '100%', fontSize: 15 }}>
-              <thead>
-                <tr>
-                  <th style={{ textAlign: 'left' }}>id</th>
-                  <th style={{ textAlign: 'left' }}>название</th>
-                  <th style={{ textAlign: 'left' }}>описание</th>
-                  <th style={{ textAlign: 'left' }}>ссылка</th>
-                  <th style={{ textAlign: 'left' }}>картинка</th>
-                </tr>
-              </thead>
-              <tbody>
-                {devProjectsLocal.map((p) => (
-                  <tr key={p.id} style={{ cursor: 'pointer' }} onClick={() => {
-                    setForm({
-                      id: p.id,
-                      title: p.title,
-                      description: p.description,
-                      link: p.link,
-                      img: p.img,
-                      images: '',
-                      isFullWidth: false
-                    });
-                  }}>
-                    <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>{p.id}</td>
-                    <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{p.title}</td>
-                    <td style={{ padding: '2px 8px', color: '#555' }}>{p.description}</td>
-                    <td style={{ padding: '2px 8px' }}>
-                      <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ color: '#ff9800', textDecoration: 'underline' }}>ссылка</a>
-                    </td>
-                    <td style={{ padding: '2px 8px' }}>
-                      <img src={p.img} alt={p.title} style={{ maxWidth: 60, borderRadius: 4 }} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </>
+          <></>
         ) : (
           <>
             <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>all items</h3>
