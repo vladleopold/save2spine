@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App.jsx';
+import IPage from './IPage.jsx';
 import AdminGallery from './AdminGallery.jsx';
 import DevPortfolio from './DevPortfolio.jsx';
 import InfographicPage from './InfographicPage.jsx';
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <Route path="/dev" element={<DevPortfolio />} />
   <Route path="/x" element={<InfographicPage />} />
   <Route path="/j" element={<JPage />} />
+  <Route path="/i" element={<IPage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
