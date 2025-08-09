@@ -2,6 +2,44 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 function AdminGallery() {
+  // Данные для dev-портфолио (локально, если нет API)
+  const devProjectsLocal = [
+    {
+      id: 1,
+      title: 'Unity Кот-симулятор',
+      description: 'Погладь кота, пока он не убежит в реальный мир. Встроенный генератор мемов и случайных мурлыканий.',
+      img: 'https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif',
+      link: 'https://unity.com/cat-simulator'
+    },
+    {
+      id: 2,
+      title: 'Гравитация для чайников',
+      description: 'Платформер, где гравитация меняется по настроению игрока. Иногда вверх — это вниз, а иногда вообще вбок.',
+      img: 'https://media.giphy.com/media/3o6ZtpxSZbQRRnwCKQ/giphy.gif',
+      link: 'https://unity.com/gravity-fun'
+    },
+    {
+      id: 3,
+      title: 'Битва багов',
+      description: 'Мультиплеерная арена, где игроки сражаются за звание самого креативного баг-репортера. Побеждает тот, кто вылетит последним.',
+      img: 'https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif',
+      link: 'https://unity.com/bug-battle'
+    },
+    {
+      id: 4,
+      title: 'Симулятор кофе-брейка',
+      description: 'Только ты, Unity и бесконечная чашка кофе. Главная цель — не пролить на клавиатуру!',
+      img: 'https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif',
+      link: 'https://unity.com/coffee-break'
+    },
+    {
+      id: 5,
+      title: 'Пингвин против Unity Editor',
+      description: 'Пингвин пытается собрать билд, но Editor сопротивляется. Кто победит — холод или баги?',
+      img: 'https://media.giphy.com/media/2wYQbQpU5hI4A/giphy.gif',
+      link: 'https://unity.com/penguin-vs-editor'
+    }
+  ];
   // Корневые страницы
   const rootPages = [
     { value: 'home', label: 'Главная' },
@@ -125,16 +163,24 @@ function AdminGallery() {
                 </tr>
               </thead>
               <tbody>
-                {projects.map((p, idx) => (
-                  <tr key={p.id || idx}>
-                    <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>{p.id || idx + 1}</td>
+                {devProjectsLocal.map((p) => (
+                  <tr key={p.id} style={{ cursor: 'pointer' }} onClick={() => {
+                    setForm({
+                      id: p.id,
+                      title: p.title,
+                      description: p.description,
+                      images: '', // Можно добавить поле для картинок, если потребуется
+                      isFullWidth: false
+                    });
+                  }}>
+                    <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>{p.id}</td>
                     <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{p.title}</td>
-                    <td style={{ padding: '2px 8px', color: '#555' }}>{p.description || p.desc}</td>
+                    <td style={{ padding: '2px 8px', color: '#555' }}>{p.description}</td>
                     <td style={{ padding: '2px 8px' }}>
-                      {p.link ? <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ color: '#ff9800', textDecoration: 'underline' }}>ссылка</a> : '-'}
+                      <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ color: '#ff9800', textDecoration: 'underline' }}>ссылка</a>
                     </td>
                     <td style={{ padding: '2px 8px' }}>
-                      {p.img ? <img src={p.img} alt={p.title} style={{ maxWidth: 60, borderRadius: 4 }} /> : '-'}
+                      <img src={p.img} alt={p.title} style={{ maxWidth: 60, borderRadius: 4 }} />
                     </td>
                   </tr>
                 ))}
