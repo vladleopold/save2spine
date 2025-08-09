@@ -90,7 +90,7 @@ function Admin() {
     } catch (err) {
       setStatus('Ошибка сети');
     }
-  }
+  
   // ...existing code...
 
   return (
