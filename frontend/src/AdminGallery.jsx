@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 function AdminGallery() {
+  // Корневые страницы
+  const rootPages = [
+    { value: 'home', label: 'Главная' },
+    { value: 'dev', label: 'Dev-портфолио' },
+    { value: 'x', label: 'Инфографика' }
+  ];
+  const [selectedPage, setSelectedPage] = useState('home');
   const [form, setForm] = useState({
     id: '',
     title: '',
@@ -88,6 +95,14 @@ function AdminGallery() {
   return (
     <div style={{ display: 'flex', maxWidth: 900, margin: '40px auto', gap: 32 }}>
       <div style={{ minWidth: 220, background: '#f6f6f6', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', height: 'fit-content' }}>
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ fontWeight: 'bold', fontSize: 16, marginRight: 8 }}>Корневая страница:</label>
+          <select value={selectedPage} onChange={e => setSelectedPage(e.target.value)} style={{ fontSize: 15, padding: '4px 12px', borderRadius: 6, border: '1px solid #ddd', minWidth: 120 }}>
+            {rootPages.map(p => (
+              <option key={p.value} value={p.value}>{p.label}</option>
+            ))}
+          </select>
+        </div>
         <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>all items</h3>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="ids-list">
@@ -147,26 +162,69 @@ function AdminGallery() {
       </div>
       <div style={{ flex: 1, background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', display: 'flex', flexDirection: 'column', minHeight: 500 }}>
         <div style={{ flex: '0 0 auto' }}>
-          <h2 style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 16, color: "#398dd3" }}>add/edit item</h2>
-          <form onSubmit={handleSubmit}>
-            <div style={{ marginBottom: 12 }}>
-              <label>id: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
-            </div>
-            <div style={{ marginBottom: 12 }}>
-              <label>title: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
-            </div>
-            <div style={{ marginBottom: 12 }}>
-              <label>description: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
-            </div>
-            <div style={{ marginBottom: 12 }}>
-              <label>images (через запятую): <input name="images" type="text" value={form.images} onChange={handleChange} required style={{ width: '100%' }} /></label>
-            </div>
-            <div style={{ marginBottom: 12 }}>
-              <label><input name="isFullWidth" type="checkbox" checked={form.isFullWidth} onChange={handleChange} /> Широкий блок (занимает всю ширину)</label>
-            </div>
-            <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
-          </form>
-          {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
+          {selectedPage === 'home' && (
+            <>
+              <h2 style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 16, color: '#22c55e' }}>Редактирование главной страницы</h2>
+              <div style={{ marginBottom: 16, color: '#555' }}>Здесь вы можете добавить или изменить контент главной страницы сайта.</div>
+              <form onSubmit={handleSubmit}>
+                <div style={{ marginBottom: 12 }}>
+                  <label>id: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label>title: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label>description: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label>images (через запятую): <input name="images" type="text" value={form.images} onChange={handleChange} required style={{ width: '100%' }} /></label>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label><input name="isFullWidth" type="checkbox" checked={form.isFullWidth} onChange={handleChange} /> Широкий блок (занимает всю ширину)</label>
+                </div>
+                <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
+              </form>
+              {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
+            </>
+          )}
+          {selectedPage === 'dev' && (
+            <>
+              <h2 style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 16, color: '#ff9800' }}>Редактирование портфолио Unity</h2>
+              <div style={{ marginBottom: 16, color: '#555' }}>Добавьте или измените демо-проекты для портфолио Unity.</div>
+              {/* Можно добавить отдельную форму для проектов, если потребуется */}
+            </>
+          )}
+          {selectedPage === 'x' && (
+            <>
+              <h2 style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 16, color: '#398dd3' }}>Редактирование инфографики</h2>
+              <div style={{ marginBottom: 16, color: '#555' }}>Соберите инфографику шаг за шагом по шаблону.</div>
+              {/* Можно добавить отдельную форму для инфографики, если потребуется */}
+            </>
+          )}
+          {selectedPage !== 'home' && selectedPage !== 'dev' && selectedPage !== 'x' && (
+            <>
+              <h2 style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 16, color: '#398dd3' }}>add/edit item</h2>
+              <form onSubmit={handleSubmit}>
+                <div style={{ marginBottom: 12 }}>
+                  <label>id: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label>title: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label>description: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label>images (через запятую): <input name="images" type="text" value={form.images} onChange={handleChange} required style={{ width: '100%' }} /></label>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label><input name="isFullWidth" type="checkbox" checked={form.isFullWidth} onChange={handleChange} /> Широкий блок (занимает всю ширину)</label>
+                </div>
+                <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
+              </form>
+              {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
+            </>
+          )}
         </div>
         <div style={{ flex: '1 1 auto', marginTop: 32, background: '#fffff0', borderRadius: 8, padding: 16, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
           <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8, color: '#FFD000' }}>keepnote</h3>
