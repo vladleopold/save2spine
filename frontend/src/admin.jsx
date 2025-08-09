@@ -84,6 +84,7 @@ function Admin() {
     } catch (err) {
       setStatus('Ошибка сети');
     }
+  }
   
   // ...existing code...
 
@@ -194,4 +195,5 @@ function Admin() {
     </div>
   );
 }
+
 export default Admin;
