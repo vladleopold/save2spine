@@ -2,6 +2,34 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 function AdminGallery() {
+  // Обработчик submit для dev-проекта
+  const handleDevSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('');
+    const payload = {
+      id: Number(form.id),
+      title: form.title,
+      description: form.description,
+      link: form.link,
+      img: form.img
+    };
+    try {
+      const res = await fetch('https://portfolio-backend-23pv.onrender.com/api/dev-projects', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStatus('Успешно сохранено!');
+        setForm({ id: '', title: '', description: '', link: '', img: '', images: '', isFullWidth: false });
+      } else {
+        setStatus('Ошибка: ' + (data.error || 'Не удалось сохранить'));
+      }
+    } catch (err) {
+      setStatus('Ошибка сети');
+    }
+  };
   // Данные для dev-портфолио (локально, если нет API)
   const devProjectsLocal = [
     {
@@ -51,6 +79,8 @@ function AdminGallery() {
     id: '',
     title: '',
     description: '',
+    link: '',
+    img: '',
     images: '',
     isFullWidth: false
   });
@@ -150,101 +180,187 @@ function AdminGallery() {
           </select>
         </div>
         {selectedPage === 'dev' ? (
-          <>
-            <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Dev-портфолио проекты</h3>
-            <table style={{ width: '100%', fontSize: 15 }}>
-              <thead>
-                <tr>
-                  <th style={{ textAlign: 'left' }}>id</th>
-                  <th style={{ textAlign: 'left' }}>название</th>
-                  <th style={{ textAlign: 'left' }}>описание</th>
-                  <th style={{ textAlign: 'left' }}>ссылка</th>
-                  <th style={{ textAlign: 'left' }}>картинка</th>
-                </tr>
-              </thead>
-              <tbody>
-                {devProjectsLocal.map((p) => (
-                  <tr key={p.id} style={{ cursor: 'pointer' }} onClick={() => {
-                    setForm({
-                      id: p.id,
-                      title: p.title,
-                      description: p.description,
-                      images: '', // Можно добавить поле для картинок, если потребуется
-                      isFullWidth: false
-                    });
-                  }}>
-                    <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>{p.id}</td>
-                    <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{p.title}</td>
-                    <td style={{ padding: '2px 8px', color: '#555' }}>{p.description}</td>
-                    <td style={{ padding: '2px 8px' }}>
-                      <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ color: '#ff9800', textDecoration: 'underline' }}>ссылка</a>
-                    </td>
-                    <td style={{ padding: '2px 8px' }}>
-                      <img src={p.img} alt={p.title} style={{ maxWidth: 60, borderRadius: 4 }} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </>
-        ) : (
-          <>
-            <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>all items</h3>
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="ids-list">
-                {(provided) => (
-                  <table style={{ width: '100%', fontSize: 15 }} ref={provided.innerRef} {...provided.droppableProps}>
+            {/* Форма редактирования dev-проекта */}
+            <div style={{ margin: '24px 0', background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)' }}>
+              <h4 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 16, color: '#ff9800' }}>Редактировать проект</h4>
+              <form onSubmit={async e => {
+                e.preventDefault();
+                setStatus('');
+                const payload = {
+                  id: Number(form.id),
+                  title: form.title,
+                  description: form.description,
+                  link: form.link,
+                  img: form.img
+                };
+                try {
+                  const res = await fetch('https://portfolio-backend-23pv.onrender.com/api/dev-projects', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                  <div>
+                    <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Dev-портфолио проекты</h3>
+                    <table style={{ width: '100%', fontSize: 15 }}>
+                      ...existing code...
+                    </table>
+                    {/* Форма редактирования dev-проекта */}
+                    <div style={{ margin: '24px 0', background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)' }}>
+                      ...existing code...
+                    </div>
+                  </div>
+                }
+              }}>
+                <div>
+                  <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Dev-портфолио проекты</h3>
+                  <table style={{ width: '100%', fontSize: 15 }}>
                     <thead>
-                      <tr><th style={{ textAlign: 'left' }}>id</th><th style={{ textAlign: 'left' }}>описание</th></tr>
+                      <tr>
+                        <th style={{ textAlign: 'left' }}>id</th>
+                        <th style={{ textAlign: 'left' }}>название</th>
+                        <th style={{ textAlign: 'left' }}>описание</th>
+                        <th style={{ textAlign: 'left' }}>ссылка</th>
+                        <th style={{ textAlign: 'left' }}>картинка</th>
+                      </tr>
                     </thead>
                     <tbody>
-                      {usedIds.map(({ id, description }, idx) => (
-                        <Draggable key={id} draggableId={id.toString()} index={idx}>
-                          {(provided, snapshot) => (
-                            <tr
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              style={{
-                                ...provided.draggableProps.style,
-                                background: snapshot.isDragging ? '#e0ffe0' : 'inherit',
-                                cursor: 'grab'
-                              }}
-                            >
-                              <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>
-                                {id}
-                              </td>
-                              <td style={{ padding: '2px 8px', color: '#555', display: 'flex', alignItems: 'center', gap: 8 }}>
-                                {description}
-                                <button
-                                  title="Редактировать"
-                                  style={{
-                                    background: 'none',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    padding: 0,
-                                    marginLeft: 8,
-                                    display: 'flex',
-                                    alignItems: 'center'
-                                  }}
-                                  onClick={() => handleIdClick(id)}
-                                >
-                                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M3 17l2.1-6.3a1 1 0 0 1 .25-0.4l8.1-8.1a1.5 1.5 0 0 1 2.1 2.1l-8.1 8.1a1 1 0 0 1-0.4.25L3 17z" stroke="#ff9800" strokeWidth="2.5" fill="#ff9800"/>
-                                    <rect x="13.5" y="2.5" width="3" height="1.5" rx="0.75" transform="rotate(45 13.5 2.5)" fill="#ff9800" />
-                                  </svg>
-                                </button>
-                              </td>
-                            </tr>
-                          )}
-                        </Draggable>
+                      {devProjectsLocal.map((p) => (
+                        <tr key={p.id} style={{ cursor: 'pointer' }} onClick={() => {
+                          setForm({
+                            id: p.id,
+                            title: p.title,
+                            description: p.description,
+                            link: p.link,
+                            img: p.img,
+                            images: '',
+                            isFullWidth: false
+                          });
+                        }}>
+                          <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>{p.id}</td>
+                          <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{p.title}</td>
+                          <td style={{ padding: '2px 8px', color: '#555' }}>{p.description}</td>
+                          <td style={{ padding: '2px 8px' }}>
+                            <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ color: '#ff9800', textDecoration: 'underline' }}>ссылка</a>
+                          </td>
+                          <td style={{ padding: '2px 8px' }}>
+                            <img src={p.img} alt={p.title} style={{ maxWidth: 60, borderRadius: 4 }} />
+                          </td>
+                        </tr>
                       ))}
-                      {provided.placeholder}
                     </tbody>
                   </table>
-                )}
-              </Droppable>
-            </DragDropContext>
+                  <div style={{ margin: '24px 0', background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)' }}>
+                    <h4 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 16, color: '#ff9800' }}>Редактировать проект</h4>
+                    <form onSubmit={handleDevSubmit}>
+                      <div style={{ marginBottom: 12 }}>
+                        <label>ID: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
+                      </div>
+                      <div style={{ marginBottom: 12 }}>
+                        <label>Название: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
+                      </div>
+                      <div style={{ marginBottom: 12 }}>
+                        <label>Описание: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
+                      </div>
+                      <div style={{ marginBottom: 12 }}>
+                        <label>Ссылка: <input name="link" type="text" value={form.link} onChange={handleChange} style={{ width: '100%' }} /></label>
+                      </div>
+                      <div style={{ marginBottom: 12 }}>
+                        <label>Картинка (URL): <input name="img" type="text" value={form.img} onChange={handleChange} style={{ width: '100%' }} /></label>
+                      </div>
+                      <button type="submit" style={{ padding: '8px 24px', background: '#ff9800', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
+                    </form>
+                    {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
+                  </div>
+                </div>
+                        setStatus('Успешно сохранено!');
+                        setForm({ id: '', title: '', description: '', link: '', img: '', images: '', isFullWidth: false });
+                      } else {
+                        setStatus('Ошибка: ' + (data.error || 'Не удалось сохранить'));
+                      }
+                    } catch (err) {
+                      setStatus('Ошибка сети');
+                    }
+                  }}>
+                    <div style={{ marginBottom: 12 }}>
+                      <label>ID: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
+                    </div>
+                    <div style={{ marginBottom: 12 }}>
+                      <label>Название: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
+                    </div>
+                    <div style={{ marginBottom: 12 }}>
+                      <label>Описание: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
+                    </div>
+                    <div style={{ marginBottom: 12 }}>
+                      <label>Ссылка: <input name="link" type="text" value={form.link} onChange={handleChange} style={{ width: '100%' }} /></label>
+                    </div>
+                    <div style={{ marginBottom: 12 }}>
+                      <label>Картинка (URL): <input name="img" type="text" value={form.img} onChange={handleChange} style={{ width: '100%' }} /></label>
+                    </div>
+                    <button type="submit" style={{ padding: '8px 24px', background: '#ff9800', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
+                  </form>
+                  {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
+                </div>
+              </>
+            ) : (
+              <>
+                <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>all items</h3>
+                <DragDropContext onDragEnd={onDragEnd}>
+                  <Droppable droppableId="ids-list">
+                    {(provided) => (
+                      <table style={{ width: '100%', fontSize: 15 }} ref={provided.innerRef} {...provided.droppableProps}>
+                        <thead>
+                          <tr><th style={{ textAlign: 'left' }}>id</th><th style={{ textAlign: 'left' }}>описание</th></tr>
+                        </thead>
+                        <tbody>
+                          {usedIds.map(({ id, description }, idx) => (
+                            <Draggable key={id} draggableId={id.toString()} index={idx}>
+                              {(provided, snapshot) => (
+                                <tr
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  style={{
+                                    ...provided.draggableProps.style,
+                                    background: snapshot.isDragging ? '#e0ffe0' : 'inherit',
+                                    cursor: 'grab'
+                                  }}
+                                >
+                                  <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>
+                                    {id}
+                                  </td>
+                                  <td style={{ padding: '2px 8px', color: '#555', display: 'flex', alignItems: 'center', gap: 8 }}>
+                                    {description}
+                                    <button
+                                      title="Редактировать"
+                                      style={{
+                                        background: 'none',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        padding: 0,
+                                        marginLeft: 8,
+                                        display: 'flex',
+                                        alignItems: 'center'
+                                      }}
+                                      onClick={() => handleIdClick(id)}
+                                    >
+                                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M3 17l2.1-6.3a1 1 0 0 1 .25-0.4l8.1-8.1a1.5 1.5 0 0 1 2.1 2.1l-8.1 8.1a1 1 0 0 1-0.4.25L3 17z" stroke="#ff9800" strokeWidth="2.5" fill="#ff9800"/>
+                                        <rect x="13.5" y="2.5" width="3" height="1.5" rx="0.75" transform="rotate(45 13.5 2.5)" fill="#ff9800" />
+                                      </svg>
+                                    </button>
+                                  </td>
+                                </tr>
+                              )}
+                            </Draggable>
+                          ))}
+                          {provided.placeholder}
+                        </tbody>
+                      </table>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              </>
+            )}
+          </div>
           </>
         )}
       </div>
