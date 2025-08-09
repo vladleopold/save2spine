@@ -15,7 +15,7 @@ function Admin() {
     description: '',
     images: '',
     isFullWidth: false
-    }
+  });
   // ...existing code...
   // Добавление новой страницы
   const handleAddPage = async () => {
