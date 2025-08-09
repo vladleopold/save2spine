@@ -85,79 +85,13 @@ function Admin() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
-  // ...existing code...
-      }
+      });
+      // ...existing code...
     } catch (err) {
       setStatus('Ошибка сети');
-  } else {
-  };
-
-  // Получить список id для выбранной страницы
-  const getUsedIds = () => {
-    if (selectedPage === 'dev') {
-      return devProjects.map(p => ({ id: p.id, description: p.description }));
     }
-    return projects.map(p => ({ id: p.id, description: p.description }));
-  };
-
-  // Drag-and-drop reorder logic
-  const onDragEnd = (result) => {
-    if (!result.destination) return;
-    const items = Array.from(getUsedIds());
-    const [reordered] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reordered);
-      }
-      if (newPageTemplate === 'gallery') {
-        // gallery шаблон с экранированными кавычками и переносами
-        content = `import React, { useState, useEffect } from 'react';
-  // Клик по id: загрузить проект в форму
-  const handleIdClick = (id) => {
-    let project = null;
-    if (selectedPage === 'dev') {
-      project = devProjects.find(p => p.id === id);
-    } else {
-      project = projects.find(p => p.id === id);
-    }
-    if (project) {
-      setForm({
-        id: project.id,
-        title: project.title || '',
-        description: project.description || '',
-        images: Array.isArray(project.images) ? project.images.join(', ') : '',
-        isFullWidth: !!project.isFullWidth
-    if (!name || customPages.includes(name) || ['home','dev','x'].includes(name)) return;
-    setCustomPages([...customPages, name]);
-    setNewPageName('');
-    // Создать файл-страницу
-    try {
-      const filePath = `/Users/vladyslavchaplygin/save2spine.online/frontend/src/${name}.jsx;
-      let content = '';
-        if (newPageTemplate === 'gallery') {
-          content = 'import React, { useState, useEffect } from "react";\nimport Masonry from "react-masonry-css";\nimport { useSwipeable } from "react-swipeable";\n\nfunction ParticlesBackground() {\n  const canvasRef = React.useRef(null);\n  const colors = ["#22c55e", "#fde047", "#ef4444", "#22c55e"];\n  const PARTICLE_COUNT = 60;\n  const MIN_SIZE = 2;\n  const MAX_SIZE = 4;\n  const SPEED = 0.2;\n\n  React.useEffect(() => {\n    const canvas = canvasRef.current;\n    if (!canvas) return;\n    const ctx = canvas.getContext("2d");\n    let width = window.innerWidth;\n    let height = window.innerHeight;\n    let animationId;\n    function resize() {\n      width = window.innerWidth;\n      height = window.innerHeight;\n      canvas.width = width;\n      canvas.height = height;\n    }\n    resize();\n    window.addEventListener("resize", resize);\n    const particles = Array.from({ length: PARTICLE_COUNT }).map(() => {\n      const angle = Math.random() * 2 * Math.PI;\n      const speed = SPEED + Math.random() * SPEED;\n      return {\n        x: Math.random() * width,\n        y: Math.random() * height,\n        r: MIN_SIZE + Math.random() * (MAX_SIZE - MIN_SIZE),\n        color: colors[Math.floor(Math.random() * colors.length)],\n        dx: Math.cos(angle) * speed,\n        dy: Math.sin(angle) * speed,\n      };\n    });\n    function animate() {\n      ctx.clearRect(0, 0, width, height);\n      for (const p of particles) {\n        ctx.beginPath();\n        ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);\n        ctx.fillStyle = p.color;\n        ctx.globalAlpha = 0.7;\n        ctx.fill();\n        ctx.globalAlpha = 1;\n        p.x += p.dx;\n        p.y += p.dy;\n        if (p.x < -p.r) p.x = width + p.r;\n        if (p.x > width + p.r) p.x = -p.r;\n        if (p.y < -p.r) p.y = height + p.r;\n        if (p.y > height + p.r) p.y = -p.r;\n      }\n      animationId = requestAnimationFrame(animate);\n    }\n    animate();\n    return () => {\n      window.removeEventListener("resize", resize);\n      cancelAnimationFrame(animationId);\n    };\n  }, []);\n  return (\n    <canvas\n      ref={canvasRef}\n      style={{\n        position: "fixed",\n        top: 0,\n        left: 0,\n        width: "100vw",\n        height: "100vh",\n        zIndex: 0,\n        pointerEvents: "none",\n      }}\n    />\n  );\n}\n\nexport default function Gallery() {\n  const [projects, setProjects] = useState([]);\n  const [activeProject, setActiveProject] = useState(null);\n  const [activeImage, setActiveImage] = useState(0);\n  useEffect(() => {\n    fetch("https://portfolio-backend-23pv.onrender.com/api/images")\n      .then((res) => res.json())\n      .then((data) => setProjects(data))\n      .catch((err) => console.error("Ошибка загрузки проектов:", err));\n  }, []);\n  const openProject = (projectIdx) => {\n    setActiveProject(projectIdx);\n    setActiveImage(0);\n  };\n  const closePopup = () => {\n    setActiveProject(null);\n    setActiveImage(0);\n  };\n  const getValidImages = (projectIdx) => {\n    if (projectIdx === null || !projects[projectIdx]) return [];\n    return (projects[projectIdx].images || []).filter(src => typeof src === "string" && src.trim() !== "");\n  };\n  const swipeHandlers = useSwipeable({\n    onSwipedLeft: () => setActiveProject((prev) => (prev + 1) % projects.length),\n    onSwipedRight: () => setActiveProject((prev) => (prev - 1 + projects.length) % projects.length),\n    trackMouse: true\n  });\n  return (\n    <div className="p-4 relative z-10">\n      <ParticlesBackground />\n      <div className="flex items-center justify-between mb-4 relative z-10">\n        <h1 className="text-2xl font-bold">gallery page</h1>\n      </div>\n      {projects.length === 0 ? (<p className="col-span-3 text-center">Загрузка проектов...</p>) : (\n        <Masonry breakpointCols={{ default: 3, 900: 2, 600: 1 }} className="flex w-auto gap-4" columnClassName="masonry-column">\n          {projects.map((project, idx) => ({ project, idx, validImages: (project.images || []).filter(src => typeof src === "string" && src.trim() !== "") })).filter(({ validImages }) => validImages.length > 0).map(({ project, idx, validImages }) => {\n            const src = validImages[0];\n            const isFullWidth = project.isFullWidth;\n            return (\n              <div key={project.id} onClick={() => openProject(idx)} className={isFullWidth ? "full-width-image" : ""}>\n                <img src={src} alt={project.description || "project"} style={{ width: "100%", display: "block", borderRadius: 8, objectFit: "cover" }} />\n              </div>\n            );\n          })}\n        </Masonry>\n      )}\n      {activeProject !== null && projects[activeProject] && (\n        <>\n          <div className="article-popup-overlay" onClick={closePopup}></div>\n          <div className="article-popup" {...swipeHandlers} onClick={(e) => e.stopPropagation()}>\n            <button className="close-button" onClick={closePopup} aria-label="Закрыть">×</button>\n            <h2 className="font-bold text-2xl mb-4">{projects[activeProject].title}</h2>\n            <p className="mb-4">{projects[activeProject].description}</p>\n            <img src={getValidImages(activeProject)[0]} alt={projects[activeProject].title || "Изображение"} className="mb-4" {...swipeHandlers} draggable={false} style={{ userSelect: "none", WebkitUserDrag: "none" }} />\n            <div className="additional-images">{getValidImages(activeProject).slice(1).map((src, idx) => (<img key={idx} src={src} alt={`Дополнительное изображение ${idx + 1}`} className="mb-4" {...swipeHandlers} draggable={false} style={{ userSelect: "none", WebkitUserDrag: "none" }} />))}</div>\n          </div>\n        </>\n      )}\n    </div>\n  );\n}\n';
-        } else {
-          content = 'import React from "react";\n\nexport default function Page() {\n  return (\n    <div style={{ maxWidth: 800, margin: "40px auto", background: "#fff", borderRadius: 16, boxShadow: "0 2px 16px rgba(0,0,0,0.08)", padding: 32 }}>\n      <h1 style={{ fontSize: 32, fontWeight: "bold", marginBottom: 24, color: "#22c55e" }}>Новая страница</h1>\n      <p style={{ fontSize: 18, marginBottom: 16 }}>Здесь будет ваш контент!</p>\n    </div>\n  );\n}\n';
-        }
-      } else {
-        content = `import React from 'react';\n\nexport default function ${name.charAt(0).toUpperCase() + name.slice(1)}() {\n  return (\n    <div style={{ maxWidth: 800, margin: '40px auto', background: '#fff', borderRadius: 16, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', padding: 32 }}>\n      <h1 style={{ fontSize: 32, fontWeight: 'bold', marginBottom: 24, color: '#22c55e' }}>${name}</h1>\n      <p style={{ fontSize: 18, marginBottom: 16 }}>\n        Здесь будет ваш контент!\n      </p>\n    </div>\n  );\n}\n`;
-      }
-      await fetch(filePath, { method: 'PUT', body: content });
-    } catch {}
-    // Добавить роут в main.jsx
-    try {
-      const mainPath = '/Users/vladyslavchaplygin/save2spine.online/frontend/src/main.jsx';
-      const mainCode = await (await fetch(mainPath)).text();
-      const importLine = `import ${name} from './${name}.jsx';\n`;
-      const routeLine = `  <Route path="/${name}" element={<${name} />} />\n`;
-      let newCode = mainCode;
-      if (!mainCode.includes(importLine)) {
-        newCode = newCode.replace(/(import Xx from \'\.\/xx\.jsx\';\n)/, `$1${importLine}`);
-      }
-      if (!mainCode.includes(routeLine)) {
-        newCode = newCode.replace(/(\s*<Route path=\"\/x\" element=\{<Xx \/>\} \/>\n)/, `$1${routeLine}`);
-      }
-      await fetch(mainPath, { method: 'PUT', body: newCode });
-    } catch {}
-  };
+  }
+  // ...existing code...
 
   return (
     <div style={{ display: 'flex', maxWidth: 900, margin: '40px auto', gap: 32 }}>
@@ -238,42 +172,7 @@ function Admin() {
         <div style={{ flex: '0 0 auto' }}>
           <h2 style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 16, color: "#398dd3" }}>add/edit item</h2>
           <form onSubmit={handleSubmit}>
-                        };
-
-                        // ...existing code...
-
-                        const handleAddPage = async () => {
-                          const name = newPageName.trim();
-                          if (!name || customPages.includes(name) || ['home','dev','x'].includes(name)) return;
-                          setCustomPages([...customPages, name]);
-                          setNewPageName('');
-                          // Создать файл-страницу
-                          try {
-                            const filePath = `/Users/vladyslavchaplygin/save2spine.online/frontend/src/${name}.jsx`;
-                            let content = '';
-                            if (newPageTemplate === 'gallery') {
-                              content = 'import React, { useState, useEffect } from "react";\nimport Masonry from "react-masonry-css";\nimport { useSwipeable } from "react-swipeable";\n\nfunction ParticlesBackground() {\n  const canvasRef = React.useRef(null);\n  const colors = ["#22c55e", "#fde047", "#ef4444", "#22c55e"];\n  const PARTICLE_COUNT = 60;\n  const MIN_SIZE = 2;\n  const MAX_SIZE = 4;\n  const SPEED = 0.2;\n\n  React.useEffect(() => {\n    const canvas = canvasRef.current;\n    if (!canvas) return;\n    const ctx = canvas.getContext("2d");\n    let width = window.innerWidth;\n    let height = window.innerHeight;\n    let animationId;\n    function resize() {\n      width = window.innerWidth;\n      height = window.innerHeight;\n      canvas.width = width;\n      canvas.height = height;\n    }\n    resize();\n    window.addEventListener("resize", resize);\n    const particles = Array.from({ length: PARTICLE_COUNT }).map(() => {\n      const angle = Math.random() * 2 * Math.PI;\n      const speed = SPEED + Math.random() * SPEED;\n      return {\n        x: Math.random() * width,\n        y: Math.random() * height,\n        r: MIN_SIZE + Math.random() * (MAX_SIZE - MIN_SIZE),\n        color: colors[Math.floor(Math.random() * colors.length)],\n        dx: Math.cos(angle) * speed,\n        dy: Math.sin(angle) * speed,\n      };\n    });\n    function animate() {\n      ctx.clearRect(0, 0, width, height);\n      for (const p of particles) {\n        ctx.beginPath();\n        ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);\n        ctx.fillStyle = p.color;\n        ctx.globalAlpha = 0.7;\n        ctx.fill();\n        ctx.globalAlpha = 1;\n        p.x += p.dx;\n        p.y += p.dy;\n        if (p.x < -p.r) p.x = width + p.r;\n        if (p.x > width + p.r) p.x = -p.r;\n        if (p.y < -p.r) p.y = height + p.r;\n        if (p.y > height + p.r) p.y = -p.r;\n      }\n      animationId = requestAnimationFrame(animate);\n    }\n    animate();\n    return () => {\n      window.removeEventListener("resize", resize);\n      cancelAnimationFrame(animationId);\n    };\n  }, []);\n  return (\n    <canvas\n      ref={canvasRef}\n      style={{\n        position: "fixed",\n        top: 0,\n        left: 0,\n        width: "100vw",\n        height: "100vh",\n        zIndex: 0,\n        pointerEvents: "none",\n      }}\n    />\n  );\n}\n\nexport default function Gallery() {\n  const [projects, setProjects] = useState([]);\n  const [activeProject, setActiveProject] = useState(null);\n  const [activeImage, setActiveImage] = useState(0);\n  useEffect(() => {\n    fetch("https://portfolio-backend-23pv.onrender.com/api/images")\n      .then((res) => res.json())\n      .then((data) => setProjects(data))\n      .catch((err) => console.error("Ошибка загрузки проектов:", err));\n  }, []);\n  const openProject = (projectIdx) => {\n    setActiveProject(projectIdx);\n    setActiveImage(0);\n  };\n  const closePopup = () => {\n    setActiveProject(null);\n    setActiveImage(0);\n  };\n  const getValidImages = (projectIdx) => {\n    if (projectIdx === null || !projects[projectIdx]) return [];\n    return (projects[projectIdx].images || []).filter(src => typeof src === "string" && src.trim() !== "");\n  };\n  const swipeHandlers = useSwipeable({\n    onSwipedLeft: () => setActiveProject((prev) => (prev + 1) % projects.length),\n    onSwipedRight: () => setActiveProject((prev) => (prev - 1 + projects.length) % projects.length),\n    trackMouse: true\n  });\n  return (\n    <div className="p-4 relative z-10">\n      <ParticlesBackground />\n      <div className="flex items-center justify-between mb-4 relative z-10">\n        <h1 className="text-2xl font-bold">gallery page</h1>\n      </div>\n      {projects.length === 0 ? (<p className="col-span-3 text-center">Загрузка проектов...</p>) : (\n        <Masonry breakpointCols={{ default: 3, 900: 2, 600: 1 }} className="flex w-auto gap-4" columnClassName="masonry-column">\n          {projects.map((project, idx) => ({ project, idx, validImages: (project.images || []).filter(src => typeof src === "string" && src.trim() !== "") })).filter(({ validImages }) => validImages.length > 0).map(({ project, idx, validImages }) => {\n            const src = validImages[0];\n            const isFullWidth = project.isFullWidth;\n            return (\n              <div key={project.id} onClick={() => openProject(idx)} className={isFullWidth ? "full-width-image" : ""}>\n                <img src={src} alt={project.description || "project"} style={{ width: "100%", display: "block", borderRadius: 8, objectFit: "cover" }} />\n              </div>\n            );\n          })}\n        </Masonry>\n      )}\n      {activeProject !== null && projects[activeProject] && (\n        <>\n          <div className="article-popup-overlay" onClick={closePopup}></div>\n          <div className="article-popup" {...swipeHandlers} onClick={(e) => e.stopPropagation()}>\n            <button className="close-button" onClick={closePopup} aria-label="Закрыть">×</button>\n            <h2 className="font-bold text-2xl mb-4">{projects[activeProject].title}</h2>\n            <p className="mb-4">{projects[activeProject].description}</p>\n            <img src={getValidImages(activeProject)[0]} alt={projects[activeProject].title || "Изображение"} className="mb-4" {...swipeHandlers} draggable={false} style={{ userSelect: "none", WebkitUserDrag: "none" }} />\n            <div className="additional-images">{getValidImages(activeProject).slice(1).map((src, idx) => (<img key={idx} src={src} alt={`Дополнительное изображение ${idx + 1}`} className="mb-4" {...swipeHandlers} draggable={false} style={{ userSelect: "none", WebkitUserDrag: "none" }} />))}</div>\n          </div>\n        </>\n      )}\n    </div>\n  );\n}\n';
-                            } else {
-                              content = `import React from 'react';\n\nexport default function ${name.charAt(0).toUpperCase() + name.slice(1)}() {\n  return (\n    <div style={{ maxWidth: 800, margin: '40px auto', background: '#fff', borderRadius: 16, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', padding: 32 }}>\n      <h1 style={{ fontSize: 32, fontWeight: 'bold', marginBottom: 24, color: '#22c55e' }}>${name}</h1>\n      <p style={{ fontSize: 18, marginBottom: 16 }}>\n        Здесь будет ваш контент!\n      </p>\n    </div>\n  );\n}\n`;
-                            }
-                            await fetch(filePath, { method: 'PUT', body: content });
-                          } catch {}
-                          // Добавить роут в main.jsx
-                          try {
-                            const mainPath = '/Users/vladyslavchaplygin/save2spine.online/frontend/src/main.jsx';
-                            const mainCode = await (await fetch(mainPath)).text();
-                            const importLine = `import ${name} from './${name}.jsx';\n`;
-                            const routeLine = `  <Route path="/${name}" element={<${name} />} />\n`;
-                            let newCode = mainCode;
-                            if (!mainCode.includes(importLine)) {
-                              newCode = newCode.replace(/(import Xx from '\.\/xx\.jsx';\n)/, `$1${importLine}`);
-                            }
-                            if (!mainCode.includes(routeLine)) {
-                              newCode = newCode.replace(/(\s*<Route path=\"\/x\" element=\{<Xx \/>\} \/>\n)/, `$1${routeLine}`);
-                            }
-                            await fetch(mainPath, { method: 'PUT', body: newCode });
-                          } catch {}
-                        };
+            {/* ...existing code... */}
             <div style={{ marginBottom: 12 }}>
               <label>title: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
             </div>
@@ -299,7 +198,5 @@ function Admin() {
         </div>
       </div>
     </div>
-  );
-}
-
+  )
 export default Admin;
