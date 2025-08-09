@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Стили для модального окна */
+.popup {
+  position: fixed; /* Фиксированное положение для центрирования */
+  top: 50%; /* Центрирование по вертикали */
+  left: 50%; /* Центрирование по горизонтали */
+  transform: translate(-50%, -50%); /* Сдвиг для точного центрирования */
+  width: 90vw; /* Ширина чуть меньше видимой области */
+  height: 100vh; /* Высота чуть меньше видимой области */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white; /* Белый фон для попапа */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06); /* Тень для попапа */
+  z-index: 1000;
+  overflow: auto; /* Прокрутка для содержимого */
+  border-radius: 8px; /* Скругленные углы */
+}
+
+/* Стили для изображений внутри модального окна */
+.popup img {
+  height: 100%; /* Изображение занимает всю высоту попапа */
+  width: 100%; /* Изображение занимает всю ширину попапа */
+  object-fit: contain; /* Сохраняем пропорции изображения */
+  margin: 0; /* Убираем отступы */
+}
+
+/* Контейнер для изображений */
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Черный фон с прозрачностью 50% */
+  z-index: 999; /* Под попапом */
+}
+
+/* Стили для нового модального окна "страница/статья" */
+.article-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin-left: 10%;
+  margin-right: 10%;
+  width: 80%;
+  height: 100vh; /* Устанавливаем высоту на весь экран */
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  z-index: 1000;
+  overflow-y: auto; /* Включаем вертикальный скролл */
+  padding: 20px;
+}
+
+.article-popup img {
+  width: auto;
+  height: 80vh;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+.article-popup .content {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.article-popup .close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.article-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* Стили для изображения, занимающего все колонки */
+.full-width-image {
+  grid-column: span 3; /* Занимает все колонки */
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
