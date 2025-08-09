@@ -5,7 +5,7 @@ function AdminGallery() {
   // Корневые страницы
   const rootPages = [
     { value: 'home', label: 'Главная' },
-    { value: 'dev', label: 'Devо' },
+    { value: 'dev', label: 'Dev-портфолио' },
     { value: 'x', label: 'x' }
   ];
   const [selectedPage, setSelectedPage] = useState('home');
@@ -201,7 +201,65 @@ function AdminGallery() {
               {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
             </>
           )}
-  {/* Блок редактирования dev-портфолио полностью удалён */}
+        {selectedPage === 'dev' && (
+          <div style={{ display: 'flex', gap: 32 }}>
+            {/* Список проектов слева */}
+            <div style={{ flex: '0 0 380px', background: '#f6f6f6', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+              <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Dev-портфолио проекты</h3>
+              <table style={{ width: '100%', fontSize: 15 }}>
+                <thead>
+                  <tr>
+                    <th>Название</th>
+                    <th>Описание</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {projects.map((p) => (
+                    <tr key={p.id}>
+                      <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{p.title}</td>
+                      <td style={{ padding: '2px 8px', color: '#555' }}>{p.description}</td>
+                      <td style={{ padding: '2px 8px' }}>
+                        <button
+                          title="Редактировать проект"
+                          style={{ background: '#ffd000', border: 'none', borderRadius: 6, cursor: 'pointer', padding: '4px 12px', fontWeight: 'bold', color: '#222' }}
+                          onClick={() => setForm({
+                            id: p.id,
+                            title: p.title || '',
+                            description: p.description || '',
+                            link: p.link || '',
+                            img: p.img || '',
+                            images: '',
+                            isFullWidth: p.isFullWidth || false
+                          })}
+                        >Редактировать</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {/* Форма редактирования справа */}
+            <div style={{ flex: '1 1 auto', marginLeft: 32 }}>
+              <form onSubmit={handleDevSubmit} style={{ background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+                <div style={{ marginBottom: 12 }}>
+                  <label>Название: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label>Описание: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label>Ссылка: <input name="link" type="text" value={form.link || ''} onChange={handleChange} style={{ width: '100%' }} /></label>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label>Картинка: <input name="img" type="text" value={form.img || ''} onChange={handleChange} style={{ width: '100%' }} /></label>
+                </div>
+                <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
+              </form>
+              {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
+            </div>
+          </div>
+        )}
           {selectedPage === 'x' && (
             <>
               <h2 style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 16, color: '#398dd3' }}>Редактирование инфографики</h2>
