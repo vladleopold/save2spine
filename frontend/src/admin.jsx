@@ -23,7 +23,9 @@ function Admin() {
     fetch('https://portfolio-backend-23pv.onrender.com/api/images')
       .then(res => res.json())
       .then(data => {
-        setUsedIds(Array.isArray(data) ? data.map(item => ({ id: item.id, description: item.description })) : []);
+        setUsedIds(Array.isArray(data)
+          ? data.map(item => ({ id: item.id, title: item.title, description: item.description }))
+          : []);
       })
       .catch(() => setUsedIds([]));
   }, []);
@@ -136,7 +138,11 @@ function Admin() {
             {(provided) => (
               <table style={{ width: '100%', fontSize: 15 }} ref={provided.innerRef} {...provided.droppableProps}>
                 <thead>
-                  <tr><th style={{ textAlign: 'left' }}>id</th><th style={{ textAlign: 'left' }}>описание</th></tr>
+                  <tr>
+                    <th style={{ textAlign: 'left' }}>id</th>
+                    <th style={{ textAlign: 'left' }}>имя</th>
+                    <th style={{ textAlign: 'left' }}>описание</th>
+                  </tr>
                 </thead>
                 <tbody>
                   {getUsedIds().map(({ id, description }, idx) => (
@@ -152,9 +158,8 @@ function Admin() {
                             cursor: 'grab'
                           }}
                         >
-                          <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#22c55e' }}>
-                            {id}
-                          </td>
+                          <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#22c55e' }}>{id}</td>
+                          <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{usedIds[idx]?.title || '-'}</td>
                           <td style={{ padding: '2px 8px', color: '#555', display: 'flex', alignItems: 'center', gap: 8 }}>
                             <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginLeft: 8, display: 'flex', alignItems: 'center' }} onClick={() => handleIdClick(id)}>
                               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
