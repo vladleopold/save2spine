@@ -21,7 +21,15 @@ function AdminGallery() {
 
   const [projects, setProjects] = useState([]);
   useEffect(() => {
-    fetch('https://portfolio-backend-23pv.onrender.com/api/images')
+    let url = '';
+    if (selectedPage === 'dev') {
+      url = 'https://portfolio-backend-23pv.onrender.com/api/dev-projects';
+    } else if (selectedPage === 'x') {
+      url = 'https://portfolio-backend-23pv.onrender.com/api/infographic-steps';
+    } else {
+      url = 'https://portfolio-backend-23pv.onrender.com/api/images';
+    }
+    fetch(url)
       .then(res => res.json())
       .then(data => {
         setProjects(data);
@@ -31,7 +39,7 @@ function AdminGallery() {
         setProjects([]);
         setUsedIds([]);
       });
-  }, [status]);
+  }, [status, selectedPage]);
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
