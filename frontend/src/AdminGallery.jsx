@@ -14,63 +14,7 @@ function AdminGallery() {
   // --- useState для jItems (J страница)
   const [items, setItems] = useState([]);
 
-  // --- useEffect для загрузки jItems
-  useEffect(() => {
-    let url = '';
-    if (selectedPage === 'j') {
-      url = '/api/j-items';
-    } else if (selectedPage === 'dev') {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/dev-projects';
-    } else if (selectedPage === 'x') {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/infographic-steps';
-    } else {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/images';
-    }
-    fetch(url)
-      .then(res => res.json())
-      .then(data => setItems(Array.isArray(data) ? data : []))
-      .catch(() => setItems([]));
-  }, [selectedPage, status]);
-
-  // --- handleJSubmit для J страницы
-  const handleJSubmit = async (e) => {
-    e.preventDefault();
-    setStatus('');
-    const payload = {
-      id: Number(form.id),
-      title: form.title,
-      description: form.description,
-      images: form.images.split(',').map(s => s.trim()).filter(Boolean),
-      isFullWidth: form.isFullWidth
-    };
-    try {
-      const res = await fetch('/api/j-items', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json();
-      if (data.success) {
-        setStatus('Успешно добавлено!');
-        setForm({ id: '', title: '', description: '', images: '', isFullWidth: false });
-      } else {
-        setStatus('Ошибка: ' + (data.error || 'Не удалось добавить'));
-      }
-    } catch (err) {
-      setStatus('Ошибка сети');
-    }
-  };
-  // --- Селектор страниц (UI)
-  const pageSelector = (
-    <div style={{ marginBottom: 24 }}>
-      <label style={{ fontWeight: 'bold', marginRight: 8 }}>Страница:</label>
-      <select value={selectedPage} onChange={e => setSelectedPage(e.target.value)} style={{ fontSize: 16, padding: '4px 12px', borderRadius: 6 }}>
-        {rootPages.map(p => (
-          <option key={p.value} value={p.value}>{p.label}</option>
-        ))}
-      </select>
-    </div>
-  );
+  // ...existing code...
 
   // Универсальный список для всех страниц
   const leftBlock = (
@@ -140,20 +84,16 @@ function AdminGallery() {
       link: 'https://unity.com/penguin-vs-editor'
     }
   ];
-  const [form, setForm] = useState({
-    id: '',
-    title: '',
-    description: '',
-    images: '',
-    isFullWidth: false
-  });
-  const [status, setStatus] = useState('');
   const [usedIds, setUsedIds] = useState([]);
+  const [items, setItems] = useState([]);
+  const [form, setForm] = useState({ id: '', title: '', description: '', images: '', isFullWidth: false });
+  const [status, setStatus] = useState('');
 
-  const [projects, setProjects] = useState([]);
   useEffect(() => {
     let url = '';
-    if (selectedPage === 'dev') {
+    if (selectedPage === 'j') {
+      url = '/api/j-items';
+    } else if (selectedPage === 'dev') {
       url = 'https://portfolio-backend-23pv.onrender.com/api/dev-projects';
     } else if (selectedPage === 'x') {
       url = 'https://portfolio-backend-23pv.onrender.com/api/infographic-steps';
@@ -162,15 +102,9 @@ function AdminGallery() {
     }
     fetch(url)
       .then(res => res.json())
-      .then(data => {
-        setProjects(data);
-        setUsedIds(data.map(p => ({ id: p.id, description: p.description })));
-      })
-      .catch(() => {
-        setProjects([]);
-        setUsedIds([]);
-      });
-  }, [status, selectedPage]);
+      .then(data => setItems(Array.isArray(data) ? data : []))
+      .catch(() => setItems([]));
+  }, [selectedPage, status]);
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
@@ -190,8 +124,18 @@ function AdminGallery() {
       images: form.images.split(',').map(s => s.trim()).filter(Boolean),
       isFullWidth: form.isFullWidth
     };
+    let url = '';
+    if (selectedPage === 'j') {
+      url = '/api/j-items';
+    } else if (selectedPage === 'dev') {
+      url = 'https://portfolio-backend-23pv.onrender.com/api/dev-projects';
+    } else if (selectedPage === 'x') {
+      url = 'https://portfolio-backend-23pv.onrender.com/api/infographic-steps';
+    } else {
+      url = 'https://portfolio-backend-23pv.onrender.com/api/images';
+    }
     try {
-      const res = await fetch('https://portfolio-backend-23pv.onrender.com/api/images', {
+      const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -207,57 +151,23 @@ function AdminGallery() {
       setStatus('Ошибка сети');
     }
   };
-
-  // Drag-and-drop reorder logic
-  const onDragEnd = (result) => {
-    if (!result.destination) return;
-    const items = Array.from(usedIds);
-    const [reordered] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reordered);
-    setUsedIds(items);
-  };
-
-  // Клик по id: загрузить проект в форму
-  const handleIdClick = (id) => {
-    const project = projects.find(p => p.id === id);
-    if (project) {
-      setForm({
-        id: project.id,
-        title: project.title || '',
-        description: project.description || '',
-        images: Array.isArray(project.images) ? project.images.join(', ') : '',
-        isFullWidth: !!project.isFullWidth
-      });
-    }
-  };
-
-  // Явный тестовый UI для проверки рендера
-  const testData = [
-    { id: 1, title: 'Тестовый проект', description: 'Описание теста' },
-    { id: 2, title: 'Еще один', description: 'Второе описание' }
-  ];
-  return (
-    <div style={{ maxWidth: 700, margin: '40px auto', background: '#fff', borderRadius: 12, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', padding: 32 }}>
-      <h1 style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 24, color: '#22c55e' }}>ТЕСТОВАЯ АДМИНКА</h1>
-      <div style={{ marginBottom: 24, color: '#d00', fontWeight: 'bold' }}>Если вы видите этот текст — компонент точно работает!</div>
-      <table style={{ width: '100%', fontSize: 15, marginBottom: 24 }}>
-        <thead>
-          <tr>
-            <th>id</th>
-            <th>title</th>
-            <th>description</th>
-          </tr>
-        </thead>
-        <tbody>
-          {testData.map(row => (
-            <tr key={row.id}>
-              <td>{row.id}</td>
-              <td>{row.title}</td>
-              <td>{row.description}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          <label>id: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
+        </div>
+        <div style={{ marginBottom: 12 }}>
+          <label>title: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
+        </div>
+        <div style={{ marginBottom: 12 }}>
+          <label>description: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
+        </div>
+        <div style={{ marginBottom: 12 }}>
+          <label>images (через запятую): <input name="images" type="text" value={form.images} onChange={handleChange} style={{ width: '100%' }} /></label>
+        </div>
+        <div style={{ marginBottom: 12 }}>
+          <label><input name="isFullWidth" type="checkbox" checked={form.isFullWidth} onChange={handleChange} /> Широкий блок (занимает всю ширину)</label>
+        </div>
+        <button type="submit" style={{ padding: '8px 24px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
+      </form>
+      {status && <div style={{ marginTop: 8, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
     </div>
   );
 }
