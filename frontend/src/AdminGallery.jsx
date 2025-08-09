@@ -181,125 +181,67 @@ function AdminGallery() {
         </div>
         {selectedPage === 'dev' ? (
               
-            <div style={{ margin: '24px 0', background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)' }}>
-              <h4 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 16, color: '#ff9800' }}>Редактировать проект</h4>
-              <form onSubmit={async e => {
-                e.preventDefault();
-                setStatus('');
-                const payload = {
-                  id: Number(form.id),
-                  title: form.title,
-                  description: form.description,
-                  link: form.link,
-                  img: form.img
-                };
-                try {
-                  const res = await fetch('https://portfolio-backend-23pv.onrender.com/api/dev-projects', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                  <div>
-                    <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Dev-портфолио проекты</h3>
-                    <table style={{ width: '100%', fontSize: 15 }}>
-                      ...existing code...
-                    </table>
-                    {/* Форма редактирования dev-проекта */}
-                    <div style={{ margin: '24px 0', background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)' }}>
-                      ...existing code...
-                    </div>
+            <div>
+              <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Dev-портфолио проекты</h3>
+              <table style={{ width: '100%', fontSize: 15 }}>
+                <thead>
+                  <tr>
+                    <th style={{ textAlign: 'left' }}>id</th>
+                    <th style={{ textAlign: 'left' }}>название</th>
+                    <th style={{ textAlign: 'left' }}>описание</th>
+                    <th style={{ textAlign: 'left' }}>ссылка</th>
+                    <th style={{ textAlign: 'left' }}>картинка</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {devProjectsLocal.map((p) => (
+                    <tr key={p.id} style={{ cursor: 'pointer' }} onClick={() => {
+                      setForm({
+                        id: p.id,
+                        title: p.title,
+                        description: p.description,
+                        link: p.link,
+                        img: p.img,
+                        images: '',
+                        isFullWidth: false
+                      });
+                    }}>
+                      <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>{p.id}</td>
+                      <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{p.title}</td>
+                      <td style={{ padding: '2px 8px', color: '#555' }}>{p.description}</td>
+                      <td style={{ padding: '2px 8px' }}>
+                        <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ color: '#ff9800', textDecoration: 'underline' }}>ссылка</a>
+                      </td>
+                      <td style={{ padding: '2px 8px' }}>
+                        <img src={p.img} alt={p.title} style={{ maxWidth: 60, borderRadius: 4 }} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div style={{ margin: '24px 0', background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)' }}>
+                <h4 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 16, color: '#ff9800' }}>Редактировать проект</h4>
+                <form onSubmit={handleDevSubmit}>
+                  <div style={{ marginBottom: 12 }}>
+                    <label>ID: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
                   </div>
-                }
-              }}>
-                <div>
-                  <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Dev-портфолио проекты</h3>
-                  <table style={{ width: '100%', fontSize: 15 }}>
-                    <thead>
-                      <tr>
-                        <th style={{ textAlign: 'left' }}>id</th>
-                        <th style={{ textAlign: 'left' }}>название</th>
-                        <th style={{ textAlign: 'left' }}>описание</th>
-                        <th style={{ textAlign: 'left' }}>ссылка</th>
-                        <th style={{ textAlign: 'left' }}>картинка</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {devProjectsLocal.map((p) => (
-                        <tr key={p.id} style={{ cursor: 'pointer' }} onClick={() => {
-                          setForm({
-                            id: p.id,
-                            title: p.title,
-                            description: p.description,
-                            link: p.link,
-                            img: p.img,
-                            images: '',
-                            isFullWidth: false
-                          });
-                        }}>
-                          <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>{p.id}</td>
-                          <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{p.title}</td>
-                          <td style={{ padding: '2px 8px', color: '#555' }}>{p.description}</td>
-                          <td style={{ padding: '2px 8px' }}>
-                            <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ color: '#ff9800', textDecoration: 'underline' }}>ссылка</a>
-                          </td>
-                          <td style={{ padding: '2px 8px' }}>
-                            <img src={p.img} alt={p.title} style={{ maxWidth: 60, borderRadius: 4 }} />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <div style={{ margin: '24px 0', background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)' }}>
-                    <h4 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 16, color: '#ff9800' }}>Редактировать проект</h4>
-                    <form onSubmit={handleDevSubmit}>
-                      <div style={{ marginBottom: 12 }}>
-                        <label>ID: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
-                      </div>
-                      <div style={{ marginBottom: 12 }}>
-                        <label>Название: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
-                      </div>
-                      <div style={{ marginBottom: 12 }}>
-                        <label>Описание: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
-                      </div>
-                      <div style={{ marginBottom: 12 }}>
-                        <label>Ссылка: <input name="link" type="text" value={form.link} onChange={handleChange} style={{ width: '100%' }} /></label>
-                      </div>
-                      <div style={{ marginBottom: 12 }}>
-                        <label>Картинка (URL): <input name="img" type="text" value={form.img} onChange={handleChange} style={{ width: '100%' }} /></label>
-                      </div>
-                      <button type="submit" style={{ padding: '8px 24px', background: '#ff9800', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
-                    </form>
-                    {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
+                  <div style={{ marginBottom: 12 }}>
+                    <label>Название: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
                   </div>
-                </div>
-                        setStatus('Успешно сохранено!');
-                        setForm({ id: '', title: '', description: '', link: '', img: '', images: '', isFullWidth: false });
-                      } else {
-                        setStatus('Ошибка: ' + (data.error || 'Не удалось сохранить'));
-                      }
-                    } catch (err) {
-                      setStatus('Ошибка сети');
-                    }
-                  }}>
-                    <div style={{ marginBottom: 12 }}>
-                      <label>ID: <input name="id" type="number" value={form.id} onChange={handleChange} required style={{ width: '100%' }} /></label>
-                    </div>
-                    <div style={{ marginBottom: 12 }}>
-                      <label>Название: <input name="title" type="text" value={form.title} onChange={handleChange} style={{ width: '100%' }} /></label>
-                    </div>
-                    <div style={{ marginBottom: 12 }}>
-                      <label>Описание: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
-                    </div>
-                    <div style={{ marginBottom: 12 }}>
-                      <label>Ссылка: <input name="link" type="text" value={form.link} onChange={handleChange} style={{ width: '100%' }} /></label>
-                    </div>
-                    <div style={{ marginBottom: 12 }}>
-                      <label>Картинка (URL): <input name="img" type="text" value={form.img} onChange={handleChange} style={{ width: '100%' }} /></label>
-                    </div>
-                    <button type="submit" style={{ padding: '8px 24px', background: '#ff9800', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
-                  </form>
-                  {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
-                </div>
-              </>
+                  <div style={{ marginBottom: 12 }}>
+                    <label>Описание: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
+                  </div>
+                  <div style={{ marginBottom: 12 }}>
+                    <label>Ссылка: <input name="link" type="text" value={form.link} onChange={handleChange} style={{ width: '100%' }} /></label>
+                  </div>
+                  <div style={{ marginBottom: 12 }}>
+                    <label>Картинка (URL): <input name="img" type="text" value={form.img} onChange={handleChange} style={{ width: '100%' }} /></label>
+                  </div>
+                  <button type="submit" style={{ padding: '8px 24px', background: '#ff9800', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer' }}>Сохранить</button>
+                </form>
+                {status && <div style={{ marginTop: 16, color: status.includes('Ошибка') ? 'red' : 'green' }}>{status}</div>}
+              </div>
+            </div>
             ) : (
               <>
                 <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>all items</h3>
