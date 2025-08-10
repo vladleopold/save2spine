@@ -1,11 +1,10 @@
-
 // ДАТАБАЗА  Эндпоинт для получения проектов с фото
 
 
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 app.use(cors());
 app.use(express.json());
