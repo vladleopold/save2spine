@@ -1,7 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import Masonry from 'react-masonry-css';
 import { useSwipeable } from 'react-swipeable';
+
+const API_URL = import.meta.env.VITE_API_URL || '';
 
 function ParticlesBackground() {
   const canvasRef = React.useRef(null);
@@ -77,7 +78,7 @@ export default function IPage() {
   const [activeImage, setActiveImage] = useState(0);
 
   useEffect(() => {
-    fetch('/api/i-items')
+    fetch(`${API_URL}/api/i-items`)
       .then((res) => res.json())
       .then((data) => setProjects(data))
       .catch((err) => console.error('Ошибка загрузки проектов:', err));

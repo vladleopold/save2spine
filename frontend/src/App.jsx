@@ -120,13 +120,15 @@ function isWebp(src) {
   return typeof src === 'string' && src.trim() !== '' && src.split('.').pop().toLowerCase() === 'webp';
 }
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 export default function App() {
   const [projects, setProjects] = useState([]);
   const [activeProject, setActiveProject] = useState(null); // индекс выбранного проекта
   const [activeImage, setActiveImage] = useState(0); // индекс фото внутри popup
 
   useEffect(() => {
-    fetch('https://portfolio-backend-23pv.onrender.com/api/images')
+    fetch(`${API_URL}/api/images`)
       .then((res) => res.json())
       .then((data) => setProjects(data))
       .catch((err) => console.error('Ошибка загрузки проектов:', err));

@@ -23,7 +23,8 @@ const jItems = [
         images: ['https://media.giphy.com/media/3o6ZtpxSZbQRRnwCKQ/giphy.gif'],
         isFullWidth: false
     }
-]; 
+];
+
 
 // Получить j-items
 app.get('/api/j-items', (req, res) => {
