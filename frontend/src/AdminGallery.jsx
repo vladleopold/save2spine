@@ -27,15 +27,15 @@ function AdminGallery() {
   useEffect(() => {
     let url = '';
     if (selectedPage === 'dev') {
-      url = '/api/dev';
+      url = 'https://portfolio-backend-23pv.onrender.com/api/dev';
     } else if (selectedPage === 'x') {
-      url = '/api/x';
+      url = 'https://portfolio-backend-23pv.onrender.com/api/x';
     } else if (selectedPage === 'i') {
-      url = '/api/i-items';
+      url = 'https://portfolio-backend-23pv.onrender.com/api/i-items';
     } else if (selectedPage === 'j') {
-      url = '/api/j-items';
+      url = 'https://portfolio-backend-23pv.onrender.com/api/j-items';
     } else {
-      url = '/api/images';
+      url = 'https://portfolio-backend-23pv.onrender.com/api/images';
     }
     fetch(url)
       .then(res => res.json())
@@ -71,15 +71,15 @@ function AdminGallery() {
     };
     let url = '';
     if (selectedPage === 'dev') {
-      url = '/api/dev';
+      url = 'https://portfolio-backend-23pv.onrender.com/api/dev';
     } else if (selectedPage === 'i') {
-      url = '/api/i-items';
+      url = 'https://portfolio-backend-23pv.onrender.com/api/i-items';
     } else if (selectedPage === 'j') {
-      url = '/api/j-items';
+      url = 'https://portfolio-backend-23pv.onrender.com/api/j-items';
     } else if (selectedPage === 'x') {
-      url = '/api/x';
+      url = 'https://portfolio-backend-23pv.onrender.com/api/x';
     } else {
-      url = '/api/images';
+      url = 'https://portfolio-backend-23pv.onrender.com/api/images';
     }
     try {
       const res = await fetch(url, {
