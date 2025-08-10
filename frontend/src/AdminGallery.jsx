@@ -44,7 +44,8 @@ function AdminGallery() {
   const rootPages = [
     { value: 'home', label: 'Главная' },
     { value: 'dev', label: 'Dev-портфолио' },
-    { value: 'x', label: 'Инфографика' }
+    { value: 'x', label: 'Инфографика' },
+    { value: 'i', label: 'I-page' }
   ];
   const [selectedPage, setSelectedPage] = useState('home');
   const [form, setForm] = useState({
@@ -64,6 +65,8 @@ function AdminGallery() {
       url = 'https://portfolio-backend-23pv.onrender.com/api/dev-projects';
     } else if (selectedPage === 'x') {
       url = 'https://portfolio-backend-23pv.onrender.com/api/infographic-steps';
+    } else if (selectedPage === 'i') {
+      url = 'https://portfolio-backend-23pv.onrender.com/api/i-items';
     } else {
       url = 'https://portfolio-backend-23pv.onrender.com/api/images';
     }
@@ -97,8 +100,14 @@ function AdminGallery() {
       images: form.images.split(',').map(s => s.trim()).filter(Boolean),
       isFullWidth: form.isFullWidth
     };
+    let url = '';
+    if (selectedPage === 'i') {
+      url = 'https://portfolio-backend-23pv.onrender.com/api/i-items';
+    } else {
+      url = 'https://portfolio-backend-23pv.onrender.com/api/images';
+    }
     try {
-      const res = await fetch('https://portfolio-backend-23pv.onrender.com/api/images', {
+      const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
