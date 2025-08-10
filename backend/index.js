@@ -1,3 +1,12 @@
+const express = require("express");
+const cors = require("cors");
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(cors());
+app.use(express.json());
+
+
 // Массив для страницы /j
 const jItems = [
     {
@@ -32,15 +41,6 @@ app.post('/api/j-items', (req, res) => {
     jItems.push(newItem);
     res.json({ success: true, item: newItem });
 });
-const express = require("express");
-const cors = require("cors");
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-
-app.use(cors());
-app.use(express.json());
-
 
 
 // Массив проектов
@@ -55,7 +55,7 @@ const projects = [
         "id": 1,
         "title": "",
         "description": "treehouse  - spine. ( 10h )",
-        "images": ["https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUybTgzcmZveWk4YzQxZTN5YWYwemtxcW5wZG0xd2pxeWpxZHZvNmFkciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/BerqIjRJo79qKepITt/giphy.webp"
+        "images": ["https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUyZndncG9pdTU4ZG5sd2RkZjZ0ajg2N2lrbG91dndmcjFxMms1YnF2OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/BerqIjRJo79qKepITt/giphy.webp"
         , "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyZndncG9pdTU4ZG5sd2RkZjZ0ajg2N2lrbG91dndmcjFxMms1YnF2OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1oEdjQdlOWqfDnBEP0/giphy.webp"
         ]
     },
