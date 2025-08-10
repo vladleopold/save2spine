@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
+
 function AdminGallery() {
   // Данные для dev-портфолио (локально, если нет API)
   const devProjectsLocal = [
@@ -63,15 +64,15 @@ function AdminGallery() {
   useEffect(() => {
     let url = '';
     if (selectedPage === 'dev') {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/dev-projects';
+      url = '/api/dev';
     } else if (selectedPage === 'x') {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/infographic-steps';
+      url = '/api/x';
     } else if (selectedPage === 'i') {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/i-items';
+      url = '/api/i-items';
     } else if (selectedPage === 'j') {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/j-items';
+      url = '/api/j-items';
     } else {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/images';
+      url = '/api/images';
     }
     fetch(url)
       .then(res => res.json())
@@ -104,12 +105,16 @@ function AdminGallery() {
       isFullWidth: form.isFullWidth
     };
     let url = '';
-    if (selectedPage === 'i') {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/i-items';
+    if (selectedPage === 'dev') {
+      url = '/api/dev';
+    } else if (selectedPage === 'i') {
+      url = '/api/i-items';
     } else if (selectedPage === 'j') {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/j-items';
+      url = '/api/j-items';
+    } else if (selectedPage === 'x') {
+      url = '/api/x';
     } else {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/images';
+      url = '/api/images';
     }
     try {
       const res = await fetch(url, {
@@ -165,41 +170,60 @@ function AdminGallery() {
         </div>
         {selectedPage === 'dev' ? (
           <>
-            <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Dev-портфолио проекты</h3>
-            <table style={{ width: '100%', fontSize: 15 }}>
-              <thead>
-                <tr>
-                  <th style={{ textAlign: 'left' }}>id</th>
-                  <th style={{ textAlign: 'left' }}>название</th>
-                  <th style={{ textAlign: 'left' }}>описание</th>
-                  <th style={{ textAlign: 'left' }}>ссылка</th>
-                  <th style={{ textAlign: 'left' }}>картинка</th>
-                </tr>
-              </thead>
-              <tbody>
-                {devProjectsLocal.map((p) => (
-                  <tr key={p.id} style={{ cursor: 'pointer' }} onClick={() => {
-                    setForm({
-                      id: p.id,
-                      title: p.title,
-                      description: p.description,
-                      images: '', // Можно добавить поле для картинок, если потребуется
-                      isFullWidth: false
-                    });
-                  }}>
-                    <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>{p.id}</td>
-                    <td style={{ padding: '2px 8px', color: '#398dd3', fontWeight: 'bold' }}>{p.title}</td>
-                    <td style={{ padding: '2px 8px', color: '#555' }}>{p.description}</td>
-                    <td style={{ padding: '2px 8px' }}>
-                      <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ color: '#ff9800', textDecoration: 'underline' }}>ссылка</a>
-                    </td>
-                    <td style={{ padding: '2px 8px' }}>
-                      <img src={p.img} alt={p.title} style={{ maxWidth: 60, borderRadius: 4 }} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+              <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>Dev-портфолио (idev)</h3>
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="ids-list-dev">
+                  {(provided) => (
+                    <table style={{ width: '100%', fontSize: 15 }} ref={provided.innerRef} {...provided.droppableProps}>
+                      <thead>
+                        <tr><th style={{ textAlign: 'left' }}>id</th><th style={{ textAlign: 'left' }}>описание</th></tr>
+                      </thead>
+                      <tbody>
+                        {usedIds.map(({ id, description }, idx) => (
+                          <Draggable key={id} draggableId={id.toString()} index={idx}>
+                            {(provided, snapshot) => (
+                              <tr
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                style={{
+                                  ...provided.draggableProps.style,
+                                  background: snapshot.isDragging ? '#e0ffe0' : 'inherit',
+                                  cursor: 'grab'
+                                }}
+                              >
+                                <td style={{ padding: '2px 8px', fontWeight: 'bold', color: '#05A302' }}>{id}</td>
+                                <td style={{ padding: '2px 8px', color: '#555', display: 'flex', alignItems: 'center', gap: 8 }}>
+                                  {description}
+                                  <button
+                                    title="Редактировать"
+                                    style={{
+                                      background: 'none',
+                                      border: 'none',
+                                      cursor: 'pointer',
+                                      padding: 0,
+                                      marginLeft: 8,
+                                      display: 'flex',
+                                      alignItems: 'center'
+                                    }}
+                                    onClick={() => handleIdClick(id)}
+                                  >
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M3 17l2.1-6.3a1 1 0 0 1 .25-0.4l8.1-8.1a1.5 1.5 0 0 1 2.1 2.1l-8.1 8.1a1 1 0 0 1-0.4.25L3 17z" stroke="#ff9800" strokeWidth="2.5" fill="#ff9800"/>
+                                    <rect x="13.5" y="2.5" width="3" height="1.5" rx="0.75" transform="rotate(45 13.5 2.5)" fill="#ff9800" />
+                                  </svg>
+                                  </button>
+                                </td>
+                              </tr>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </tbody>
+                    </table>
+                  )}
+                </Droppable>
+              </DragDropContext>
           </>
         ) : (
           <>
