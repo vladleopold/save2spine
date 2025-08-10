@@ -289,6 +289,34 @@ app.post("/api/images", (req, res) => {
     res.json({ success: true, project: { id, title, description, images, isFullWidth } });
 });
 
+// Массив для страницы /i
+const iItems = [
+  {
+    id: 1,
+    title: 'I demo 1',
+    description: 'Описание I demo 1',
+    images: ['https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif'],
+    isFullWidth: false
+  }
+];
+
+// Получить i-items
+app.get('/api/i-items', (req, res) => {
+  res.json(iItems);
+});
+
+// Добавить новый i-item
+app.post('/api/i-items', (req, res) => {
+  const { title, description, images, isFullWidth } = req.body;
+  if (!Array.isArray(images)) {
+    return res.status(400).json({ error: 'Некорректные данные' });
+  }
+  const id = iItems.length ? Math.max(...iItems.map(i => i.id)) + 1 : 1;
+  const newItem = { id, title, description, images, isFullWidth };
+  iItems.push(newItem);
+  res.json({ success: true, item: newItem });
+});
+
 app.listen(PORT, () => {
   console.log("Server listening on", PORT);
 });
