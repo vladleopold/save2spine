@@ -1,5 +1,7 @@
+
 import React, { useEffect, useState } from 'react';
 
+export default function InfographicPage() {
   const [steps, setSteps] = useState([]);
   useEffect(() => {
     fetch('https://portfolio-backend-23pv.onrender.com/api/x')
@@ -29,4 +31,5 @@ import React, { useEffect, useState } from 'react';
       </div>
     </div>
   );
+}
 
