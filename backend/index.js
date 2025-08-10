@@ -31,6 +31,7 @@ const iItems = [
     }
 ];
 app.get("/api/i-items", (req, res) => {
+        res.json(iItems);
     const cleanProjects = projects
         .map(project => ({
             ...project,
