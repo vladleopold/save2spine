@@ -128,10 +128,10 @@ export default function IPage() {
     <div className="p-4 relative z-10">
       <ParticlesBackground />
       <div className="flex items-center justify-between mb-4 relative z-10">
-        <h1 className="text-2xl font-bold">spine animator portfolio (I)</h1>
+        <h1 className="text-2xl font-bold">portfolio</h1>
       </div>
       {projects.length === 0 ? (
-        <p className="col-span-3 text-center">Загрузка проектов...</p>
+        <p className="col-span-3 text-center">loading...</p>
       ) : (
         <Masonry
           breakpointCols={{ default: 3, 900: 2, 600: 1 }}

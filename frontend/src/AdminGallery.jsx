@@ -45,7 +45,8 @@ function AdminGallery() {
     { value: 'home', label: 'Главная' },
     { value: 'dev', label: 'Dev-портфолио' },
     { value: 'x', label: 'Инфографика' },
-    { value: 'i', label: 'I-page' }
+    { value: 'i', label: 'I-page' },
+    { value: 'j', label: 'J-page' }
   ];
   const [selectedPage, setSelectedPage] = useState('home');
   const [form, setForm] = useState({
@@ -67,6 +68,8 @@ function AdminGallery() {
       url = 'https://portfolio-backend-23pv.onrender.com/api/infographic-steps';
     } else if (selectedPage === 'i') {
       url = 'https://portfolio-backend-23pv.onrender.com/api/i-items';
+    } else if (selectedPage === 'j') {
+      url = 'https://portfolio-backend-23pv.onrender.com/api/j-items';
     } else {
       url = 'https://portfolio-backend-23pv.onrender.com/api/images';
     }
@@ -103,6 +106,8 @@ function AdminGallery() {
     let url = '';
     if (selectedPage === 'i') {
       url = 'https://portfolio-backend-23pv.onrender.com/api/i-items';
+    } else if (selectedPage === 'j') {
+      url = 'https://portfolio-backend-23pv.onrender.com/api/j-items';
     } else {
       url = 'https://portfolio-backend-23pv.onrender.com/api/images';
     }

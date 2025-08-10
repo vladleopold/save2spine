@@ -1,3 +1,7 @@
+
+// ДАТАБАЗА  Эндпоинт для получения проектов с фото
+
+
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -289,7 +293,7 @@ app.post("/api/images", (req, res) => {
     projects.push({ id, title, description, images, isFullWidth });
     res.json({ success: true, project: { id, title, description, images, isFullWidth } });
 });
-
+/////////////////////////////////////////////////////////////////////////////////////////
 // Массив для страницы /i
 const iItems = [
   {
@@ -315,6 +319,69 @@ app.post('/api/i-items', (req, res) => {
   const id = iItems.length ? Math.max(...iItems.map(i => i.id)) + 1 : 1;
   const newItem = { id, title, description, images, isFullWidth };
   iItems.push(newItem);
+  res.json({ success: true, item: newItem });
+});
+
+app.listen(PORT, () => {
+  console.log("Server listening on", PORT);
+});
+/////////////////////////////////////////////////////////////////////////////////////////
+// Массив для страницы /i
+const idev = [
+  {
+    id: 1,
+    title: 'I demo 1',
+    description: 'Описание I demo 1',
+    images: ['https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif'],
+    isFullWidth: false
+  }
+];
+
+// Получить i-items
+app.get('/api/dev', (req, res) => {
+  res.json(idev);
+});
+
+// Добавить новый i-item
+app.post('/api/dev', (req, res) => {
+  const { title, description, images, isFullWidth } = req.body;
+  if (!Array.isArray(images)) {
+    return res.status(400).json({ error: 'Некорректные данные' });
+  }
+  const id = idev.length ? Math.max(...idev.map(i => i.id)) + 1 : 1;
+  const newItem = { id, title, description, images, isFullWidth };
+  dev.push(newItem);
+  res.json({ success: true, item: newItem });
+});
+
+app.listen(PORT, () => {
+  console.log("Server listening on", PORT);
+});
+/////////////////////////////////////////////////////////////////////////////////////////
+const ix = [
+  {
+    id: 1,
+    title: 'I demo 1',
+    description: 'Описание I demo 1',
+    images: ['https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif'],
+    isFullWidth: false
+  }
+];
+
+// Получить i-items
+app.get('/api/x', (req, res) => {
+  res.json(ix);
+});
+
+// Добавить новый i-item
+app.post('/api/x', (req, res) => {
+  const { title, description, images, isFullWidth } = req.body;
+  if (!Array.isArray(images)) {
+    return res.status(400).json({ error: 'Некорректные данные' });
+  }
+  const id = ix.length ? Math.max(...ix.map(i => i.id)) + 1 : 1;
+  const newItem = { id, title, description, images, isFullWidth };
+  ix.push(newItem);
   res.json({ success: true, item: newItem });
 });
 
