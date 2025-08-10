@@ -46,7 +46,7 @@ app.post('/api/j-items', (req, res) => {
     res.json({ success: true, item: newItem });
 });
 
-
+////////////////////////////////////////////////////////////////////////////////////////
 // Массив проектов
 const projects = [
     {
@@ -320,10 +320,6 @@ app.post('/api/i-items', (req, res) => {
   iItems.push(newItem);
   res.json({ success: true, item: newItem });
 });
-
-app.listen(PORT, () => {
-  console.log("Server listening on", PORT);
-});
 /////////////////////////////////////////////////////////////////////////////////////////
 // Массив для страницы /i
 const idev = [
@@ -351,10 +347,6 @@ app.post('/api/dev', (req, res) => {
   const newItem = { id, title, description, images, isFullWidth };
   dev.push(newItem);
   res.json({ success: true, item: newItem });
-});
-
-app.listen(PORT, () => {
-  console.log("Server listening on", PORT);
 });
 /////////////////////////////////////////////////////////////////////////////////////////
 const ix = [
