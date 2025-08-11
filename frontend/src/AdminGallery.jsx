@@ -7,10 +7,10 @@ function AdminGallery() {
   // Корневые страницы
   const rootPages = [
     { value: 'home', label: 'Главная' },
-    { value: 'dev', label: 'Dev-портфолио' },
-    { value: 'x', label: 'Инфографика' },
-    { value: 'i', label: 'I-page' },
-    { value: 'j', label: 'J-page' }
+    { value: 'dev', label: 'dev' },
+    { value: 'x', label: 'x' },
+    { value: 'i', label: 'i' },
+    { value: 'j', label: 'j' }
   ];
   const [selectedPage, setSelectedPage] = useState('home');
   const [form, setForm] = useState({
@@ -325,13 +325,7 @@ function AdminGallery() {
             </>
           )}
         </div>
-        <div style={{ flex: '1 1 auto', marginTop: 32, background: '#fffff0', borderRadius: 8, padding: 16, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
-          <h3 style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8, color: '#FFD000' }}>keepnote</h3>
-          <textarea
-            placeholder="text..."
-            style={{ width: '100%', minHeight: 80, resize: 'vertical', borderRadius: 6, border: '1px solid rgb(238 159 159)', padding: 8, fontSize: 15, background: 'rgb(255 251 251)', color: '#333' }}
-          />
-        </div>
+  {/* блок keepnote удалён */}
       </div>
     </div>
   );

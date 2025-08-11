@@ -129,6 +129,21 @@ export default function IPage() {
       <ParticlesBackground />
       <div className="flex items-center justify-between mb-4 relative z-10">
         <h1 className="text-2xl font-bold">portfolio</h1>
+        <button
+          style={{
+            background: '#22c55e',
+            color: '#fff',
+            fontWeight: 'bold',
+            border: 'none',
+            borderRadius: 8,
+            padding: '8px 28px',
+            fontSize: 18,
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(34,197,94,0.10)'
+          }}
+        >
+          resume
+        </button>
       </div>
       {projects.length === 0 ? (
         <p className="col-span-3 text-center">loading...</p>
