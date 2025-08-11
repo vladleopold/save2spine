@@ -1,5 +1,6 @@
-//посмотрим
-console.log(fs.readFileSync('имя_файла', 'utf8')); 
+//посмотрим в логах
+console.log(fs.readFileSync('iItems.json', 'utf8')); 
+
 // Простая файловая база для iItems
 const fs = require('fs');
 const path = require('path');
