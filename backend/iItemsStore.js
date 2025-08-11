@@ -1,5 +1,3 @@
-//посмотрим в логах
-console.log(fs.readFileSync('iItems.json', 'utf8')); 
 
 // Простая файловая база для iItems
 const fs = require('fs');
