@@ -237,6 +237,53 @@ function AdminGallery() {
                                     <rect x="13.5" y="2.5" width="3" height="1.5" rx="0.75" transform="rotate(45 13.5 2.5)" fill="#ff9800" />
                                   </svg>
                                 </button>
+                                <button
+                                  title="Удалить"
+                                  style={{
+                                    background: 'none',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    padding: 0,
+                                    marginLeft: 4,
+                                    display: 'flex',
+                                    alignItems: 'center'
+                                  }}
+                                  onClick={() => handleDelete(id)}
+                                >
+                                  <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <line x1="4" y1="4" x2="16" y2="16" stroke="#ef4444" strokeWidth="2.5"/>
+                                    <line x1="16" y1="4" x2="4" y2="16" stroke="#ef4444" strokeWidth="2.5"/>
+                                  </svg>
+                                </button>
+  // Удаление записи по id
+  const handleDelete = async (id) => {
+    let url = '';
+    if (selectedPage === 'dev') {
+      url = `https://portfolio-backend-23pv.onrender.com/api/dev/${id}`;
+    } else if (selectedPage === 'i') {
+      url = `https://portfolio-backend-23pv.onrender.com/api/i-items/${id}`;
+    } else if (selectedPage === 'j') {
+      url = `https://portfolio-backend-23pv.onrender.com/api/j-items/${id}`;
+    } else if (selectedPage === 'x') {
+      url = `https://portfolio-backend-23pv.onrender.com/api/x/${id}`;
+    } else {
+      url = `https://portfolio-backend-23pv.onrender.com/api/images/${id}`;
+    }
+    if (!window.confirm('Удалить запись с id ' + id + '?')) return;
+    try {
+      const res = await fetch(url, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        setStatus('Удалено!');
+        setForm({ id: '', title: '', description: '', images: '', isFullWidth: false });
+        setStatus('');
+      } else {
+        setStatus('Ошибка удаления: ' + (data.error || 'Не удалось удалить'));
+      }
+    } catch (err) {
+      setStatus('Ошибка сети при удалении');
+    }
+  };
                               </td>
                             </tr>
                           )}
