@@ -314,7 +314,15 @@ function AdminGallery() {
                   <label>description: <input name="description" type="text" value={form.description} onChange={handleChange} style={{ width: '100%' }} /></label>
                 </div>
                 <div style={{ marginBottom: 12 }}>
-                  <label>images (через запятую): <input name="images" type="text" value={form.images} onChange={handleChange} required style={{ width: '100%' }} /></label>
+                  <label>images (через запятую):
+                    <textarea
+                      name="images"
+                      value={form.images}
+                      onChange={handleChange}
+                      required
+                      style={{ width: '100%', minHeight: 120, resize: 'vertical', borderRadius: 6, border: '1px solid #ddd', padding: 8, fontSize: 15 }}
+                    />
+                  </label>
                 </div>
                 <div style={{ marginBottom: 12 }}>
                   <label><input name="isFullWidth" type="checkbox" checked={form.isFullWidth} onChange={handleChange} /> Широкий блок (занимает всю ширину)</label>
