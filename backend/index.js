@@ -293,32 +293,39 @@ app.post("/api/images", (req, res) => {
     res.json({ success: true, project: { id, title, description, images, isFullWidth } });
 });
 /////////////////////////////////////////////////////////////////////////////////////////
-// Массив для страницы /i
-const iItems = [
-  {
-    id: 1,
-    title: 'I demo 1',
-    description: 'Описание I demo 1',
-    images: ['https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif'],
-    isFullWidth: false
-  }
-];
+// Файловое хранилище для iItems
+const { loadIItems, saveIItems } = require('./iItemsStore');
+let iItems = loadIItems();
 
 // Получить i-items
 app.get('/api/i-items', (req, res) => {
-  res.json(iItems);
+    res.json(iItems);
 });
 
 // Добавить новый i-item
 app.post('/api/i-items', (req, res) => {
-  const { title, description, images, isFullWidth } = req.body;
-  if (!Array.isArray(images)) {
-    return res.status(400).json({ error: 'Некорректные данные' });
-  }
-  const id = iItems.length ? Math.max(...iItems.map(i => i.id)) + 1 : 1;
-  const newItem = { id, title, description, images, isFullWidth };
-  iItems.push(newItem);
-  res.json({ success: true, item: newItem });
+    const { title, description, images, isFullWidth } = req.body;
+    if (!Array.isArray(images)) {
+        return res.status(400).json({ error: 'Некорректные данные' });
+    }
+    const id = iItems.length ? Math.max(...iItems.map(i => i.id)) + 1 : 1;
+    const newItem = { id, title, description, images, isFullWidth };
+    iItems.push(newItem);
+    saveIItems(iItems);
+    res.json({ success: true, item: newItem });
+});
+
+// Удалить i-item по id
+app.delete('/api/i-items/:id', (req, res) => {
+    const id = Number(req.params.id);
+    const prevLen = iItems.length;
+    iItems = iItems.filter(item => item.id !== id);
+    if (iItems.length !== prevLen) {
+        saveIItems(iItems);
+        res.json({ success: true });
+    } else {
+        res.status(404).json({ error: 'Not found' });
+    }
 });
 /////////////////////////////////////////////////////////////////////////////////////////
 // Массив для страницы /i
