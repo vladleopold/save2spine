@@ -152,8 +152,8 @@ function AdminGallery() {
   };
 
   return (
-    <div style={{ display: 'flex', maxWidth: 900, margin: '40px auto', gap: 32 }}>
-      <div style={{ minWidth: 220, background: '#f6f6f6', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', height: 'fit-content' }}>
+    <div style={{ display: 'flex', maxWidth: 1200, margin: '40px auto', gap: 32, justifyContent: 'space-between' }}>
+      <div style={{ width: '45%', background: '#f6f6f6', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', height: 'fit-content' }}>
         <div style={{ marginBottom: 16 }}>
           <label style={{ fontWeight: 'bold', fontSize: 16, marginRight: 8 }}>Корневая страница:</label>
           <select value={selectedPage} onChange={e => setSelectedPage(e.target.value)} style={{ fontSize: 15, padding: '4px 12px', borderRadius: 6, border: '1px solid #ddd', minWidth: 120 }}>
@@ -298,7 +298,7 @@ function AdminGallery() {
           </>
         )}
       </div>
-      <div style={{ flex: 1, background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', display: 'flex', flexDirection: 'column', minHeight: 500 }}>
+  <div style={{ width: '45%', background: '#f2f2f2', borderRadius: 12, padding: 24, boxShadow: '0 2px 16px rgba(0,0,0,0.08)', display: 'flex', flexDirection: 'column', minHeight: 500 }}>
         <div style={{ flex: '0 0 auto' }}>
           {selectedPage === 'home' && (
             <>
