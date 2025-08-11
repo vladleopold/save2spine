@@ -255,35 +255,6 @@ function AdminGallery() {
                                     <line x1="16" y1="4" x2="4" y2="16" stroke="#ef4444" strokeWidth="2.5"/>
                                   </svg>
                                 </button>
-  // Удаление записи по id
-  const handleDelete = async (id) => {
-    let url = '';
-    if (selectedPage === 'dev') {
-      url = `https://portfolio-backend-23pv.onrender.com/api/dev/${id}`;
-    } else if (selectedPage === 'i') {
-      url = `https://portfolio-backend-23pv.onrender.com/api/i-items/${id}`;
-    } else if (selectedPage === 'j') {
-      url = `https://portfolio-backend-23pv.onrender.com/api/j-items/${id}`;
-    } else if (selectedPage === 'x') {
-      url = `https://portfolio-backend-23pv.onrender.com/api/x/${id}`;
-    } else {
-      url = `https://portfolio-backend-23pv.onrender.com/api/images/${id}`;
-    }
-    if (!window.confirm('Удалить запись с id ' + id + '?')) return;
-    try {
-      const res = await fetch(url, { method: 'DELETE' });
-      const data = await res.json();
-      if (data.success) {
-        setStatus('Удалено!');
-        setForm({ id: '', title: '', description: '', images: '', isFullWidth: false });
-        setStatus('');
-      } else {
-        setStatus('Ошибка удаления: ' + (data.error || 'Не удалось удалить'));
-      }
-    } catch (err) {
-      setStatus('Ошибка сети при удалении');
-    }
-  };
                               </td>
                             </tr>
                           )}
