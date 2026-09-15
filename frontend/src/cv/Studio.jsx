@@ -9,15 +9,15 @@ const PAGE_H = 1123;
 
 export function Studio() {
   const [lang, setLang] = useState("uk");
-  const [mode, setMode] = useState("ATS"); // ATS -> RESUME -> CV -> ATS...
-  const [pdfArmed, setPdfArmed] = useState(false); // PDF -> DOWNLOAD -> скачивает
+  const [resume, setResume] = useState(false); // false = ATS, true = RESUME (показывает CV)
+  const [pdfLabel, setPdfLabel] = useState("PDF"); // PDF -> DOWNLOAD + сразу качает
   const [scale, setScale] = useState(1);
   const [offsetX, setOffsetX] = useState(0);
   const [sheetH, setSheetH] = useState(PAGE_H);
   const wrapRef = useRef(null);
   const sheetRef = useRef(null);
 
-  const view = mode === "ATS" ? "ats" : "visual";
+  const view = resume ? "visual" : "ats";
 
   useLayoutEffect(() => {
     const wrap = wrapRef.current;
@@ -44,10 +44,14 @@ export function Studio() {
   const pdfHref = `/cv/${pdfName(view, lang)}`;
 
   const onPdf = (e) => {
-    if (!pdfArmed) {
-      e.preventDefault();
-      setPdfArmed(true);
-    }
+    e.preventDefault();
+    setPdfLabel("DOWNLOAD");
+    const a = document.createElement("a");
+    a.href = pdfHref;
+    a.download = pdfHref.split("/").pop();
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
   };
 
   return (
@@ -74,9 +78,9 @@ export function Studio() {
             type="button"
             className={view === "ats" ? "on" : ""}
             aria-pressed={view === "ats"}
-            onClick={() => setMode((m) => (m === "ATS" ? "RESUME" : m === "RESUME" ? "CV" : "ATS"))}
+            onClick={() => setResume((r) => !r)}
           >
-            {mode}
+            {resume ? "RESUME" : "ATS"}
           </button>
           <a
             className="studio-pdf"
@@ -86,7 +90,7 @@ export function Studio() {
             rel="noopener noreferrer"
             onClick={onPdf}
           >
-            {pdfArmed ? "DOWNLOAD" : "PDF"}
+            {pdfLabel}
           </a>
         </div>
       </header>
