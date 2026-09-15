@@ -7,15 +7,15 @@ function AdminGallery() {
   const handleDelete = async (id) => {
     let url = '';
     if (selectedPage === 'dev') {
-      url = `https://portfolio-backend-23pv.onrender.com/api/dev/${id}`;
+      url = `/api/dev/${id}`;
     } else if (selectedPage === 'i') {
-      url = `https://portfolio-backend-23pv.onrender.com/api/i-items/${id}`;
+      url = `/api/i-items/${id}`;
     } else if (selectedPage === 'j') {
-      url = `https://portfolio-backend-23pv.onrender.com/api/j-items/${id}`;
+      url = `/api/j-items/${id}`;
     } else if (selectedPage === 'x') {
-      url = `https://portfolio-backend-23pv.onrender.com/api/x/${id}`;
+      url = `/api/x/${id}`;
     } else {
-      url = `https://portfolio-backend-23pv.onrender.com/api/images/${id}`;
+      url = `/api/images/${id}`;
     }
     if (!window.confirm('Удалить запись с id ' + id + '?')) return;
     try {
@@ -56,15 +56,15 @@ function AdminGallery() {
   useEffect(() => {
     let url = '';
     if (selectedPage === 'dev') {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/dev';
+      url = '/api/dev';
     } else if (selectedPage === 'x') {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/x';
+      url = '/api/x';
     } else if (selectedPage === 'i') {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/i-items';
+      url = '/api/i-items';
     } else if (selectedPage === 'j') {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/j-items';
+      url = '/api/j-items';
     } else {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/images';
+      url = '/api/images';
     }
     fetch(url)
       .then(res => res.json())
@@ -100,15 +100,15 @@ function AdminGallery() {
     };
     let url = '';
     if (selectedPage === 'dev') {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/dev';
+      url = '/api/dev';
     } else if (selectedPage === 'i') {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/i-items';
+      url = '/api/i-items';
     } else if (selectedPage === 'j') {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/j-items';
+      url = '/api/j-items';
     } else if (selectedPage === 'x') {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/x';
+      url = '/api/x';
     } else {
-      url = 'https://portfolio-backend-23pv.onrender.com/api/images';
+      url = '/api/images';
     }
     try {
       const res = await fetch(url, {
