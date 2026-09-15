@@ -9,8 +9,10 @@ const PAGE_H = 1123;
 
 export function Studio() {
   const [lang, setLang] = useState("uk");
-  const [resume, setResume] = useState(false); // false = ATS, true = RESUME (показывает CV)
-  const [pdfLabel, setPdfLabel] = useState("PDF"); // PDF -> DOWNLOAD + сразу качает
+  const [resume, setResume] = useState(false); // false = ATS-документ, true = CV (кнопка RESUME->CV)
+  const onPdf = (e) => {
+    e.preventDefault();
+    const a = document.createElement("a");
   const [scale, setScale] = useState(1);
   const [offsetX, setOffsetX] = useState(0);
   const [sheetH, setSheetH] = useState(PAGE_H);
@@ -93,7 +95,7 @@ export function Studio() {
             rel="noopener noreferrer"
             onClick={onPdf}
           >
-            {pdfLabel}
+            DOWNLOAD
           </a>
         </div>
       </header>
