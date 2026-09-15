@@ -264,6 +264,12 @@ export default function App() {
   const [activeProject, setActiveProject] = useState(null); // индекс выбранного проекта
   const [activeImage, setActiveImage] = useState(0); // индекс фото внутри popup
   const [copied, setCopied] = useState(false);
+  const [theme, setTheme] = useState(() =>
+    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  );
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+  }, [theme]);
 
   useEffect(() => {
     fetch(`${API_URL}/api/images`)
@@ -398,6 +404,15 @@ export default function App() {
       <ParticlesBackground />
       <div className="flex items-center justify-between mb-4 relative z-10">
         <h1 className="text-2xl font-bold">spine animator portfolio</h1>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <button
+          onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
+          aria-label="Переключить тему"
+          title="Тёмная / светлая тема"
+          style={{ fontSize: 20, background: 'none', border: 'none', cursor: 'pointer', lineHeight: 1 }}
+        >
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
         <a
           href="https://drive.google.com/file/d/1_h0KVlLw2ClgD8xeSn8lNfJpy7jyml1L/view?usp=sharing"
           target="_blank"
@@ -407,6 +422,7 @@ export default function App() {
         >
           resume
         </a>
+        </div>
       </div>
       {projects.length === 0 ? (
         <p className="col-span-3 text-center">Загрузка проектов...</p>
