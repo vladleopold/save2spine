@@ -9,17 +9,14 @@ const PAGE_H = 1123;
 
 export function Studio() {
   const [lang, setLang] = useState("uk");
-  const [resume, setResume] = useState(false); // false = ATS-документ, true = CV (кнопка RESUME->CV)
-  const onPdf = (e) => {
-    e.preventDefault();
-    const a = document.createElement("a");
+  const [resume, setResume] = useState(false); // false = ATS-документ, true = CV
   const [scale, setScale] = useState(1);
   const [offsetX, setOffsetX] = useState(0);
   const [sheetH, setSheetH] = useState(PAGE_H);
   const wrapRef = useRef(null);
   const sheetRef = useRef(null);
 
-  const view = resume ? "visual" : "ats";
+  const view = resume ? "ats" : "visual";
 
   useLayoutEffect(() => {
     const wrap = wrapRef.current;
@@ -84,7 +81,7 @@ export function Studio() {
             aria-pressed={view === "ats"}
             onClick={() => setResume((r) => !r)}
           >
-            {resume ? "RESUME" : "ATS"}
+            {resume ? "CV" : "RESUME"}
           </button>
           <a
             className="studio-pdf"
