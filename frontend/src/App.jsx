@@ -403,7 +403,20 @@ export default function App() {
     <div className="p-4 relative z-10">
       <ParticlesBackground />
       <div className="flex items-center justify-between mb-4 relative z-10">
-        <h1 className="text-2xl font-bold">spine animator portfolio</h1>
+        <img
+          src="/photo-square.jpg"
+          alt="spine animator portfolio"
+          style={{
+            width: 52,
+            height: 52,
+            borderRadius: '50%',
+            objectFit: 'cover',
+            border: '8px solid #22c55e',
+            margin: '-16px 0',
+            position: 'relative',
+            zIndex: 20,
+          }}
+        />
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
         <button
           onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
@@ -414,9 +427,7 @@ export default function App() {
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
         <a
-          href="https://drive.google.com/file/d/1_h0KVlLw2ClgD8xeSn8lNfJpy7jyml1L/view?usp=sharing"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/cv"
           className="text-2xl font-bold bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition-colors duration-200"
           style={{ height: '2.25rem', display: 'flex', alignItems: 'center' }}
         >
