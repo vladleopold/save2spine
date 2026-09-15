@@ -71,6 +71,57 @@ function isGif(src) {
 function isWebp(src) {
   return typeof src === 'string' && src.trim() !== '' && src.split('.').pop().toLowerCase() === 'webp';
 }
+
+// Ротация внутри карточки: вертикальная прокрутка по кругу строго вниз 1>2>3>1,
+// переезд после окончания каждого видео, плавно (0.6s ease-in-out)
+function CardRotator({ images, alt, paused }) {
+  const [idx, setIdx] = useState(0);
+  const trackRef = React.useRef(null);
+  const count = images.length;
+  useEffect(() => { setIdx(0); }, [images.join('|')]);
+  useEffect(() => {
+    if (paused) {
+      trackRef.current?.querySelectorAll('video').forEach((v) => v.pause());
+    } else {
+      trackRef.current?.querySelectorAll('video')[idx]?.play().catch(() => {});
+    }
+  }, [paused, idx]);
+  if (count === 1) {
+    return (
+      <Media
+        src={images[0]}
+        alt={alt}
+        className="gallery-video"
+        style={{ width: '100%', display: 'block', borderRadius: 8, objectFit: 'contain' }}
+      />
+    );
+  }
+  return (
+    <div style={{ overflow: 'hidden', borderRadius: 8, width: '100%', height: '100%' }}>
+      <div
+        ref={trackRef}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          transform: `translateY(-${idx * 100}%)`,
+          transition: 'transform 0.6s ease-in-out',
+        }}
+      >
+        {images.map((src, i) => (
+          <Media
+            key={i}
+            src={src}
+            alt={`${alt} ${i + 1}`}
+            className="gallery-video"
+            style={{ width: '100%', height: '100%', flex: 'none', display: 'block', objectFit: 'contain' }}
+            onEnded={i === idx ? () => setIdx((p) => (p + 1) % count) : undefined}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 function isWebm(src) {
   return typeof src === 'string' && src.trim() !== '' && src.split('?')[0].split('.').pop().toLowerCase() === 'webm';
 }
@@ -248,9 +299,9 @@ export default function IPage() {
         <p className="col-span-3 text-center">loading...</p>
       ) : (
         <Masonry
-          breakpointCols={{ default: 3, 900: 2, 600: 1 }}
-          className="flex w-auto gap-4"
-          columnClassName="masonry-column"
+          breakpointCols={{ default: 5, 1500: 4, 1100: 3, 900: 2, 600: 1 }}
+          className="gallery-masonry"
+          columnClassName="gallery-column"
         >
           {projects
             .map((project, idx) => ({ project, idx, validImages: (project.images || []).filter(src => typeof src === 'string' && src.trim() !== '') }))
@@ -266,17 +317,7 @@ export default function IPage() {
                   onClick={() => openProject(idx)}
                   className={isFullWidth ? 'full-width-image' : ''}
                 >
-                  <Media
-                    src={src}
-                    alt={project.description || 'project'}
-                    className="gallery-video"
-                    style={{
-                      width: '100%',
-                      display: 'block',
-                      borderRadius: 8,
-                      objectFit: isGif(src) || isWebp(src) || isWebm(src) ? 'contain' : 'cover'
-                    }}
-                  />
+                  <CardRotator images={validImages} alt={project.description || 'project'} paused={activeProject !== null} />
                 </div>
               );
             })}

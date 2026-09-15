@@ -104,7 +104,19 @@
   border-radius: 8px;
 }
 
-/* Видео в попапе: на всю ширину, целиком */
+/* Сетка галереи: 1–5 колонок, отступы 1rem по горизонтали и вертикали */
+.gallery-masonry {
+  display: flex;
+  width: auto;
+  margin-left: -1rem;
+}
+.gallery-column {
+  padding-left: 1rem;
+  background-clip: padding-box;
+}
+.gallery-column > div {
+  margin-bottom: 1rem;
+}
 .article-popup video {
   width: 100%;
   height: auto;
