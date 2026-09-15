@@ -296,6 +296,9 @@ body.bg-gray-100 {
 
 .studio-actions .studio-resume {
   margin-left: 18px;
+  background: #facc15;
+  border-color: #facc15;
+  color: #111;
 }
 
 .studio-back {
