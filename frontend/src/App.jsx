@@ -187,10 +187,13 @@ function isWebp(src) {
 // Играет ТОЛЬКО текущее видео и ТОЛЬКО если карточка видна (хоть частично).
 function CardRotator({ images, alt, paused }) {
   const [idx, setIdx] = useState(0);
+  const [anim, setAnim] = useState(true);
   const [ratio, setRatio] = useState(null);
   const wrapRef = React.useRef(null);
   const count = images.length;
-  useEffect(() => { setIdx(0); }, [images.join('|')]);
+  // +1 клон первого видео в конце: уходим вниз на клон, потом прыгаем в начало без анимации
+  const slides = count > 1 ? [...images, images[0]] : images;
+  useEffect(() => { setIdx(0); setAnim(true); }, [images.join('|')]);
   useEffect(() => {
     const wrap = wrapRef.current;
     if (!wrap) return;
@@ -209,6 +212,23 @@ function CardRotator({ images, alt, paused }) {
     sync(true);
     return () => io.disconnect();
   }, [paused, idx, count]);
+  const advance = () => {
+    if (count <= 1) return;
+    if (idx < count) {
+      setAnim(true);
+      setIdx(idx + 1); // последнее — клон первого, едем только вниз
+    }
+  };
+  useEffect(() => {
+    if (idx === count && count > 1) {
+      // доехали до клона: тихо прыгаем в начало без анимации (перемотки нет)
+      const t = setTimeout(() => {
+        setAnim(false);
+        setIdx(0);
+      }, 650);
+      return () => clearTimeout(t);
+    }
+  }, [idx, count]);
   const onFirstMeta = (e) => {
     const v = e.target;
     if (v.videoWidth && v.videoHeight) setRatio(`${v.videoWidth} / ${v.videoHeight}`);
@@ -240,10 +260,10 @@ function CardRotator({ images, alt, paused }) {
           flexDirection: 'column',
           height: '100%',
           transform: `translateY(-${idx * 100}%)`,
-          transition: 'transform 0.6s ease-in-out',
+          transition: anim ? 'transform 0.6s ease-in-out' : 'none',
         }}
       >
-        {images.map((src, i) => (
+        {slides.map((src, i) => (
           <Media
             key={i}
             src={src}
@@ -252,7 +272,7 @@ function CardRotator({ images, alt, paused }) {
             style={mediaStyle(i)}
             loop={false}
             autoPlay={false}
-            onEnded={i === idx ? () => setIdx((p) => (p + 1) % count) : undefined}
+            onEnded={i === idx ? advance : undefined}
             {...(i === 0 ? firstMetaProps : {})}
           />
         ))}
