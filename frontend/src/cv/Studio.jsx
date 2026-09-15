@@ -9,13 +9,15 @@ const PAGE_H = 1123;
 
 export function Studio() {
   const [lang, setLang] = useState("uk");
-  const [view, setView] = useState("visual"); // visual = RESUME, ats = ATS
+  const [mode, setMode] = useState("ATS"); // ATS -> RESUME -> CV -> ATS...
   const [pdfArmed, setPdfArmed] = useState(false); // PDF -> DOWNLOAD -> скачивает
   const [scale, setScale] = useState(1);
   const [offsetX, setOffsetX] = useState(0);
   const [sheetH, setSheetH] = useState(PAGE_H);
   const wrapRef = useRef(null);
   const sheetRef = useRef(null);
+
+  const view = mode === "ATS" ? "ats" : "visual";
 
   useLayoutEffect(() => {
     const wrap = wrapRef.current;
@@ -72,9 +74,9 @@ export function Studio() {
             type="button"
             className={view === "ats" ? "on" : ""}
             aria-pressed={view === "ats"}
-            onClick={() => setView((v) => (v === "ats" ? "visual" : "ats"))}
+            onClick={() => setMode((m) => (m === "ATS" ? "RESUME" : m === "RESUME" ? "CV" : "ATS"))}
           >
-            {view === "ats" ? "RESUME" : "ATS"}
+            {mode}
           </button>
           <a
             className="studio-pdf"
