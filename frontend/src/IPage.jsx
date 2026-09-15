@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Masonry from 'react-masonry-css';
 import { useSwipeable } from 'react-swipeable';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
@@ -441,11 +440,7 @@ export default function IPage() {
       {projects.length === 0 ? (
         <p className="col-span-3 text-center">loading...</p>
       ) : (
-        <Masonry
-          breakpointCols={{ default: 5, 1500: 4, 1100: 3, 900: 2, 600: 1 }}
-          className="gallery-masonry"
-          columnClassName="gallery-column"
-        >
+        <div className="gallery-masonry">
           {projects
             .map((project, idx) => ({ project, idx, validImages: (project.images || []).filter(src => typeof src === 'string' && src.trim() !== '') }))
             .filter(({ validImages }) => validImages.length > 0)
@@ -464,7 +459,7 @@ export default function IPage() {
                 </div>
               );
             })}
-        </Masonry>
+        </div>
       )}
 
       {activeProject !== null && projects[activeProject] && (
