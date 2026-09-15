@@ -35,7 +35,7 @@ const projects = [
     { id: 120, title: "", description: "", images: ["/vids/e3f91594.webm"] },
     { id: 121, title: "", description: "", images: ["/vids/f8afd2d8.webm"] },
     { id: 122, title: "", description: "", images: ["/vids/f5133aa0.webm"] },
-    { id: 123, title: "", description: "", images: ["/vids/6811a6c4.webm"] },
+    { id: 123, title: "", description: "", images: ["/vids/6811a6c4.webm", "/vids/hg69a.webm", "/vids/hg69b.webm", "/vids/hg118.webm"] },
     { id: 124, title: "", description: "", images: ["/vids/76d133ac.webm"] },
     { id: 125, title: "", description: "", images: ["/vids/ce3860e0.webm"] },
     { id: 126, title: "", description: "", images: ["/vids/ddd8f8b9.webm"] },
