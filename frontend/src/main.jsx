@@ -8,6 +8,7 @@ import AdminGallery from './AdminGallery.jsx';
 import DevPortfolio from './DevPortfolio.jsx';
 import InfographicPage from './InfographicPage.jsx';
 import JPage from './JPage.jsx';
+import CvPage from './CvPage.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -19,6 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <Route path="/x" element={<InfographicPage />} />
   <Route path="/j" element={<JPage />} />
   <Route path="/i" element={<IPage />} />
+  <Route path="/cv" element={<CvPage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

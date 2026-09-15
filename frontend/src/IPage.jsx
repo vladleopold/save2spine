@@ -363,7 +363,8 @@ export default function IPage() {
         >
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
-        <button
+        <a
+          href="/cv"
           style={{
             background: '#22c55e',
             color: '#fff',
@@ -373,11 +374,12 @@ export default function IPage() {
             padding: '8px 28px',
             fontSize: 18,
             cursor: 'pointer',
-            boxShadow: '0 2px 8px rgba(34,197,94,0.10)'
+            boxShadow: '0 2px 8px rgba(34,197,94,0.10)',
+            textDecoration: 'none'
           }}
         >
           resume
-        </button>
+        </a>
         </div>
       </div>
       {projects.length === 0 ? (
