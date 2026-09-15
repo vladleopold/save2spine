@@ -2,6 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --page-bg: #f3f4f6;
+  --page-fg: #111111;
+  --card-bg: #ffffff;
+  --muted-fg: #555555;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page-bg: #000000;
+    --page-fg: #f3f4f6;
+    --card-bg: #111111;
+    --muted-fg: #bbbbbb;
+  }
+}
+:root[data-theme="dark"] {
+  --page-bg: #000000;
+  --page-fg: #f3f4f6;
+  --card-bg: #111111;
+  --muted-fg: #bbbbbb;
+}
+:root[data-theme="light"] {
+  --page-bg: #f3f4f6;
+  --page-fg: #111111;
+  --card-bg: #ffffff;
+  --muted-fg: #555555;
+}
+body.bg-gray-100 {
+  background-color: var(--page-bg);
+  color: var(--page-fg);
+}
+.article-popup {
+  background-color: var(--card-bg);
+  color: var(--page-fg);
+}
+
 /* Стили для модального окна */
 .popup {
   position: fixed; /* Фиксированное положение для центрирования */

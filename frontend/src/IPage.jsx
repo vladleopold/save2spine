@@ -220,6 +220,12 @@ export default function IPage() {
   const [activeProject, setActiveProject] = useState(null);
   const [activeImage, setActiveImage] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [theme, setTheme] = useState(() =>
+    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  );
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+  }, [theme]);
 
   useEffect(() => {
     fetch(`${API_URL}/api/i-items`)
@@ -348,6 +354,15 @@ export default function IPage() {
       <ParticlesBackground />
       <div className="flex items-center justify-between mb-4 relative z-10">
         <h1 className="text-2xl font-bold">portfolio</h1>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <button
+          onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
+          aria-label="Переключить тему"
+          title="Тёмная / светлая тема"
+          style={{ fontSize: 20, background: 'none', border: 'none', cursor: 'pointer', lineHeight: 1 }}
+        >
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
         <button
           style={{
             background: '#22c55e',
@@ -363,6 +378,7 @@ export default function IPage() {
         >
           resume
         </button>
+        </div>
       </div>
       {projects.length === 0 ? (
         <p className="col-span-3 text-center">loading...</p>
