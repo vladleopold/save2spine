@@ -200,13 +200,20 @@ function CardRotator({ images, alt, paused }) {
     const vids = Array.from(wrap.querySelectorAll('video'));
     const sync = (visible) => {
       vids.forEach((v, i) => {
-        if (paused || !visible || i !== idx) v.pause();
-        else v.play().catch(() => {});
+        if (paused || !visible || i !== idx) {
+          v.pause();
+        } else {
+          if (v.preload === 'none') {
+            v.preload = 'auto';
+            try { v.load(); } catch {}
+          }
+          v.play().catch(() => {});
+        }
       });
     };
     const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => sync(e.intersectionRatio > 0)),
-      { threshold: [0, 0.05] }
+      (entries) => entries.forEach((e) => sync(e.intersectionRatio >= 0.1)),
+      { threshold: [0, 0.1, 0.5] }
     );
     io.observe(wrap);
     sync(true);
@@ -248,7 +255,7 @@ function CardRotator({ images, alt, paused }) {
   if (count === 1) {
     return (
       <div ref={wrapRef}>
-        <Media src={images[0]} alt={alt} className="gallery-video" style={mediaStyle(0)} {...firstMetaProps} />
+        <Media src={images[0]} alt={alt} className="gallery-video" style={mediaStyle(0)} preload="none" {...firstMetaProps} />
       </div>
     );
   }
@@ -272,6 +279,7 @@ function CardRotator({ images, alt, paused }) {
             style={mediaStyle(i)}
             loop={false}
             autoPlay={false}
+            preload="none"
             onEnded={i === idx ? advance : undefined}
             {...(i === 0 ? firstMetaProps : {})}
           />
@@ -286,7 +294,7 @@ function isWebm(src) {
 }
 
 // webm — только видео-тегом (img видео не показывает), остальное — img
-function Media({ src, alt, className, style, loop = true, autoPlay = true, ...rest }) {
+function Media({ src, alt, className, style, loop = true, autoPlay = true, preload = "metadata", ...rest }) {
   if (isWebm(src)) {
     return (
       <video
@@ -297,7 +305,7 @@ function Media({ src, alt, className, style, loop = true, autoPlay = true, ...re
         muted
         loop={loop}
         playsInline
-        preload="metadata"
+        preload={preload}
         {...rest}
       />
     );
@@ -402,7 +410,24 @@ export default function App() {
 
   // автоплей главной handled внутри CardRotator (видно — играет, попап открыт — стоит)
 
-  // соотношение сторон карточки = первому видео внутри
+  // в попапе тоже играют только видимые видео
+  useEffect(() => {
+    if (activeProject === null) return;
+    const vids = Array.from(document.querySelectorAll('video.popup-video'));
+    vids.forEach((v) => v.pause());
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          const v = e.target;
+          if (e.intersectionRatio >= 0.1) v.play().catch(() => {});
+          else v.pause();
+        });
+      },
+      { threshold: [0, 0.1, 0.5] }
+    );
+    vids.forEach((v) => io.observe(v));
+    return () => io.disconnect();
+  }, [activeProject]);
   useEffect(() => {
     const vids = Array.from(document.querySelectorAll('video.gallery-video'));
     const onMeta = (e) => {
