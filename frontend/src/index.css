@@ -103,3 +103,59 @@
   object-fit: cover;
   border-radius: 8px;
 }
+
+/* Видео в попапе: на всю ширину, целиком */
+.article-popup video {
+  width: 100%;
+  height: auto;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background: #000;
+}
+
+/* Прозрачный тач-плейсхолдер поверх попапа (жесты, не блокирует) */
+.article-popup .touch-placeholder {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Круглая кнопка «копировать ссылку» напротив кнопки закрыть */
+.article-popup .copy-link-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 6;
+}
+
+/* Мобильная адаптивность попапа */
+@media (max-width: 640px) {
+  .article-popup {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+    padding: 12px;
+    border-radius: 0;
+  }
+  .article-popup img,
+  .article-popup video {
+    max-height: 60vh;
+  }
+  .article-popup h2 {
+    font-size: 1.25rem;
+    padding-right: 80px;
+  }
+}
