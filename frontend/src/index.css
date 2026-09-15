@@ -291,6 +291,11 @@ body.bg-gray-100 {
   background: var(--color-cv-pink);
   border-color: var(--color-cv-pink);
   color: #fff;
+  flex: 3;
+}
+
+.studio-actions .studio-resume {
+  margin-left: 18px;
 }
 
 .studio-back {

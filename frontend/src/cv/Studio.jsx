@@ -77,7 +77,7 @@ export function Studio() {
           </button>
           <button
             type="button"
-            className={view === "ats" ? "on" : ""}
+            className={`studio-resume${view === "ats" ? " on" : ""}`}
             aria-pressed={view === "ats"}
             onClick={() => setResume((r) => !r)}
           >
