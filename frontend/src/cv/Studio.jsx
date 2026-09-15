@@ -47,7 +47,6 @@ export function Studio() {
 
   const onPdf = (e) => {
     e.preventDefault();
-    setPdfLabel("DOWNLOAD");
     const a = document.createElement("a");
     a.href = pdfHref;
     a.download = pdfHref.split("/").pop();
