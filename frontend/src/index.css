@@ -293,6 +293,21 @@ body.bg-gray-100 {
   color: #fff;
 }
 
+.studio-back {
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-fg);
+  font-size: 18px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .studio-stage {
   box-sizing: border-box;
   padding: 20px 28px 48px;
