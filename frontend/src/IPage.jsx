@@ -71,6 +71,29 @@ function isGif(src) {
 function isWebp(src) {
   return typeof src === 'string' && src.trim() !== '' && src.split('.').pop().toLowerCase() === 'webp';
 }
+function isWebm(src) {
+  return typeof src === 'string' && src.trim() !== '' && src.split('?')[0].split('.').pop().toLowerCase() === 'webm';
+}
+
+// webm — только видео-тегом (img видео не показывает), остальное — img
+function Media({ src, alt, className, style, ...rest }) {
+  if (isWebm(src)) {
+    return (
+      <video
+        src={src}
+        className={className}
+        style={style}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        {...rest}
+      />
+    );
+  }
+  return <img src={src} alt={alt} className={className} style={style} {...rest} />;
+}
 
 export default function IPage() {
   const [projects, setProjects] = useState([]);
@@ -165,14 +188,14 @@ export default function IPage() {
                   onClick={() => openProject(idx)}
                   className={isFullWidth ? 'full-width-image' : ''}
                 >
-                  <img
+                  <Media
                     src={src}
                     alt={project.description || 'project'}
                     style={{
                       width: '100%',
                       display: 'block',
                       borderRadius: 8,
-                      objectFit: isGif(src) || isWebp(src) ? 'contain' : 'cover'
+                      objectFit: isGif(src) || isWebp(src) || isWebm(src) ? 'contain' : 'cover'
                     }}
                   />
                 </div>
@@ -200,7 +223,7 @@ export default function IPage() {
               {projects[activeProject].title}
             </h2>
             <p className="mb-4">{projects[activeProject].description}</p>
-            <img
+            <Media
               src={getValidImages(activeProject)[0]}
               alt={projects[activeProject].title || 'Изображение'}
               className="mb-4"
@@ -210,7 +233,7 @@ export default function IPage() {
             />
             <div className="additional-images">
               {getValidImages(activeProject).slice(1).map((src, idx) => (
-                <img
+                <Media
                   key={idx}
                   src={src}
                   alt={`Дополнительное изображение ${idx + 1}`}
