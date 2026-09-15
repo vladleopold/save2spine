@@ -4,13 +4,11 @@ import { useSwipeable } from 'react-swipeable';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
+// Реалистичные частицы: мерцание, переменный ветер, звёздная пыль сверху/сбоку,
+// свайп сдувает с физикой (разлетаются и улетают, новые появляются сбоку)
 function ParticlesBackground() {
   const canvasRef = React.useRef(null);
-  const colors = ['#22c55e', '#fde047', '#ef4444', '#22c55e'];
-  const PARTICLE_COUNT = 60;
-  const MIN_SIZE = 2;
-  const MAX_SIZE = 4;
-  const SPEED = 0.2;
+
   React.useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -18,6 +16,46 @@ function ParticlesBackground() {
     let width = window.innerWidth;
     let height = window.innerHeight;
     let animationId;
+
+    // предрендер светящихся спрайтов (дешево для производительности)
+    const COLORS = ['#22c55e', '#fde047', '#ef4444', '#ffffff'];
+    const sprites = COLORS.map((color) => {
+      const s = document.createElement('canvas');
+      s.width = s.height = 32;
+      const c = s.getContext('2d');
+      const g = c.createRadialGradient(16, 16, 0, 16, 16, 16);
+      g.addColorStop(0, '#ffffff');
+      g.addColorStop(0.25, color);
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      c.fillStyle = g;
+      c.fillRect(0, 0, 32, 32);
+      return s;
+    });
+
+    const COUNT = 70;
+    const spawn = (fromEdge) => {
+      const side = fromEdge ?? Math.floor(Math.random() * 4);
+      const p = {
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: 0.15 + Math.random() * 0.45, // пыль сыплется вниз как снег
+        r: 1.5 + Math.random() * 3.5,
+        sprite: sprites[Math.floor(Math.random() * sprites.length)],
+        life: 0.6 + Math.random() * 0.4,
+        decay: 0.0006 + Math.random() * 0.0012,
+        tw: Math.random() * Math.PI * 2,
+        twSpeed: 0.02 + Math.random() * 0.05,
+        gustX: 0,
+        gustY: 0,
+      };
+      if (side === 0) { p.y = -10; p.x = Math.random() * width; } // сверху
+      else if (side === 1) { p.x = -10; p.vx = Math.abs(p.vx) + 0.2; } // слева
+      else if (side === 2) { p.x = width + 10; p.vx = -Math.abs(p.vx) - 0.2; } // справа
+      return p;
+    };
+    let particles = Array.from({ length: COUNT }).map(() => spawn());
+
     function resize() {
       width = window.innerWidth;
       height = window.innerHeight;
@@ -26,43 +64,74 @@ function ParticlesBackground() {
     }
     resize();
     window.addEventListener('resize', resize);
-    const particles = Array.from({ length: PARTICLE_COUNT }).map(() => {
-      const angle = Math.random() * 2 * Math.PI;
-      const speed = SPEED + Math.random() * SPEED;
-      return {
-        x: Math.random() * width,
-        y: Math.random() * height,
-        r: MIN_SIZE + Math.random() * (MAX_SIZE - MIN_SIZE),
-        color: colors[Math.floor(Math.random() * colors.length)],
-        dx: Math.cos(angle) * speed,
-        dy: Math.sin(angle) * speed,
-      };
-    });
-    function animate() {
-      ctx.clearRect(0, 0, width, height);
-      for (const p of particles) {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = 0.7;
-        ctx.fill();
-        ctx.globalAlpha = 1;
-        p.x += p.dx;
-        p.y += p.dy;
-        if (p.x < -p.r) p.x = width + p.r;
-        if (p.x > width + p.r) p.x = -p.r;
-        if (p.y < -p.r) p.y = height + p.r;
-        if (p.y > height + p.r) p.y = -p.r;
+
+    // свайп: порыв ветра в сторону жеста + новые частицы сбоку
+    let touchX = null, touchY = null;
+    const onTouchStart = (e) => {
+      const t = e.touches[0];
+      touchX = t.clientX; touchY = t.clientY;
+    };
+    const onTouchEnd = (e) => {
+      if (touchX == null) return;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - touchX, dy = t.clientY - touchY;
+      const dist = Math.hypot(dx, dy);
+      if (dist > 24) {
+        const nx = dx / dist, ny = dy / dist;
+        const force = Math.min(6, 2 + dist / 60);
+        particles.forEach((p) => { p.gustX += nx * force; p.gustY += ny * force; });
+        // новые частицы с противоположной стороны
+        for (let i = 0; i < 8; i++) {
+          const p = spawn(nx > 0 ? 2 : 1);
+          p.gustX = nx * force * 0.7; p.gustY = ny * force * 0.7;
+          particles.push(p);
+        }
+        if (particles.length > 140) particles = particles.slice(-140);
       }
+      touchX = touchY = null;
+    };
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
+
+    let time = 0;
+    function animate() {
+      time += 0.016;
+      // переменный ветер
+      const wind = Math.sin(time * 0.4) * 0.25 + Math.sin(time * 1.1) * 0.08;
+      ctx.clearRect(0, 0, width, height);
+      ctx.globalCompositeOperation = 'lighter';
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        // порыв затухает, частица продолжает лететь сама
+        p.gustX *= 0.985; p.gustY *= 0.985;
+        p.x += p.vx + wind + p.gustX;
+        p.y += p.vy + p.gustY * 0.6;
+        p.tw += p.twSpeed;
+        p.life -= p.decay;
+        // мерцание + выгорание в 0
+        const blink = 0.45 + 0.55 * Math.abs(Math.sin(p.tw));
+        const alpha = Math.max(0, Math.min(1, p.life)) * blink;
+        if (p.life <= 0 || p.x < -20 || p.x > width + 20 || p.y > height + 20) {
+          particles[i] = spawn();
+          continue;
+        }
+        const size = p.r * (0.6 + 0.4 * Math.abs(Math.sin(p.tw * 0.7)));
+        ctx.globalAlpha = alpha * 0.9;
+        ctx.drawImage(p.sprite, p.x - size, p.y - size, size * 2, size * 2);
+      }
+      ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = 'source-over';
       animationId = requestAnimationFrame(animate);
     }
     animate();
     return () => {
       window.removeEventListener('resize', resize);
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchend', onTouchEnd);
       cancelAnimationFrame(animationId);
     };
   }, []);
-  return <canvas ref={canvasRef} style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }} />;
+  return <canvas ref={canvasRef} style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', zIndex: 1001, pointerEvents: 'none' }} />;
 }
 
 function isGif(src) {
