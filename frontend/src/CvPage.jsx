@@ -8,7 +8,7 @@ const PDFS = {
 };
 
 export default function CvPage() {
-  const [resumeArmed, setResumeArmed] = useState(false); // ATS -> RESUME -> показывает CV
+  const [resumeStep, setResumeStep] = useState('ATS'); // ATS -> RESUME -> CV -> ATS...
   const [pdfArmed, setPdfArmed] = useState(false); // PDF -> DOWNLOAD -> скачивает
   const [lang, setLang] = useState('EN');
 
@@ -36,10 +36,10 @@ export default function CvPage() {
 
       <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginBottom: 24, flexWrap: 'wrap' }}>
         <button
-          onClick={() => setResumeArmed((v) => !v)}
+          onClick={() => setResumeStep((s) => (s === 'ATS' ? 'RESUME' : s === 'RESUME' ? 'CV' : 'ATS'))}
           style={{ padding: '10px 32px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 'bold', fontSize: 18, cursor: 'pointer' }}
         >
-          {resumeArmed ? 'RESUME' : 'ATS'}
+          {resumeStep}
         </button>
         <button
           onClick={() => {
@@ -58,7 +58,7 @@ export default function CvPage() {
         </button>
       </div>
 
-      {resumeArmed && (
+      {resumeStep !== 'ATS' && (
         <div style={{ textAlign: 'left', background: 'var(--card-bg, #fff)', border: '1px solid #e5e5e5', borderRadius: 12, padding: 24 }}>
           <h2 style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 12 }}>CV</h2>
           <p style={{ marginBottom: 8 }}><strong>Специализация:</strong> Spine-анимация (игровые персонажи, слоты, UI), Unity-интеграция.</p>
