@@ -58,6 +58,9 @@ export function Studio() {
     <div className="studio">
       <header className="studio-bar">
         <div className="studio-actions">
+          <a className="studio-back" href="/" aria-label="Галерея" title="Галерея">
+            ←
+          </a>
           <button
             type="button"
             className={lang === "uk" ? "on" : ""}
