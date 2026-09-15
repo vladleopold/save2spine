@@ -206,3 +206,710 @@ body.bg-gray-100 {
     padding-right: 80px;
   }
 }
+
+/* ===== CV из архива (Studio) ===== */
+:root {
+  --color-bg: #121412;
+  --color-surface: #1c1f1c;
+  --color-surface-2: #262a26;
+  --color-fg: #f3f4f2;
+  --color-muted: #9aa39a;
+  --color-accent: #53ac56;
+  --color-accent-foreground: #ffffff;
+  --color-border: #2e352e;
+  --color-cv-green: #53ac56;
+  --color-cv-green-line: #45a300;
+  --color-cv-pink: #ff69a2;
+  --color-cv-card: #69a960;
+  --color-cv-ink: #222222;
+  --color-cv-paper: #ffffff;
+  --font-sans: "Noto Sans", "Segoe UI", sans-serif;
+}
+.studio {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  overflow-x: hidden;
+}
+
+.studio-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--color-border);
+  background: rgb(18 20 18 / 0.94);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  flex-shrink: 0;
+  isolation: isolate;
+  pointer-events: auto;
+}
+
+.studio-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  width: min(100%, 420px);
+  position: relative;
+  z-index: 51;
+}
+
+.studio-actions button,
+.studio-pdf {
+  height: 44px;
+  flex: 1;
+  min-width: 0;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-fg);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 52;
+  pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.studio-actions button.on {
+  background: var(--color-cv-green);
+  border-color: var(--color-cv-green);
+  color: #fff;
+}
+
+.studio-pdf {
+  background: var(--color-cv-pink);
+  border-color: var(--color-cv-pink);
+  color: #fff;
+}
+
+.studio-stage {
+  box-sizing: border-box;
+  padding: 20px 28px 48px;
+  width: min(100%, 880px);
+  margin: 0 auto;
+  overflow-x: hidden;
+  min-width: 0;
+  min-height: 0;
+  flex: 1;
+}
+
+.studio-sheet-wrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.studio-sheet {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+}
+
+.cv-document {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  color: var(--color-cv-ink);
+  font-family: "Noto Sans", sans-serif;
+}
+
+.cv-page {
+  box-sizing: border-box;
+  width: 210mm;
+  height: 297mm;
+  background: var(--color-cv-paper);
+  color: var(--color-cv-ink);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 18px 50px rgb(0 0 0 / 0.35);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.cv-header {
+  box-sizing: border-box;
+  height: 38mm;
+  background: var(--color-cv-green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 12mm 0 9mm;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.cv-photo-wrap {
+  width: 28mm;
+  height: 28mm;
+  margin-right: 6mm;
+  flex-shrink: 0;
+}
+
+.cv-photo {
+  box-sizing: border-box;
+  width: 28mm;
+  height: 28mm;
+  display: block;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.cv-header-copy {
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+  padding-top: 1mm;
+}
+
+.cv-name {
+  margin: 0 0 2mm;
+  font-size: 13pt;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cv-document[lang="uk"] .cv-name {
+  letter-spacing: 0.04em;
+  font-size: 12.5pt;
+}
+
+.cv-document[lang="uk"] .cv-stat-k {
+  letter-spacing: 0.04em;
+}
+
+.cv-document[lang="uk"] .cv-header-meta {
+  gap: 7mm;
+}
+
+.cv-header-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4mm;
+  margin-bottom: 2mm;
+  min-width: 0;
+}
+
+.cv-portfolio-label {
+  font-size: 9.5pt;
+  font-weight: 400;
+}
+
+.cv-portfolio {
+  background: var(--color-cv-pink);
+  color: #fff !important;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 9pt;
+  letter-spacing: 0.01em;
+  padding: 1.3mm 3.8mm 1.5mm;
+  border-radius: 2px;
+  line-height: 1.15;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.cv-header-meta {
+  display: flex;
+  justify-content: flex-end;
+  gap: 11mm;
+  font-size: 10pt;
+  min-width: 0;
+}
+
+.cv-stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1.6mm;
+  white-space: nowrap;
+}
+
+.cv-stat-k {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.cv-stat-v {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.cv-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 58mm minmax(0, 1fr);
+  min-height: 0;
+  min-width: 0;
+}
+
+.cv-sidebar {
+  box-sizing: border-box;
+  padding: 4mm 4mm 3.5mm;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-right: 0.7mm solid var(--color-cv-green);
+  overflow: hidden;
+  min-width: 0;
+}
+
+.cv-contact {
+  font-style: normal;
+  width: 100%;
+  font-size: 7.2pt;
+  line-height: 1.28;
+}
+
+.cv-contact p {
+  margin: 0;
+}
+
+.cv-contact a {
+  color: #1f7a32;
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+  display: block;
+  word-break: break-word;
+}
+
+.cv-contact a[href^="tel"] {
+  color: #e85d04;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.cv-rule {
+  display: block;
+  width: 24mm;
+  height: 0.3mm;
+  background: var(--color-cv-green-line);
+  margin: 2.6mm auto;
+}
+
+.cv-skills {
+  list-style: none;
+  margin: 3.2mm 0 0;
+  padding: 0;
+  width: 100%;
+  font-size: 7.6pt;
+  line-height: 1.55;
+  color: #444;
+}
+
+.cv-skills li {
+  margin: 0.35mm 0;
+}
+
+.cv-skills li:first-child {
+  color: var(--color-cv-ink);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.2mm;
+}
+
+.cv-edu-side {
+  width: 100%;
+  margin-top: auto;
+  padding-top: 4mm;
+  font-size: 7.4pt;
+  line-height: 1.28;
+}
+
+.cv-edu-item {
+  margin-bottom: 4.4mm;
+}
+
+.cv-edu-school {
+  font-weight: 700;
+  margin: 0 0 1.2mm;
+}
+
+.cv-edu-field {
+  margin: 0;
+  color: #e85d04;
+  font-weight: 600;
+}
+
+.cv-main {
+  box-sizing: border-box;
+  padding: 2.2mm 8mm 2.2mm 3.5mm;
+  display: flex;
+  flex-direction: column;
+  gap: 2.2mm;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.cv-card {
+  box-sizing: border-box;
+  border: 0.3mm solid var(--color-cv-card);
+  padding: 1.5mm 4.2mm 1.4mm 3.2mm;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  max-width: 100%;
+  flex: 1;
+}
+
+.cv-card-tall {
+  flex: 1.45;
+}
+
+.cv-role {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
+
+.cv-job-title {
+  margin: 0;
+  font-size: 8.4pt;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #111;
+}
+
+.cv-job-company {
+  margin: 0.3mm 0 0;
+  font-size: 7.6pt;
+  font-weight: 700;
+  color: #333;
+}
+
+.cv-job-dates {
+  margin: 0.4mm 0 0;
+  font-size: 7.2pt;
+  color: var(--color-cv-pink);
+  font-weight: 600;
+}
+
+.cv-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 3mm;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.cv-card-titles {
+  min-width: 0;
+  flex: 1;
+}
+
+.cv-logo-wrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 13mm;
+  max-width: 38mm;
+  overflow: hidden;
+}
+
+.cv-logo {
+  display: block;
+  height: 12mm;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: right center;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.cv-logo-banner {
+  height: 13mm;
+  max-width: 36mm;
+  border-radius: 1.2mm;
+}
+
+.cv-logo-wide {
+  height: 11.5mm;
+  max-width: 36mm;
+}
+
+.cv-logo-mark {
+  height: 12.5mm;
+  max-width: 28mm;
+}
+
+.cv-logo-wrap-retro {
+  width: 36mm;
+}
+
+.cv-bullets {
+  list-style: none;
+  margin: 1mm 0 0;
+  padding: 0 0 0 4.4mm;
+  font-size: 7.3pt;
+  line-height: 1.28;
+  color: #2a2a2a;
+}
+
+.cv-bullets li {
+  position: relative;
+  margin: 0 0 0.35mm;
+}
+
+.cv-bullets li::before {
+  content: "";
+  position: absolute;
+  left: -4mm;
+  top: 0.55mm;
+  width: 1.7mm;
+  height: 1.7mm;
+  box-sizing: border-box;
+  background: transparent;
+  border: 0.38mm solid #222;
+  border-radius: 50%;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.cv-tools {
+  margin: auto 0 0;
+  padding-top: 1.2mm;
+  text-align: right;
+  font-size: 6.4pt;
+  line-height: 1.24;
+  color: #7a7a7a;
+  flex-shrink: 0;
+}
+
+.cv-footer {
+  height: 8mm;
+  background: var(--color-cv-green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.cv-footer p {
+  margin: 0;
+  font-size: 13.5pt;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ats-document {
+  box-sizing: border-box;
+  width: 210mm;
+  min-height: 297mm;
+  max-height: 297mm;
+  overflow: hidden;
+  background: #fff;
+  color: #111;
+  padding: 7mm 14mm 8mm 12mm;
+  font-family: "Noto Sans", "Calibri", "Segoe UI", sans-serif;
+  font-size: 9.5pt;
+  line-height: 1.24;
+  box-shadow: 0 18px 50px rgb(0 0 0 / 0.35);
+  print-color-adjust: exact;
+}
+
+.ats-header h1 {
+  margin: 0;
+  font-size: 16pt;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ats-headline {
+  margin: 1.4mm 0 2.2mm;
+  font-size: 12pt;
+  font-weight: 600;
+  color: #1f7a32;
+}
+
+.ats-contact {
+  margin: 0 0 1mm;
+  font-size: 9.5pt;
+  color: #333;
+}
+
+.ats-document section {
+  margin-top: 1.8mm;
+}
+
+.ats-document h2 {
+  margin: 0 0 2mm;
+  font-size: 11pt;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1f7a32;
+  border-bottom: 0.35mm solid #1f7a32;
+  padding-bottom: 0.7mm;
+}
+
+.ats-document h3 {
+  margin: 0;
+  font-size: 10.5pt;
+  font-weight: 700;
+}
+
+.ats-job {
+  margin: 0 0 2.4mm;
+  page-break-inside: avoid;
+}
+
+.ats-company {
+  margin: 0.2mm 0;
+  font-size: 10.5pt;
+  font-weight: 700;
+}
+
+.ats-meta {
+  margin: 0.2mm 0;
+  font-size: 9.5pt;
+  color: #333;
+}
+
+.ats-document ul {
+  margin: 0.6mm 0 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.ats-document li {
+  margin: 0 0 0.35mm;
+}
+
+body:has(.print-root) {
+  background: #fff;
+}
+
+.print-root {
+  background: #fff;
+}
+
+.print-root .cv-document,
+.print-root .ats-document {
+  box-shadow: none;
+  margin: 0 auto;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  html,
+  body {
+    background: #fff !important;
+    margin: 0;
+    padding: 0;
+  }
+  .studio-bar {
+    display: none !important;
+  }
+  .studio {
+    background: #fff;
+    min-height: 0;
+    overflow: visible;
+  }
+  .studio-stage {
+    padding: 0;
+    width: 210mm;
+    margin: 0;
+    overflow: visible;
+  }
+  .studio-sheet-wrap {
+    height: auto !important;
+    overflow: visible;
+    display: block;
+    position: static;
+  }
+  .studio-sheet {
+    transform: none !important;
+    zoom: 1 !important;
+    width: 210mm !important;
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+  }
+  .cv-document {
+    gap: 0;
+  }
+  .cv-page {
+    width: 210mm;
+    height: 297mm;
+    box-shadow: none;
+    page-break-after: auto;
+    break-after: auto;
+    overflow: hidden;
+    margin: 0 !important;
+  }
+  .ats-document {
+    box-shadow: none;
+    width: 210mm;
+    min-height: 297mm;
+    max-height: 297mm;
+    page-break-after: auto;
+  }
+  .cv-header,
+  .cv-footer {
+    background: #53ac56 !important;
+    color: #fff !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .cv-portfolio {
+    background: #ff69a2 !important;
+    color: #fff !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .cv-photo {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .cv-logo,
+  .cv-logo-wrap,
+  .cv-bullets li::before {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+@media (max-width: 720px) {
+  .studio-bar {
+    padding: 8px 12px;
+  }
+  .studio-actions {
+    width: 100%;
+  }
+  .studio-stage {
+    padding: 12px 16px 36px;
+  }
+}

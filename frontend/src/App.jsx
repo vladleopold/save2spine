@@ -187,6 +187,7 @@ function isWebp(src) {
 // Играет ТОЛЬКО текущее видео и ТОЛЬКО если карточка видна (хоть частично).
 function CardRotator({ images, alt, paused }) {
   const [idx, setIdx] = useState(0);
+  const [ratio, setRatio] = useState(null);
   const wrapRef = React.useRef(null);
   const count = images.length;
   useEffect(() => { setIdx(0); }, [images.join('|')]);
@@ -208,6 +209,10 @@ function CardRotator({ images, alt, paused }) {
     sync(true);
     return () => io.disconnect();
   }, [paused, idx, count]);
+  const onFirstMeta = (e) => {
+    const v = e.target;
+    if (v.videoWidth && v.videoHeight) setRatio(`${v.videoWidth} / ${v.videoHeight}`);
+  };
   const mediaStyle = (i) => ({
     width: '100%',
     display: 'block',
@@ -215,15 +220,20 @@ function CardRotator({ images, alt, paused }) {
     objectFit: 'contain',
     ...(count > 1 ? { height: '100%', flex: 'none' } : {}),
   });
+  const wrapStyle =
+    count > 1
+      ? { overflow: 'hidden', borderRadius: 8, width: '100%', ...(ratio ? { aspectRatio: ratio } : { aspectRatio: '1 / 1' }) }
+      : undefined;
+  const firstMetaProps = { onLoadedMetadata: onFirstMeta };
   if (count === 1) {
     return (
       <div ref={wrapRef}>
-        <Media src={images[0]} alt={alt} className="gallery-video" style={mediaStyle(0)} />
+        <Media src={images[0]} alt={alt} className="gallery-video" style={mediaStyle(0)} {...firstMetaProps} />
       </div>
     );
   }
   return (
-    <div ref={wrapRef} style={{ overflow: 'hidden', borderRadius: 8, width: '100%', height: '100%' }}>
+    <div ref={wrapRef} style={wrapStyle}>
       <div
         style={{
           display: 'flex',
@@ -243,6 +253,7 @@ function CardRotator({ images, alt, paused }) {
             loop={false}
             autoPlay={false}
             onEnded={i === idx ? () => setIdx((p) => (p + 1) % count) : undefined}
+            {...(i === 0 ? firstMetaProps : {})}
           />
         ))}
       </div>
