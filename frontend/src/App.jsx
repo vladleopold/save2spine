@@ -147,7 +147,7 @@ function ParticlesBackground() {
 
 
 import React, { useState, useEffect } from 'react';
-import Masonry from 'react-masonry-css';
+
 import { useSwipeable } from 'react-swipeable';
 
 // Fade-in компонент для анимации появления изображений
@@ -492,21 +492,12 @@ export default function App() {
       {projects.length === 0 ? (
         <p className="col-span-3 text-center">Загрузка проектов...</p>
       ) : (
-<Masonry
-          breakpointCols={{
-            default: 5,
-            1500: 4,
-            1100: 3,
-            900: 2,
-            600: 1,
-          }}
-          className="gallery-masonry"
-          columnClassName="gallery-masonry__column"
-        >
+<div className="gallery-masonry">
           {projects
             .map((project, idx) => ({ project, idx, validImages: (project.images || []).filter(src => typeof src === 'string' && src.trim() !== '') }))
             .filter(({ validImages }) => validImages.length > 0)
             .map(({ project, idx, validImages }) => {
+              const src = validImages[0];
               const isFullWidth = project.isFullWidth;
               return (
                 <div
@@ -515,13 +506,12 @@ export default function App() {
                   data-card
                   onClick={() => openProject(idx)}
                   className={isFullWidth ? 'full-width-image' : ''}
-                  style={isFullWidth ? { width: '200%' } : {}}
                 >
                   <CardRotator images={validImages} alt={project.description || 'project'} paused={activeProject !== null} />
                 </div>
               );
             })}
-        </Masonry>
+        </div>
       )}
 
       {/* Новое модальное окно "страница/статья" с дополнительными картинками, описанием и заголовком */}
