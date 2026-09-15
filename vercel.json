@@ -8,8 +8,16 @@
     { "source": "/print/:path*", "destination": "https://cv-six-black-32.vercel.app/print/:path*" },
     { "source": "/logos/:path*", "destination": "https://cv-six-black-32.vercel.app/logos/:path*" },
     { "source": "/__grok/:path*", "destination": "https://cv-six-black-32.vercel.app/__grok/:path*" },
-    { "source": "/assets/:path((AtsDocument.*|routes-CXRXfJn3\\.js|print-.*|styles-Ce4tJGAj\\.css|index-DlvpqXkv\\.js|photo-badge-.*))", "destination": "https://cv-six-black-32.vercel.app/assets/:path" },
-    { "source": "/:file(photo\\.jpg|photo\\.png|photo-badge\\.jpg|og\\.jpg)", "destination": "https://cv-six-black-32.vercel.app/:file" },
+    { "source": "/assets/AtsDocument-CLRcluyS.js", "destination": "https://cv-six-black-32.vercel.app/assets/AtsDocument-CLRcluyS.js" },
+    { "source": "/assets/routes-CXRXfJn3.js", "destination": "https://cv-six-black-32.vercel.app/assets/routes-CXRXfJn3.js" },
+    { "source": "/assets/print-BNqJxnBj.js", "destination": "https://cv-six-black-32.vercel.app/assets/print-BNqJxnBj.js" },
+    { "source": "/assets/styles-Ce4tJGAj.css", "destination": "https://cv-six-black-32.vercel.app/assets/styles-Ce4tJGAj.css" },
+    { "source": "/assets/index-DlvpqXkv.js", "destination": "https://cv-six-black-32.vercel.app/assets/index-DlvpqXkv.js" },
+    { "source": "/assets/photo-badge-BQ7cwHFL.jpg", "destination": "https://cv-six-black-32.vercel.app/assets/photo-badge-BQ7cwHFL.jpg" },
+    { "source": "/photo.jpg", "destination": "https://cv-six-black-32.vercel.app/photo.jpg" },
+    { "source": "/photo.png", "destination": "https://cv-six-black-32.vercel.app/photo.png" },
+    { "source": "/photo-badge.jpg", "destination": "https://cv-six-black-32.vercel.app/photo-badge.jpg" },
+    { "source": "/og.jpg", "destination": "https://cv-six-black-32.vercel.app/og.jpg" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }
