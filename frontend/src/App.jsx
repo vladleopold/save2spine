@@ -183,33 +183,48 @@ function isWebp(src) {
 }
 
 // Ротация внутри карточки: вертикальная прокрутка по кругу строго вниз 1>2>3>1,
-// переезд после окончания каждого видео, плавно (0.6s ease-in-out)
+// переезд после окончания каждого видео, плавно (0.6s ease-in-out).
+// Играет ТОЛЬКО текущее видео и ТОЛЬКО если карточка видна (хоть частично).
 function CardRotator({ images, alt, paused }) {
   const [idx, setIdx] = useState(0);
-  const trackRef = React.useRef(null);
+  const wrapRef = React.useRef(null);
   const count = images.length;
   useEffect(() => { setIdx(0); }, [images.join('|')]);
   useEffect(() => {
-    if (paused) {
-      trackRef.current?.querySelectorAll('video').forEach((v) => v.pause());
-    } else {
-      trackRef.current?.querySelectorAll('video')[idx]?.play().catch(() => {});
-    }
-  }, [paused, idx]);
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+    const vids = Array.from(wrap.querySelectorAll('video'));
+    const sync = (visible) => {
+      vids.forEach((v, i) => {
+        if (paused || !visible || i !== idx) v.pause();
+        else v.play().catch(() => {});
+      });
+    };
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => sync(e.intersectionRatio > 0)),
+      { threshold: [0, 0.05] }
+    );
+    io.observe(wrap);
+    sync(true);
+    return () => io.disconnect();
+  }, [paused, idx, count]);
+  const mediaStyle = (i) => ({
+    width: '100%',
+    display: 'block',
+    borderRadius: 8,
+    objectFit: 'contain',
+    ...(count > 1 ? { height: '100%', flex: 'none' } : {}),
+  });
   if (count === 1) {
     return (
-      <Media
-        src={images[0]}
-        alt={alt}
-        className="gallery-video"
-        style={{ width: '100%', display: 'block', borderRadius: 8, objectFit: 'contain' }}
-      />
+      <div ref={wrapRef}>
+        <Media src={images[0]} alt={alt} className="gallery-video" style={mediaStyle(0)} />
+      </div>
     );
   }
   return (
-    <div style={{ overflow: 'hidden', borderRadius: 8, width: '100%', height: '100%' }}>
+    <div ref={wrapRef} style={{ overflow: 'hidden', borderRadius: 8, width: '100%', height: '100%' }}>
       <div
-        ref={trackRef}
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -224,7 +239,9 @@ function CardRotator({ images, alt, paused }) {
             src={src}
             alt={`${alt} ${i + 1}`}
             className="gallery-video"
-            style={{ width: '100%', height: '100%', flex: 'none', display: 'block', objectFit: 'contain' }}
+            style={mediaStyle(i)}
+            loop={false}
+            autoPlay={false}
             onEnded={i === idx ? () => setIdx((p) => (p + 1) % count) : undefined}
           />
         ))}
@@ -238,16 +255,16 @@ function isWebm(src) {
 }
 
 // webm — только видео-тегом (img видео не показывает), остальное — img
-function Media({ src, alt, className, style, ...rest }) {
+function Media({ src, alt, className, style, loop = true, autoPlay = true, ...rest }) {
   if (isWebm(src)) {
     return (
       <video
         src={src}
         className={className}
         style={style}
-        autoPlay
+        autoPlay={autoPlay}
         muted
-        loop
+        loop={loop}
         playsInline
         preload="metadata"
         {...rest}
@@ -352,27 +369,7 @@ export default function App() {
     trackMouse: true
   });
 
-  // автоплей: играет то, что видно (хоть частично); попап открыт — главная стоит
-  useEffect(() => {
-    const vids = Array.from(document.querySelectorAll('video.gallery-video'));
-    if (activeProject !== null) {
-      vids.forEach((v) => v.pause());
-      document.querySelectorAll('video.popup-video').forEach((v) => v.play().catch(() => {}));
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          const v = e.target;
-          if (e.intersectionRatio > 0) v.play().catch(() => {});
-          else v.pause();
-        });
-      },
-      { threshold: [0, 0.05] }
-    );
-    vids.forEach((v) => io.observe(v));
-    return () => io.disconnect();
-  }, [projects, activeProject]);
+  // автоплей главной handled внутри CardRotator (видно — играет, попап открыт — стоит)
 
   // соотношение сторон карточки = первому видео внутри
   useEffect(() => {

@@ -3,6 +3,13 @@
   "buildCommand": "npm run build --prefix frontend",
   "outputDirectory": "frontend/dist",
   "rewrites": [
+    { "source": "/cv", "destination": "https://cv-six-black-32.vercel.app/" },
+    { "source": "/cv/:path*", "destination": "https://cv-six-black-32.vercel.app/:path*" },
+    { "source": "/print/:path*", "destination": "https://cv-six-black-32.vercel.app/print/:path*" },
+    { "source": "/logos/:path*", "destination": "https://cv-six-black-32.vercel.app/logos/:path*" },
+    { "source": "/__grok/:path*", "destination": "https://cv-six-black-32.vercel.app/__grok/:path*" },
+    { "source": "/assets/:path((AtsDocument.*|routes-CXRXfJn3\\.js|print-.*|styles-Ce4tJGAj\\.css|index-DlvpqXkv\\.js|photo-badge-.*))", "destination": "https://cv-six-black-32.vercel.app/assets/:path" },
+    { "source": "/:file(photo\\.jpg|photo\\.png|photo-badge\\.jpg|og\\.jpg)", "destination": "https://cv-six-black-32.vercel.app/:file" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }
