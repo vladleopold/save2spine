@@ -216,7 +216,8 @@ function CardRotator({ images, alt, paused }) {
       { threshold: [0, 0.1, 0.5] }
     );
     io.observe(wrap);
-    sync(true);
+    // без sync(true): observer сам сразу выдаст реальную видимость;
+    // иначе все 104 видео грузятся одновременно и сайт виснет
     return () => io.disconnect();
   }, [paused, idx, count]);
   const advance = () => {
