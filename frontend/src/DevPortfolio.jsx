@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 export default function DevPortfolio() {
   const [projects, setProjects] = useState([]);
   useEffect(() => {
-    fetch('https://portfolio-backend-23pv.onrender.com/api/dev')
+    fetch('/api/dev')
       .then(res => res.json())
       .then(data => setProjects(data))
       .catch(() => setProjects([]));

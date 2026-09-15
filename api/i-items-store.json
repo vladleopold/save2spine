@@ -3,7 +3,7 @@
     "id": 1,
     "title": "I demo 1",
     "description": "Описание I demo 1",
-    "images": ["https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif"],
+    "images": ["/images/giphy/4lOcXKbyMQTHYYHBeg.webm"],
     "isFullWidth": false
   }
 ]
