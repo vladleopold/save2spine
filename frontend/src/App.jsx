@@ -187,109 +187,54 @@ function isWebp(src) {
 // Играет ТОЛЬКО текущее видео и ТОЛЬКО если карточка видна (хоть частично).
 function CardRotator({ images, alt, paused }) {
   const [idx, setIdx] = useState(0);
-  const [anim, setAnim] = useState(true);
-  const [ratio, setRatio] = useState(null);
   const wrapRef = React.useRef(null);
   const count = images.length;
-  // +1 клон первого видео в конце: уходим вниз на клон, потом прыгаем в начало без анимации
-  const slides = count > 1 ? [...images, images[0]] : images;
-  useEffect(() => { setIdx(0); setAnim(true); }, [images.join('|')]);
+  useEffect(() => setIdx(0), [images.join('|')]);
+
   useEffect(() => {
     const wrap = wrapRef.current;
     if (!wrap) return;
-    const vids = Array.from(wrap.querySelectorAll('video'));
-    const sync = (visible) => {
-      vids.forEach((v, i) => {
-        if (paused || !visible || i !== idx) {
-          v.pause();
-        } else {
-          if (v.preload === 'none') {
-            v.preload = 'auto';
-            try { v.load(); } catch {}
-          }
-          v.play().catch(() => {});
+    const observer = new IntersectionObserver(([entry]) => {
+      const video = wrap.querySelector('video[data-active="true"]');
+      if (!video) return;
+      if (paused || !entry.isIntersecting || entry.intersectionRatio < 0.1) {
+        video.pause();
+      } else {
+        if (video.preload === 'none') {
+          video.preload = 'auto';
+          video.load();
         }
-      });
-    };
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => sync(e.intersectionRatio >= 0.1)),
-      { threshold: [0, 0.1, 0.5] }
-    );
-    io.observe(wrap);
-    // без sync(true): observer сам сразу выдаст реальную видимость;
-    // иначе все 104 видео грузятся одновременно и сайт виснет
-    return () => io.disconnect();
-  }, [paused, idx, count]);
+        video.play().catch(() => {});
+      }
+    }, { threshold: [0, 0.1] });
+    observer.observe(wrap);
+    return () => observer.disconnect();
+  }, [paused, idx]);
+
   const advance = () => {
-    if (count <= 1) return;
-    if (idx < count) {
-      setAnim(true);
-      setIdx(idx + 1); // последнее — клон первого, едем только вниз
-    }
+    if (count > 1) setIdx(current => (current + 1) % count);
   };
-  useEffect(() => {
-    if (idx === count && count > 1) {
-      // доехали до клона: тихо прыгаем в начало без анимации (перемотки нет)
-      const t = setTimeout(() => {
-        setAnim(false);
-        setIdx(0);
-      }, 650);
-      return () => clearTimeout(t);
-    }
-  }, [idx, count]);
-  const onFirstMeta = (e) => {
-    const v = e.target;
-    if (v.videoWidth && v.videoHeight) setRatio(`${v.videoWidth} / ${v.videoHeight}`);
-  };
-  const mediaStyle = (i) => ({
-    width: '100%',
-    display: 'block',
-    borderRadius: 8,
-    objectFit: 'contain',
-    ...(count > 1 ? { height: '100%', flex: 'none' } : {}),
-  });
-  const wrapStyle =
-    count > 1
-      ? { overflow: 'hidden', borderRadius: 8, width: '100%', ...(ratio ? { aspectRatio: ratio } : { aspectRatio: '1 / 1' }) }
-      : undefined;
-  const firstMetaProps = { onLoadedMetadata: onFirstMeta };
-  if (count === 1) {
-    return (
-      <div ref={wrapRef}>
-        <Media src={images[0]} alt={alt} className="gallery-video" style={mediaStyle(0)} preload="none" {...firstMetaProps} />
-      </div>
-    );
-  }
+
   return (
-    <div ref={wrapRef} style={wrapStyle}>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-          transform: `translateY(-${idx * 100}%)`,
-          transition: anim ? 'transform 0.6s ease-in-out' : 'none',
-        }}
-      >
-        {slides.map((src, i) => (
-          <Media
-            key={i}
-            src={src}
-            alt={`${alt} ${i + 1}`}
-            className="gallery-video"
-            style={mediaStyle(i)}
-            loop={false}
-            autoPlay={false}
-            preload="none"
-            onEnded={i === idx ? advance : undefined}
-            {...(i === 0 ? firstMetaProps : {})}
-          />
-        ))}
-      </div>
+    <div ref={wrapRef} className="gallery-media-frame">
+      {images.map((src, i) => (
+        <Media
+          key={src + ':' + i}
+          src={src}
+          alt={alt}
+          className={`gallery-media ${i === idx ? 'is-active' : ''}`}
+          data-active={i === idx ? 'true' : 'false'}
+          loop={false}
+          autoPlay={false}
+          preload="none"
+          onEnded={i === idx ? advance : undefined}
+          onClick={(e) => e.stopPropagation()}
+        />
+      ))}
+      {count > 1 && <span className="gallery-media-count">{idx + 1} / {count}</span>}
     </div>
   );
 }
-
 function isWebm(src) {
   return typeof src === 'string' && src.trim() !== '' && src.split('?')[0].split('.').pop().toLowerCase() === 'webm';
 }
@@ -471,6 +416,7 @@ export default function App() {
             zIndex: 20,
           }}
         />
+        <div className="portfolio-role" aria-label="Spine Animator">SPINE ANIMATOR</div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
         <button
           onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
@@ -490,14 +436,13 @@ export default function App() {
         </div>
       </div>
       {projects.length === 0 ? (
-        <p className="col-span-3 text-center">Загрузка проектов...</p>
+        <p className="gallery-status" role="status">Проекты загружаются…</p>
       ) : (
 <div className="gallery-masonry">
           {projects
             .map((project, idx) => ({ project, idx, validImages: (project.images || []).filter(src => typeof src === 'string' && src.trim() !== '') }))
             .filter(({ validImages }) => validImages.length > 0)
             .map(({ project, idx, validImages }) => {
-              const src = validImages[0];
               const isFullWidth = project.isFullWidth;
               return (
                 <div
@@ -505,7 +450,16 @@ export default function App() {
                   id={`card-${project.id}`}
                   data-card
                   onClick={() => openProject(idx)}
-                  className={isFullWidth ? 'full-width-image' : ''}
+                  className={`gallery-card ${isFullWidth ? 'full-width-image' : ''}`}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Открыть проект ${project.title || project.description || project.id}`}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      openProject(idx);
+                    }
+                  }}
                 >
                   <CardRotator images={validImages} alt={project.description || 'project'} paused={activeProject !== null} />
                 </div>

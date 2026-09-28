@@ -130,45 +130,100 @@ body.bg-gray-100 {
   z-index: 999;
 }
 
-/* Стили для изображения, занимающего все колонки */
-.full-width-image {
-  grid-column: span 3; /* Занимает все колонки */
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-/* Сетка галереи: 1–5 колонок, dense асимметричная заливка дыр */
+/* Галерея: CSS columns дают естественную masonry-раскладку без пересчёта grid-рядов. */
 .gallery-masonry {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-auto-flow: column dense;
-  grid-auto-rows: minmax(0, auto);
-  align-items: start;
-  gap: 1rem;
+  columns: 5 220px;
+  column-gap: 1rem;
+  width: 100%;
 }
-@media (max-width: 1500px) {
-  .gallery-masonry { grid-template-columns: repeat(4, 1fr); }
+.gallery-card {
+  display: inline-block;
+  width: 100%;
+  margin: 0 0 1rem;
+  min-width: 0;
+  break-inside: avoid;
+  vertical-align: top;
+  cursor: pointer;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #171a17;
+  box-shadow: 0 2px 12px rgb(0 0 0 / 0.09);
+  transition: transform 180ms ease, box-shadow 180ms ease;
 }
-@media (max-width: 1100px) {
-  .gallery-masonry { grid-template-columns: repeat(3, 1fr); }
+.gallery-card:hover,
+.gallery-card:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 9px 24px rgb(0 0 0 / 0.18);
+  outline: 2px solid #22c55e;
+  outline-offset: 2px;
+}
+.gallery-card.full-width-image {
+  column-span: all;
+}
+.gallery-media-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: linear-gradient(135deg, #181b18, #303630);
+}
+.gallery-media {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 240ms ease;
+}
+.gallery-media.is-active {
+  opacity: 1;
+}
+.gallery-media-count {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 2;
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: white;
+  background: rgb(0 0 0 / 0.62);
+  font-size: 12px;
+  font-weight: 700;
+}
+.gallery-status {
+  margin: 4rem auto;
+  text-align: center;
+  color: var(--muted-fg);
+}
+.portfolio-role {
+  flex: 1;
+  text-align: center;
+  color: #16a34a;
+  font-size: clamp(1.05rem, 2.6vw, 1.65rem);
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  white-space: nowrap;
+  text-shadow: 0 1px 0 rgb(0 0 0 / 0.08);
+}
+@media (max-width: 1200px) {
+  .gallery-masonry { columns: 4 210px; }
 }
 @media (max-width: 900px) {
-  .gallery-masonry { grid-template-columns: repeat(2, 1fr); }
+  .gallery-masonry { columns: 3 190px; }
 }
-@media (max-width: 600px) {
-  .gallery-masonry { grid-template-columns: 1fr; }
+@media (max-width: 640px) {
+  .gallery-masonry { columns: 2 145px; column-gap: 0.7rem; }
+  .gallery-card { margin-bottom: 0.7rem; }
 }
-.gallery-column {
-  display: contents;
+@media (max-width: 400px) {
+  .gallery-masonry { columns: 1; }
+  .portfolio-role { font-size: 0.88rem; letter-spacing: 0.04em; }
 }
-/* широкие блоки: на пару колонок (точно не один) */
-.gallery-masonry .full-width-image {
-  grid-column: span 2;
-}
-.gallery-masonry > div {
-  min-width: 0;
+@media (prefers-reduced-motion: reduce) {
+  .gallery-card, .gallery-media { transition: none; }
 }
 .article-popup video {
   width: 100%;
