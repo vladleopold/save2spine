@@ -4,6 +4,8 @@ import { getAspect } from './lib/mediaDims.js';
 import { pickCardType } from './lib/cardTypes.js';
 import Masonry from './lib/Masonry.jsx';
 import SiteHeader from './SiteHeader.jsx';
+import BackgroundMusic from './lib/BackgroundMusic.jsx';
+import CardRotator, { Media } from './lib/CardRotator.jsx';
 
 // Реалистичные частицы: мерцание, переменный ветер, звёздная пыль сверху/сбоку,
 // свайп сдувает с физикой (разлетаются и улетают, новые появляются сбоку)
@@ -174,137 +176,6 @@ function FadeImg({ src }) {
   );
 }
 
-function isGif(src) {
-  return typeof src === 'string' && src.trim() !== '' && src.split('.').pop().toLowerCase() === 'gif';
-}
-
-function isWebp(src) {
-  return typeof src === 'string' && src.trim() !== '' && src.split('.').pop().toLowerCase() === 'webp';
-}
-
-// Ротация внутри карточки: вертикальная прокрутка по кругу строго вниз 1>2>3>1,
-// переезд после окончания каждого видео, плавно (0.6s ease-in-out).
-// Играет ТОЛЬКО текущее видео и ТОЛЬКО если карточка видна (хоть частично).
-function CardRotator({ images, alt, paused }) {
-  const [idx, setIdx] = useState(0);
-  const [anim, setAnim] = useState(true);
-  const wrapRef = React.useRef(null);
-  const count = images.length;
-  // +1 клон первого видео в конце: уходим вниз на клон, потом прыгаем в начало без анимации
-  const slides = count > 1 ? [...images, images[0]] : images;
-  useEffect(() => { setIdx(0); setAnim(true); }, [images.join('|')]);
-  useEffect(() => {
-    const wrap = wrapRef.current;
-    if (!wrap) return;
-    const vids = Array.from(wrap.querySelectorAll('video'));
-    const sync = (visible) => {
-      vids.forEach((v, i) => {
-        if (paused || !visible || i !== idx) {
-          v.pause();
-        } else {
-          if (v.preload === 'none') {
-            v.preload = 'auto';
-            try { v.load(); } catch {}
-          }
-          v.play().catch(() => {});
-        }
-      });
-    };
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => sync(e.intersectionRatio >= 0.1)),
-      { threshold: [0, 0.1, 0.5] }
-    );
-    io.observe(wrap);
-    // без sync(true): observer сам сразу выдаст реальную видимость;
-    // иначе все 104 видео грузятся одновременно и сайт виснет
-    return () => io.disconnect();
-  }, [paused, idx, count]);
-  const advance = () => {
-    if (count <= 1) return;
-    if (idx < count) {
-      setAnim(true);
-      setIdx(idx + 1); // последнее — клон первого, едем только вниз
-    }
-  };
-  useEffect(() => {
-    if (idx === count && count > 1) {
-      // доехали до клона: тихо прыгаем в начало без анимации (перемотки нет)
-      const t = setTimeout(() => {
-        setAnim(false);
-        setIdx(0);
-      }, 650);
-      return () => clearTimeout(t);
-    }
-  }, [idx, count]);
-  // размер и заполнение задаёт CSS карточки (width/height 100%, object-fit: cover),
-  // поэтому здесь только поведение ротации
-  const mediaStyle = (i) => ({
-    ...(count > 1 ? { height: '100%', flex: 'none' } : {}),
-  });
-  // пропорции рамки задаёт карточка через CSS (--card-aspect / aspect-ratio),
-  // поэтому здесь только обрезка и скругление
-  const wrapStyle = count > 1 ? { overflow: 'hidden', borderRadius: 8, width: '100%', height: '100%' } : undefined;
-  if (count === 1) {
-    return (
-      <div ref={wrapRef}>
-        <Media src={images[0]} alt={alt} className="gallery-video" style={mediaStyle(0)} preload="none" />
-      </div>
-    );
-  }
-  return (
-    <div ref={wrapRef} style={wrapStyle}>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-          transform: `translateY(-${idx * 100}%)`,
-          transition: anim ? 'transform 0.6s ease-in-out' : 'none',
-        }}
-      >
-        {slides.map((src, i) => (
-          <Media
-            key={i}
-            src={src}
-            alt={`${alt} ${i + 1}`}
-            className="gallery-video"
-            style={mediaStyle(i)}
-            loop={false}
-            autoPlay={false}
-            preload="none"
-            onEnded={i === idx ? advance : undefined}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function isWebm(src) {
-  return typeof src === 'string' && src.trim() !== '' && src.split('?')[0].split('.').pop().toLowerCase() === 'webm';
-}
-
-// webm — только видео-тегом (img видео не показывает), остальное — img
-// autoplay по умолчанию ВЫКЛЮЧЕН: иначе браузер сам начинает качать все видео
-// страницы. Запуск делает только IntersectionObserver — когда карточка реально видна.
-function Media({ src, alt, className, style, loop = true, autoPlay = false, preload = "none", ...rest }) {
-  if (isWebm(src)) {
-    return (
-      <video
-        src={src}
-        className={className}
-        style={style}
-        autoPlay={autoPlay}
-        muted
-        loop={loop}
-        playsInline
-        preload={preload}
-        {...rest}
-      />
-    );
-  }
-  return <img src={src} alt={alt} className={className} style={style} {...rest} />;
-}
 
 
 const API_URL = import.meta.env.VITE_API_URL || '';
@@ -444,7 +315,8 @@ export default function App() {
   return (
     <div className="p-4 relative z-10">
       <ParticlesBackground />
-      <SiteHeader theme={theme} onToggleTheme={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))} />
+      <BackgroundMusic />
+      <SiteHeader />
       {projects.length === 0 ? (
         <p className="col-span-3 text-center">Загрузка проектов...</p>
       ) : (
