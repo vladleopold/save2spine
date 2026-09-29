@@ -86,8 +86,18 @@ export default function CardRotator({ images, alt, paused }) {
       (entries) => {
         const ev = entries[entries.length - 1];
         if (!ev) return;
-        if (ev.intersectionRatio >= 0.1) playAt(idx);
-        else stopAt(idx);
+        if (ev.intersectionRatio >= 0.1) {
+          const v = videoRefs.current[idx];
+          // preload=none: сначала качаем, потом играем. Иначе play()
+          // упирается в пустой буфер и кадр остаётся остановленным.
+          if (v && v.preload === 'none') {
+            v.preload = 'auto';
+            try { v.load(); } catch {}
+          }
+          playAt(idx);
+        } else {
+          stopAt(idx);
+        }
       },
       { threshold: 0.1 }
     );
@@ -134,7 +144,7 @@ export default function CardRotator({ images, alt, paused }) {
   if (count === 1) {
     return (
       <div ref={wrapRef}>
-        <Media src={images[0]} alt={alt} className="gallery-video" style={mediaStyle(0)} preload="metadata" />
+        <Media src={images[0]} alt={alt} className="gallery-video" style={mediaStyle(0)} preload="none" />
       </div>
     );
   }
@@ -160,7 +170,7 @@ export default function CardRotator({ images, alt, paused }) {
             style={mediaStyle(i)}
             loop={false}
             autoPlay={false}
-            preload={i === 0 ? 'auto' : 'metadata'}
+            preload="none"
             onEnded={i === idx ? () => onEnded(i) : undefined}
           />
         ))}
