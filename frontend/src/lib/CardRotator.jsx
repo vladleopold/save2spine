@@ -15,30 +15,30 @@ export function Media({ src, alt, className, style, loop = true, autoPlay = fals
   return <img src={src} alt={alt} className={className} style={style} {...rest} />;
 }
 
-const SLIDE_MS = 650;   // длительность переезда кадра
-const START_DELAY = 16; // кадр между сменой transform и стартом видео
+const SLIDE_MS = 620;   // длительность переезда кадра
 
 /**
  * Ротация нескольких анимаций по кругу, снизу вверх.
  *
- * Ключевое требование: анимация не должна проигрываться, пока её кадр
- * ещё едет. Поэтому порядок такой:
- *   1. сдвинули ленту (transform) — кадр уезжает снизу вверх;
- *   2. ждём окончания переезда;
- *   3. только теперь включаем видео текущего кадра, а предыдущее
- *      останавливаем — оно уже уехало наверх;
- *   4. ждём, пока новое видео доиграет, и только тогда переходим дальше.
+ * Требование: анимация не пропускается и не начинается, пока её кадр
+ * ещё едет. Порядок такой:
+ *   1. предыдущее видео доиграло — сдвигаем ленту вверх на следующий кадр;
+ *   2. НЕ ждём transitionEnd: событие приходит с задержкой и при быстрых
+ *      коротких анимациях теряется, из-за чего кадр остаётся непроигранным.
+ *      Вместо этого запускаем новое видео по таймеру ровно на момент, когда
+ *      кадр встаёт в центр (SLIDE_MS / 2 — середина переезда);
+ *   3. в этот же момент глушим предыдущее: оно уже ушло наверх.
  *
- * Без этого видео успевало стартовать в начале переезда, и при быстром
- * переходе анимации терялись: кадр успевал проиграться, пока был ещё
- * внизу кадра, и его не было видно.
+ * Почему так: анимация должна быть видна целиком. Если ждать конца
+ * переезда, короткие ролики (1–2 с) успевают закончиться, пока кадр ещё
+ * внизу, и визуально кажется, что анимация «пропущена».
  */
 export default function CardRotator({ images, alt, paused }) {
   const [idx, setIdx] = useState(0);
   const [anim, setAnim] = useState(true);
   const wrapRef = useRef(null);
   const videoRefs = useRef([]);
-  const clearTimer = useRef(null);
+  const timers = useRef([]);
   const seq = useRef(0);
 
   const count = images.length;
@@ -47,51 +47,97 @@ export default function CardRotator({ images, alt, paused }) {
 
   useEffect(() => { setIdx(0); setAnim(true); }, [images.join('|')]);
 
-  // пауза, когда карточка ушла из экрана или открыт попап
+  const clearTimers = () => {
+    timers.current.forEach(clearTimeout);
+    timers.current = [];
+  };
+
+  useEffect(() => () => clearTimers(), []);
+
+  const playAt = (i) => {
+    const v = videoRefs.current[i];
+    if (!v) return;
+    try {
+      v.currentTime = 0;
+      v.muted = true;
+      const p = v.play();
+      if (p && p.catch) p.catch(() => {});
+    } catch {}
+  };
+
+  const stopAt = (i) => {
+    const v = videoRefs.current[i];
+    if (v && !v.paused) { try { v.pause(); } catch {} }
+  };
+
+  // Пауза, когда карточка ушла из экрана или открыт попап
   useEffect(() => {
     const wrap = wrapRef.current;
     if (!wrap) return;
-    const vids = () => videoRefs.current.filter(Boolean);
-    const pauseAll = () => vids().forEach((v) => { if (!v.paused) v.pause(); });
-
-    if (paused) { pauseAll(); return; }
-
+    if (paused) {
+      clearTimers();
+      videoRefs.current.forEach((v) => { if (v && !v.paused) { try { v.pause(); } catch {} } });
+      return;
+    }
     const io = new IntersectionObserver(
       (entries) => {
         const visible = entries.some((e) => e.intersectionRatio >= 0.1);
-        if (!visible) { pauseAll(); return; }
-        // карточка появилась — доиграть текущий кадр с начала
-        const v = videoRefs.current[idx];
-        if (v && v.paused) {
-          v.currentTime = 0;
-          const p = v.play();
-          if (p && p.catch) p.catch(() => {});
+        if (visible) {
+          const cur = videoRefs.current[idx];
+          // НЕ проверяем readyState: на старте он 0, и условие отбрасывало
+          // запуск навсегда — видео оставалось остановленным. play() сам
+          // дождётся готовности и запустит ролик.
+          if (cur && cur.paused) playAt(idx);
+        } else {
+          videoRefs.current.forEach((v) => { if (v && !v.paused) { try { v.pause(); } catch {} } });
         }
       },
       { threshold: [0, 0.1, 0.5] }
     );
     io.observe(wrap);
+    // страховка: если observer не сработал (headless, нестандартный вьюпорт),
+    // запускаем текущий кадр сами, как только он в зоне видимости
+    const r = wrap.getBoundingClientRect();
+    if (r.bottom > 0 && r.top < window.innerHeight) {
+      const cur = videoRefs.current[idx];
+      if (cur && cur.paused) playAt(idx);
+    }
     return () => io.disconnect();
   }, [paused, idx, count]);
-
-  useEffect(() => () => { if (clearTimer.current) clearTimeout(clearTimer.current); }, []);
 
   const onEnded = (i) => {
     if (i !== idx) return;          // событие от неактивного кадра
     if (count <= 1) return;
+    if (paused) return;
     const my = ++seq.current;       // защита от гонки при быстрых переходах
+
+    clearTimers();
+
     if (idx < count) {
       setAnim(true);
-      setIdx((n) => n + 1);
+      const next = idx + 1;
+      setIdx(next);
+      // запускаем следующий кадр в момент, когда он встаёт по центру
+      timers.current.push(setTimeout(() => {
+        if (seq.current !== my) return;
+        stopAt(idx);      // предыдущий ушёл наверх — глушим
+        playAt(next);
+      }, SLIDE_MS / 2));
       return;
     }
-    // доехали до клона: вернуться наверх без анимации
-    if (clearTimer.current) clearTimeout(clearTimer.current);
-    clearTimer.current = setTimeout(() => {
+
+    // доехали до клона: возвращаемся наверх без анимации и стартуем заново
+    timers.current.push(setTimeout(() => {
       if (seq.current !== my) return;
       setAnim(false);
       setIdx(0);
-    }, SLIDE_MS + START_DELAY);
+      // следующий кадр уже на месте — сразу играем
+      timers.current.push(setTimeout(() => {
+        if (seq.current !== my) return;
+        stopAt(count);
+        playAt(0);
+      }, 40));
+    }, SLIDE_MS + 20));
   };
 
   const mediaStyle = (i) => (count > 1 ? { height: '100%', flex: 'none' } : {});
@@ -102,7 +148,7 @@ export default function CardRotator({ images, alt, paused }) {
   if (count === 1) {
     return (
       <div ref={wrapRef}>
-        <Media src={images[0]} alt={alt} className="gallery-video" style={mediaStyle(0)} preload="none" />
+        <Media src={images[0]} alt={alt} className="gallery-video" style={mediaStyle(0)} preload="metadata" />
       </div>
     );
   }
@@ -117,19 +163,6 @@ export default function CardRotator({ images, alt, paused }) {
           transform: `translateY(-${idx * 100}%)`,
           transition: anim ? `transform ${SLIDE_MS}ms ease-in-out` : 'none',
         }}
-        onTransitionEnd={(e) => {
-          if (e.propertyName !== 'transform') return;
-          if (!anim) return;                       // это был прыжок наверх
-          // кадр доехал и остановился посередине — только теперь играем
-          const prev = videoRefs.current[idx - 1];
-          if (prev && !prev.paused) prev.pause();  // предыдущий ушёл наверх
-          const cur = videoRefs.current[idx];
-          if (cur) {
-            cur.currentTime = 0;
-            const p = cur.play();
-            if (p && p.catch) p.catch(() => {});
-          }
-        }}
       >
         {slides.map((src, i) => (
           <Media
@@ -141,7 +174,7 @@ export default function CardRotator({ images, alt, paused }) {
             style={mediaStyle(i)}
             loop={false}
             autoPlay={false}
-            preload={i === 0 ? 'metadata' : 'none'}
+            preload={i <= 1 ? 'metadata' : 'auto'}
             onEnded={i === idx ? () => onEnded(i) : undefined}
           />
         ))}
