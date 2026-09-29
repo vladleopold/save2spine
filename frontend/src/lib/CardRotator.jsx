@@ -103,12 +103,14 @@ export default function CardRotator({ images, alt, paused }) {
     if (!within && v.dataset.capped === "1") return;
     try {
       v.muted = true;
-      const pr = v.play();
-      // Ротация карточки слот тоже занимает, но минует проверку capped:
+      // Слот занимаем до play(), синхронно: к моменту, когда сработает
+      // промис, уже стартуют все видимые ролики, и enforce вытеснял бы
+      // их по кругу, попутно снимая метку capped — реестр пустел.
+      // Ротация карточки слот тоже берёт, но минует проверку capped:
       // её ролик обязан доиграть, иначе цепочка 1→2→3 обрывается.
-      if (within) { reserve(v); return; }
-      if (pr && pr.then) pr.then(() => register(v)).catch(() => {});
-      else register(v);
+      if (within) { reserve(v); } else { register(v); }
+      const pr = v.play();
+      if (pr && pr.catch) pr.catch(() => { playing.delete(v); });
     } catch {}
   }, []);
 
