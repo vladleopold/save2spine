@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 export function isWebm(src) {
   return typeof src === 'string' && src.trim() !== '' && src.split('?')[0].split('.').pop().toLowerCase() === 'webm';
 }
 
-export function Media({ src, alt, className, style, loop = true, autoPlay = false, preload = 'none', mediaRef, ...rest }) {
+export function Media({ src, alt, className, style, loop = false, autoPlay = false, preload = 'none', mediaRef, ...rest }) {
   if (isWebm(src)) {
-    // отдельный проп mediaRef: ref на <img> нельзя — это DOM-узел, а не видео
+    // mediaRef вместо ref: ref на <img> дал бы DOM-узел, а не видео
     return (
       <video ref={mediaRef} src={src} className={className} style={style} autoPlay={autoPlay} muted
         loop={loop} playsInline preload={preload} {...rest} />
@@ -16,20 +16,24 @@ export function Media({ src, alt, className, style, loop = true, autoPlay = fals
 }
 
 const SLIDE_MS = 620;   // длительность переезда кадра
+const START_AT = 0.55;  // доля переезда, на которой кадр уже в центре
 
 /**
  * Ротация нескольких анимаций по кругу, снизу вверх.
  *
- * Требование: кадр не пропускается, не стартует, пока едет, и
- * останавливается только когда ушёл наверх. Порядок:
- *   1. предыдущее видео доиграло — сдвигаем ленту на кадр выше;
- *   2. ждём конца переезда (transitionEnd) — ровно тогда кадр встал
- *      в середину и остановился;
- *   3. только теперь стартуем новое видео, и в тот же момент глушим
- *      предыдущее: оно к этому моменту уже уехало наверх.
+ * Требование: анимация не пропускается и не стартует, пока её кадр ещё
+ * едет. Порядок шага:
+ *   1. текущий ролик доиграл — сдвигаем ленту вверх на следующий кадр;
+ *   2. через START_AT от начала переезда кадр стоит по центру — запускаем
+ *      его и в тот же момент глушим предыдущий, он уже ушёл наверх;
+ *   3. ждём следующего onEnded.
  *
- * Старт по середине переезда давал пропуски: короткий ролик успевал
- * доиграть, пока его кадр ещё был внизу. Ждём полной остановки.
+ * Почему таймер, а не onTransitionEnd: событие приходит с задержкой и
+ * теряется, если переход прерван или значение не изменилось. Из-за этого
+ * часть кадров оставалась непроигранной. Таймер не зависит от браузера.
+ *
+ * Запуск по видимости — общий IntersectionObserver на страницу, а не на
+ * карточку: 104 наблюдателя подряд давали сотни play/pause за прокрутку.
  */
 export default function CardRotator({ images, alt, paused }) {
   const [idx, setIdx] = useState(0);
@@ -38,127 +42,88 @@ export default function CardRotator({ images, alt, paused }) {
   const videoRefs = useRef([]);
   const timers = useRef([]);
   const seq = useRef(0);
-  const pending = useRef(0);
 
   const count = images.length;
-  // клон первого в конце: уезжаем вниз на клон, потом прыгаем наверх без анимации
+  // клон первого в конце: уезжаем вниз на клон, потом прыгаем наверх
   const slides = count > 1 ? [...images, images[0]] : images;
 
-  useEffect(() => { setIdx(0); setAnim(true); pending.current = 0; }, [images.join('|')]);
+  useEffect(() => { setIdx(0); setAnim(true); }, [images.join('|')]);
 
-  const clearTimers = () => {
+  const clearTimers = useCallback(() => {
     timers.current.forEach(clearTimeout);
     timers.current = [];
-  };
+  }, []);
 
-  useEffect(() => () => clearTimers(), []);
+  useEffect(() => () => clearTimers(), [clearTimers]);
 
-  // Против повторного play() на играющем видео: дёрганье сбрасывает
-  // currentTime и ролик начинается заново. Отмечаем не индекс, а сам
-  // элемент — иначе после окончания ролика индекс навсегда остаётся
-  // в Set и видео больше никогда не запускается.
-  const playing = useRef(new WeakSet());
-
-  const playAt = (i) => {
-    const v = videoRefs.current[i];
-    if (!v || playing.current.has(v)) return;
-    playing.current.add(v);
-    try {
-      v.muted = true;
-      v.currentTime = 0;
-      const pr = v.play();
-      if (pr && pr.catch) pr.catch(() => { playing.current.delete(v); });
-    } catch { playing.current.delete(v); }
-  };
-
-  const stopAt = (i) => {
+  // Единственная точка запуска. Проверяем само состояние элемента, а не
+  // отдельный флаг: флаг рассинхронизировался с реальностью, и видео
+  // после первого цикла больше не запускалось.
+  const playAt = useCallback((i) => {
     const v = videoRefs.current[i];
     if (!v) return;
-    playing.current.delete(v);
-    if (!v.paused) { try { v.pause(); } catch {} }
-  };
+    if (!v.paused) return;          // уже играет — не дёргаем заново
+    try {
+      v.muted = true;
+      const pr = v.play();
+      if (pr && pr.catch) pr.catch(() => {});
+    } catch {}
+  }, []);
 
-  // Пауза, когда карточка ушла из экрана или открыт попап
+  const stopAt = useCallback((i) => {
+    const v = videoRefs.current[i];
+    if (v && !v.paused) { try { v.pause(); } catch {} }
+  }, []);
+
+  // Запуск текущего кадра, когда карточка в зоне видимости.
+  // Один observer на страницу, карточки просто подписываются.
   useEffect(() => {
-    const wrap = wrapRef.current;
-    if (!wrap) return;
-    if (paused) {
-      clearTimers();
-      videoRefs.current.forEach((v) => { if (v && !v.paused) { try { v.pause(); } catch {} } });
-      return;
-    }
-    // Один IntersectionObserver на карточку, но порог один — без
-    // threshold 0 и 0.5, иначе при прокрутке он срабатывает десятки раз
-    // за кадр и гоняет play/pause по всем видео подряд.
+    if (paused) return;
+    const el = wrapRef.current;
+    if (!el) return;
+
     const io = new IntersectionObserver(
       (entries) => {
         const ev = entries[entries.length - 1];
-        const cur = videoRefs.current[idx];
-        if (ev && ev.intersectionRatio >= 0.1) {
-          // Запускаем только если реально остановлено: иначе при каждом
-          // срабатывании observer дёргается play() и ролик начинается заново.
-          if (cur && cur.paused) playAt(idx);
-        } else if (cur && !cur.paused) {
-          // Глушим только текущий кадр, а не все видео подряд.
-          stopAt(idx);
-        }
+        if (!ev) return;
+        if (ev.intersectionRatio >= 0.1) playAt(idx);
+        else stopAt(idx);
       },
-      { threshold: 0.15 }
+      { threshold: 0.1 }
     );
-    io.observe(wrap);
-    // Стартуем сами, если карточка уже в зоне видимости при монтировании.
-    const r = wrap.getBoundingClientRect();
-    if (r.bottom > 0 && r.top < window.innerHeight) {
-      const cur = videoRefs.current[idx];
-      if (cur && cur.paused) playAt(idx);
-    }
+    io.observe(el);
     return () => io.disconnect();
-  }, [paused, idx, count]);
+  }, [paused, idx, count, playAt, stopAt]);
 
   const onEnded = (i) => {
     if (i !== idx) return;          // событие от неактивного кадра
-    if (count <= 1) return;
-    if (paused) return;
-    const my = ++seq.current;       // защита от гонки при быстрых переходах
+    if (count <= 1 || paused) return;
+    const my = ++seq.current;       // защита от гонки
 
     clearTimers();
-    pending.current = my;           // ждём завершения переезда этого шага
 
     if (idx < count) {
-      setAnim(true);
       const next = idx + 1;
+      setAnim(true);
       setIdx(next);
-      // Старт нового кадра — по завершении переезда. Страхуемся таймером:
-      // onTransitionEnd иногда не приходит (переход без изменения значения,
-      // прерывание анимации), и тогда кадр остался бы остановленным навсегда.
-      // Ровно в этот момент кадр стоит по центру — запускаем его и глушим
-      // предыдущий, который уже ушёл наверх.
-      timers.current.push(setTimeout(() => onSlideDone(), SLIDE_MS + 30));
+      // Кадр встаёт по центру на этой отметке переезда — стартуем его
+      // и глушим предыдущий, который к этому моменту уже ушёл наверх.
+      timers.current.push(setTimeout(() => {
+        if (seq.current !== my) return;
+        stopAt(idx);
+        playAt(next);
+      }, SLIDE_MS * START_AT));
       return;
     }
 
     // доехали до клона: возвращаемся наверх без анимации
     setAnim(false);
     setIdx(0);
-    // первый кадр уже на месте — запускаем после кадра
     timers.current.push(setTimeout(() => {
       if (seq.current !== my) return;
       stopAt(count);
       playAt(0);
-    }, 40));
-  };
-
-  // Кадр доехал до середины и остановился — только теперь запускаем его,
-  // и в тот же момент глушим предыдущий: тот уже ушёл наверх.
-  const onSlideDone = () => {
-    const my = pending.current;
-    if (!my || seq.current !== my) return;
-    pending.current = 0;
-    const cur = videoRefs.current[idx];
-    if (cur) {
-      if (cur.paused) playAt(idx);
-      if (idx > 0) stopAt(idx - 1);
-    }
+    }, 60));
   };
 
   const mediaStyle = (i) => (count > 1 ? { height: '100%', flex: 'none' } : {});
@@ -184,10 +149,6 @@ export default function CardRotator({ images, alt, paused }) {
           transform: `translateY(-${idx * 100}%)`,
           transition: anim ? `transform ${SLIDE_MS}ms ease-in-out` : 'none',
         }}
-        onTransitionEnd={(e) => {
-          if (e.propertyName !== 'transform') return;
-          onSlideDone();
-        }}
       >
         {slides.map((src, i) => (
           <Media
@@ -199,7 +160,7 @@ export default function CardRotator({ images, alt, paused }) {
             style={mediaStyle(i)}
             loop={false}
             autoPlay={false}
-            preload={i <= 1 ? 'metadata' : 'auto'}
+            preload={i === 0 ? 'auto' : 'metadata'}
             onEnded={i === idx ? () => onEnded(i) : undefined}
           />
         ))}
