@@ -1,3 +1,7 @@
+import React, { useState, useEffect } from 'react';
+import { useSwipeable } from 'react-swipeable';
+import { getAspect } from './lib/mediaDims.js';
+
 // Реалистичные частицы: мерцание, переменный ветер, звёздная пыль сверху/сбоку,
 // свайп сдувает с физикой (разлетаются и улетают, новые появляются сбоку)
 function ParticlesBackground() {
@@ -143,13 +147,6 @@ function ParticlesBackground() {
 }
 
 
-
-
-
-import React, { useState, useEffect } from 'react';
-
-import { useSwipeable } from 'react-swipeable';
-
 // Fade-in компонент для анимации появления изображений
 function FadeImg({ src }) {
   const [visible, setVisible] = useState(false);
@@ -188,7 +185,6 @@ function isWebp(src) {
 function CardRotator({ images, alt, paused }) {
   const [idx, setIdx] = useState(0);
   const [anim, setAnim] = useState(true);
-  const [ratio, setRatio] = useState(null);
   const wrapRef = React.useRef(null);
   const count = images.length;
   // +1 клон первого видео в конце: уходим вниз на клон, потом прыгаем в начало без анимации
@@ -237,26 +233,18 @@ function CardRotator({ images, alt, paused }) {
       return () => clearTimeout(t);
     }
   }, [idx, count]);
-  const onFirstMeta = (e) => {
-    const v = e.target;
-    if (v.videoWidth && v.videoHeight) setRatio(`${v.videoWidth} / ${v.videoHeight}`);
-  };
+  // размер и заполнение задаёт CSS карточки (width/height 100%, object-fit: cover),
+  // поэтому здесь только поведение ротации
   const mediaStyle = (i) => ({
-    width: '100%',
-    display: 'block',
-    borderRadius: 8,
-    objectFit: 'contain',
     ...(count > 1 ? { height: '100%', flex: 'none' } : {}),
   });
-  const wrapStyle =
-    count > 1
-      ? { overflow: 'hidden', borderRadius: 8, width: '100%', ...(ratio ? { aspectRatio: ratio } : { aspectRatio: '1 / 1' }) }
-      : undefined;
-  const firstMetaProps = { onLoadedMetadata: onFirstMeta };
+  // пропорции рамки задаёт карточка через CSS (--card-aspect / aspect-ratio),
+  // поэтому здесь только обрезка и скругление
+  const wrapStyle = count > 1 ? { overflow: 'hidden', borderRadius: 8, width: '100%', height: '100%' } : undefined;
   if (count === 1) {
     return (
       <div ref={wrapRef}>
-        <Media src={images[0]} alt={alt} className="gallery-video" style={mediaStyle(0)} preload="none" {...firstMetaProps} />
+        <Media src={images[0]} alt={alt} className="gallery-video" style={mediaStyle(0)} preload="none" />
       </div>
     );
   }
@@ -282,7 +270,6 @@ function CardRotator({ images, alt, paused }) {
             autoPlay={false}
             preload="none"
             onEnded={i === idx ? advance : undefined}
-            {...(i === 0 ? firstMetaProps : {})}
           />
         ))}
       </div>
@@ -295,7 +282,9 @@ function isWebm(src) {
 }
 
 // webm — только видео-тегом (img видео не показывает), остальное — img
-function Media({ src, alt, className, style, loop = true, autoPlay = true, preload = "metadata", ...rest }) {
+// autoplay по умолчанию ВЫКЛЮЧЕН: иначе браузер сам начинает качать все видео
+// страницы. Запуск делает только IntersectionObserver — когда карточка реально видна.
+function Media({ src, alt, className, style, loop = true, autoPlay = false, preload = "none", ...rest }) {
   if (isWebm(src)) {
     return (
       <video
@@ -313,6 +302,7 @@ function Media({ src, alt, className, style, loop = true, autoPlay = true, prelo
   }
   return <img src={src} alt={alt} className={className} style={style} {...rest} />;
 }
+
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
@@ -420,8 +410,16 @@ export default function App() {
       (entries) => {
         entries.forEach((e) => {
           const v = e.target;
-          if (e.intersectionRatio >= 0.1) v.play().catch(() => {});
-          else v.pause();
+          if (e.intersectionRatio >= 0.1) {
+            // preload=none: сначала качаем, только потом играем
+            if (v.preload === 'none') {
+              v.preload = 'auto';
+              try { v.load(); } catch {}
+            }
+            v.play().catch(() => {});
+          } else {
+            v.pause();
+          }
         });
       },
       { threshold: [0, 0.1, 0.5] }
@@ -429,19 +427,6 @@ export default function App() {
     vids.forEach((v) => io.observe(v));
     return () => io.disconnect();
   }, [activeProject]);
-  useEffect(() => {
-    const vids = Array.from(document.querySelectorAll('video.gallery-video'));
-    const onMeta = (e) => {
-      const v = e.target;
-      const card = v.closest('[data-card]');
-      if (card && v.videoWidth && v.videoHeight) {
-        card.style.aspectRatio = `${v.videoWidth} / ${v.videoHeight}`;
-      }
-    };
-    vids.forEach((v) => v.addEventListener('loadedmetadata', onMeta));
-    return () => vids.forEach((v) => v.removeEventListener('loadedmetadata', onMeta));
-  }, [projects]);
-
   useEffect(() => {
     if (activeProject !== null) {
       const articlePopup = document.querySelector('.article-popup');
@@ -456,37 +441,24 @@ export default function App() {
   return (
     <div className="p-4 relative z-10">
       <ParticlesBackground />
-      <div className="flex items-center justify-between mb-4 relative z-10">
+      <div className="gallery-head relative z-10">
         <img
           src="/photo-square.jpg"
           alt="spine animator portfolio"
-          style={{
-            width: 52,
-            height: 52,
-            borderRadius: '50%',
-            objectFit: 'cover',
-            border: '8px solid #22c55e',
-            margin: '-16px 0',
-            position: 'relative',
-            zIndex: 20,
-          }}
+          className="gallery-avatar"
+          width={52}
+          height={52}
         />
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <div className="gallery-head__actions">
         <button
           onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
+          className="theme-toggle"
           aria-label="Переключить тему"
           title="Тёмная / светлая тема"
-          style={{ fontSize: 20, background: 'none', border: 'none', cursor: 'pointer', lineHeight: 1 }}
         >
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
-        <a
-          href="/cv"
-          className="text-2xl font-bold bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition-colors duration-200"
-          style={{ height: '2.25rem', display: 'flex', alignItems: 'center' }}
-        >
-          resume
-        </a>
+        <a href="/cv" className="resume-btn">resume</a>
         </div>
       </div>
       {projects.length === 0 ? (
@@ -499,6 +471,9 @@ export default function App() {
             .map(({ project, idx, validImages }) => {
               const src = validImages[0];
               const isFullWidth = project.isFullWidth;
+              // пропорции берём из манифеста, а не ждём loadedmetadata:
+              // высота карточки известна с первого рендера — сетка не скачет
+              const firstAspect = getAspect(src, 1);
               return (
                 <div
                   key={project.id}
@@ -506,6 +481,7 @@ export default function App() {
                   data-card
                   onClick={() => openProject(idx)}
                   className={isFullWidth ? 'full-width-image' : ''}
+                  style={{ '--card-aspect': String(firstAspect) }}
                 >
                   <CardRotator images={validImages} alt={project.description || 'project'} paused={activeProject !== null} />
                 </div>
