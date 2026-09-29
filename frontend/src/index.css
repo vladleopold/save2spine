@@ -130,53 +130,42 @@ body.bg-gray-100 {
   z-index: 999;
 }
 
-/* Сетка галереи работ.
-   Раскладка стабильная, потому что:
-   1) обычный row-flow — порядок карточек = порядок в DOM, ничего не перетекает;
-   2) высота карточки задана заранее через aspect-ratio (пропорции из mediaDims.js),
-      поэтому сетка не перестраивается, когда приходит loadedmetadata;
-   3) gap одинаковый по обеим осям — отступы ровные на всех брейкпоинтах. */
-.gallery-masonry {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  align-items: start;
-  gap: 0.75rem;
-  grid-auto-rows: auto;
-}
-@media (max-width: 1500px) {
-  .gallery-masonry { grid-template-columns: repeat(4, 1fr); }
-}
-@media (max-width: 1100px) {
-  .gallery-masonry { grid-template-columns: repeat(3, 1fr); }
-}
-@media (max-width: 900px) {
-  .gallery-masonry { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 600px) {
-  .gallery-masonry { grid-template-columns: 1fr; }
+/* ===== Masonry-галерея =====
+   Колоночная укладка: каждая колонка заполняется независимо, карточки
+   внутри колонки стоят вплотную (gap задан один раз в Masonry.jsx).
+   Пять размеров карточек — пропорции подобраны под реальное содержимое. */
+.gallery-masonry,
+.masonry-wrap {
+  width: 100%;
+  min-width: 0;
 }
 
-/* Карточка: пропорции зарезервированы заранее, aspect-ratio ставит React */
-.gallery-masonry > [data-card] {
+.masonry-col > .masonry-cell {
+  display: block;
   min-width: 0;
+}
+
+.gallery-card {
+  display: block;
+  width: 100%;
   aspect-ratio: var(--card-aspect, 1 / 1);
   overflow: hidden;
   border-radius: 8px;
-  cursor: pointer;
   background: var(--card-bg);
-  contain: layout paint;
-}
-.gallery-masonry > [data-card] > * {
-  width: 100%;
-  height: 100%;
+  cursor: pointer;
+  /* изолируем карточку: пересчёты раскладки не затрагивают соседей */
+  contain: layout paint style;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  line-height: normal;
+  font-size: initial;
 }
 
-/* Медиа внутри карточки не должна влиять на высоту: размер уже задан
-   карточкой через aspect-ratio. object-fit: cover гарантирует, что видео
-   заполняет рамку без чёрных полей, но не растягивает сетку. */
-.gallery-masonry [data-card] .gallery-video,
-.gallery-masonry [data-card] img,
-.gallery-masonry [data-card] video {
+.gallery-card > * { width: 100%; height: 100%; }
+
+.gallery-masonry .gallery-video,
+.gallery-card img,
+.gallery-card video {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -184,98 +173,29 @@ body.bg-gray-100 {
   max-width: 100%;
 }
 
-/* Внутренний «поезд» карточки (ротация 1>2>3) тянется на всю рамку */
-.gallery-masonry [data-card] > div {
+/* Пять размеров — aspect-ratio приходит из cardTypes.js через --card-aspect,
+   здесь страховка на случай, если переменная не задана. */
+.gallery-card--portrait  { --card-aspect: 0.6667; }
+.gallery-card--square    { --card-aspect: 1; }
+.gallery-card--wide      { --card-aspect: 1.3333; }
+.gallery-card--panorama  { --card-aspect: 1.7778; }
+.gallery-card--ultrawide { --card-aspect: 2.3333; }
+
+/* Внутри колоночной укладки ширина уже задана колонкой,
+   поэтому широкие блоки просто занимают всю ширину своей колонки. */
+.gallery-card.full-width-image {
+  grid-column: auto;
   width: 100%;
-  height: 100%;
-  overflow: hidden;
-  border-radius: 8px;
+  height: auto;
 }
 
-/* ===== Шапка галереи: адаптивная, кнопки удобны для пальца =====
-   Размеры заданы в rem и растут на узких экранах, зона касания >= 44px. */
-.gallery-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
+/* На узких экранах колонка одна — плотность обеспечивается gap. */
+@media (max-width: 640px) {
+  .masonry-col { gap: 10px !important; }
+  .masonry-wrap { --masonry-gap: 10px; }
 }
-.gallery-avatar {
-  width: 52px;
-  height: 52px;
-  min-width: 52px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 8px solid #22c55e;
-  position: relative;
-  z-index: 20;
-  flex-shrink: 0;
-}
-.gallery-head__actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0;
-}
-.theme-toggle {
-  /* зона касания 44x44 при любом размере шрифта */
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
-  line-height: 1;
-  background: var(--card-bg);
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 8px;
-  cursor: pointer;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  transition: border-color 0.2s, transform 0.15s;
-}
-.theme-toggle:hover { border-color: rgba(0, 0, 0, 0.3); }
-.theme-toggle:active { transform: scale(0.94); }
-.resume-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 0.5rem 1.5rem;
-  background: #22c55e;
-  color: #fff;
-  font-weight: 700;
-  font-size: 1.125rem;
-  border-radius: 8px;
-  text-decoration: none;
-  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.1);
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  transition: background 0.2s;
-}
-.resume-btn:hover { background: #16a34a; }
-
-/* на узких экранах отступы и кнопки чуть компактнее, но зона касания не меньше 44px */
-@media (max-width: 480px) {
-  .gallery-head { gap: 0.5rem; margin-bottom: 0.75rem; }
-  .gallery-avatar { width: 44px; height: 44px; min-width: 44px; border-width: 5px; }
-  .resume-btn { padding: 0.5rem 1.1rem; font-size: 1rem; }
-  .gallery-masonry { gap: 0.625rem; }
-}
-@media (max-width: 340px) {
-  .resume-btn { padding: 0.5rem 0.9rem; font-size: 0.95rem; }
-}
-
-/* Широкие блоки занимают ровно 2 колонки, но не больше, чем есть в сетке */
-.gallery-masonry .full-width-image {
-  grid-column: span 2;
-}
-@media (max-width: 600px) {
-  .gallery-masonry .full-width-image { grid-column: span 1; }
+@media (max-width: 380px) {
+  .masonry-col { gap: 8px !important; }
 }
 
 .article-popup video {

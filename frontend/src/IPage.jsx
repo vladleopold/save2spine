@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useSwipeable } from 'react-swipeable';
 
 import { getAspect } from './lib/mediaDims.js';
+import { pickCardType } from './lib/cardTypes.js';
+import Masonry from './lib/Masonry.jsx';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
@@ -413,30 +415,43 @@ export default function IPage() {
       {projects.length === 0 ? (
         <p className="col-span-3 text-center">loading...</p>
       ) : (
-        <div className="gallery-masonry">
-          {projects
-            .map((project, idx) => ({ project, idx, validImages: (project.images || []).filter(src => typeof src === 'string' && src.trim() !== '') }))
+                <Masonry
+          items={projects
+            .map((project, idx) => ({
+              key: project.id,
+              project,
+              idx,
+              validImages: (project.images || []).filter(src => typeof src === 'string' && src.trim() !== ''),
+            }))
             .filter(({ validImages }) => validImages.length > 0)
             .map(({ project, idx, validImages }) => {
-              const src = validImages[0];
-              const isFullWidth = project.isFullWidth;
-              // пропорции берём из манифеста, а не ждём loadedmetadata:
-              // высота карточки известна с первого рендера — сетка не скачет
-              const firstAspect = getAspect(src, 1);
-              return (
-                <div
-                  key={project.id}
-                  id={`card-${project.id}`}
-                  data-card
-                  onClick={() => openProject(idx)}
-                  className={isFullWidth ? 'full-width-image' : ''}
-                  style={{ '--card-aspect': String(firstAspect) }}
-                >
-                  <CardRotator images={validImages} alt={project.description || 'project'} paused={activeProject !== null} />
-                </div>
-              );
+              const aspect = getAspect(validImages[0], 1);
+              return {
+                key: project.id,
+                idx,
+                project,
+                validImages,
+                aspect,
+                // один из пяти размеров — ближайший к реальным пропорциям
+                type: pickCardType(aspect),
+                isFullWidth: !!project.isFullWidth,
+              };
             })}
-        </div>
+          renderItem={(item) => (
+            <div
+              id={`card-${item.project.id}`}
+              data-card
+              data-card-type={item.type.id}
+              onClick={() => openProject(item.idx)}
+              className={`gallery-card gallery-card--${item.type.id}${item.isFullWidth ? ' full-width-image' : ''}`}
+              style={{ '--card-aspect': String(item.type.aspect) }}
+            >
+              <CardRotator images={item.validImages} alt={item.project.description || 'project'} paused={activeProject !== null} />
+            </div>
+          )}
+          gap={12}
+          ariaLabel="Галерея работ"
+        />
       )}
 
       {activeProject !== null && projects[activeProject] && (
