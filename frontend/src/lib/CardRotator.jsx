@@ -54,19 +54,25 @@ export default function CardRotator({ images, alt, paused }) {
 
   useEffect(() => () => clearTimers(), []);
 
+  // Флаг, чтобы play() не вызывался повторно на уже играющем видео:
+  // дёргание play() сбрасывает currentTime и ролик начинается заново.
+  const playing = useRef(new Set());
+
   const playAt = (i) => {
     const v = videoRefs.current[i];
-    if (!v) return;
+    if (!v || playing.current.has(i)) return;
+    playing.current.add(i);
     try {
-      v.currentTime = 0;
       v.muted = true;
-      const p = v.play();
-      if (p && p.catch) p.catch(() => {});
-    } catch {}
+      v.currentTime = 0;
+      const pr = v.play();
+      if (pr && pr.catch) pr.catch(() => { playing.current.delete(i); });
+    } catch { playing.current.delete(i); }
   };
 
   const stopAt = (i) => {
     const v = videoRefs.current[i];
+    playing.current.delete(i);
     if (v && !v.paused) { try { v.pause(); } catch {} }
   };
 
@@ -79,24 +85,26 @@ export default function CardRotator({ images, alt, paused }) {
       videoRefs.current.forEach((v) => { if (v && !v.paused) { try { v.pause(); } catch {} } });
       return;
     }
+    // Один IntersectionObserver на карточку, но порог один — без
+    // threshold 0 и 0.5, иначе при прокрутке он срабатывает десятки раз
+    // за кадр и гоняет play/pause по всем видео подряд.
     const io = new IntersectionObserver(
       (entries) => {
-        const visible = entries.some((e) => e.intersectionRatio >= 0.1);
-        if (visible) {
-          const cur = videoRefs.current[idx];
-          // НЕ проверяем readyState: на старте он 0, и условие отбрасывало
-          // запуск навсегда — видео оставалось остановленным. play() сам
-          // дождётся готовности и запустит ролик.
+        const ev = entries[entries.length - 1];
+        const cur = videoRefs.current[idx];
+        if (ev && ev.intersectionRatio >= 0.1) {
+          // Запускаем только если реально остановлено: иначе при каждом
+          // срабатывании observer дёргается play() и ролик начинается заново.
           if (cur && cur.paused) playAt(idx);
-        } else {
-          videoRefs.current.forEach((v) => { if (v && !v.paused) { try { v.pause(); } catch {} } });
+        } else if (cur && !cur.paused) {
+          // Глушим только текущий кадр, а не все видео подряд.
+          stopAt(idx);
         }
       },
-      { threshold: [0, 0.1, 0.5] }
+      { threshold: 0.15 }
     );
     io.observe(wrap);
-    // страховка: если observer не сработал (headless, нестандартный вьюпорт),
-    // запускаем текущий кадр сами, как только он в зоне видимости
+    // Стартуем сами, если карточка уже в зоне видимости при монтировании.
     const r = wrap.getBoundingClientRect();
     if (r.bottom > 0 && r.top < window.innerHeight) {
       const cur = videoRefs.current[idx];
