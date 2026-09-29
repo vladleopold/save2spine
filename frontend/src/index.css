@@ -174,24 +174,23 @@ body.bg-gray-100 {
 .site-head__title {
   display: inline-block;
   font-family: "Noto Sans", system-ui, sans-serif;
-  font-weight: 800;
-  font-size: 1.6rem;
-  letter-spacing: 0.28em;
+  font-weight: 600;
+  font-size: 1.45rem;
+  letter-spacing: 0.3em;
   /* отступ слева компенсирует letter-spacing, чтобы слово было по центру */
-  padding-left: 0.28em;
-  line-height: 1;
+  padding-left: 0.3em;
+  line-height: 1.1;
   /* белый на чёрном, без рамки и без подложки */
-  color: #fff;
-  background: none;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  color: #ffffff;
+  background: #000000;
+  text-shadow: none;
   white-space: nowrap;
   user-select: none;
 }
 /* в тёмной теме инверсия: чёрный текст на белом фоне */
 :root[data-theme="dark"] .site-head__title {
-  color: #000;
-  background: none;
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.45);
+  color: #ffffff;
+  background: #000000;
 }
 
 /* Кнопки в шапке */
@@ -229,7 +228,7 @@ body.bg-gray-100 {
   .resume-btn { padding: 0.5rem 0.9rem; font-size: 0.95rem; }
 }
 @media (max-width: 360px) {
-  .site-head__title { font-size: 1rem; letter-spacing: 0.14em; padding-left: 0.14em; }
+  .site-head__title { font-size: 0.82rem; letter-spacing: 0.14em; padding-left: 0.14em; }
 }
 
 /* ===== Masonry-галерея =====
