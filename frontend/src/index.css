@@ -28,9 +28,16 @@
   --card-bg: #ffffff;
   --muted-fg: #555555;
 }
+/* Фон задаём и на html, и на body: иначе при «резиновой» прокрутке
+   (iOS, macOS) и на полосе прокрутки остаётся белый. */
+html {
+  background-color: var(--page-bg);
+}
 body.bg-gray-100 {
   background-color: var(--page-bg);
   color: var(--page-fg);
+  min-height: 100vh;
+  margin: 0;
 }
 .article-popup {
   background-color: var(--card-bg);
@@ -158,9 +165,10 @@ body.bg-gray-100 {
    фото показывается целиком, в исходных пропорциях. */
 .site-avatar {
   display: block;
-  width: 48px;
-  height: 48px;
-  min-width: 48px;
+  /* +28% к прежним 48px */
+  width: 61px;
+  height: 61px;
+  min-width: 61px;
   object-fit: cover;
   object-position: center;
   /* вписана в круг: круглая маска */
@@ -174,23 +182,27 @@ body.bg-gray-100 {
 .site-head__title {
   display: inline-block;
   font-family: "Noto Sans", system-ui, sans-serif;
-  font-weight: 600;
-  font-size: 1.45rem;
-  letter-spacing: 0.3em;
+  /* лёгкое начертание — тоньше обычного semibold */
+  font-weight: 300;
+  font-size: 1.4rem;
+  letter-spacing: 0.34em;
   /* отступ слева компенсирует letter-spacing, чтобы слово было по центру */
-  padding-left: 0.3em;
-  line-height: 1.1;
-  /* белый на чёрном, без рамки и без подложки */
-  color: #ffffff;
-  background: #000000;
-  text-shadow: none;
+  padding-left: 0.34em;
+  line-height: 1.15;
+  background: none;
+  border: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+  color: #111111;
   white-space: nowrap;
   user-select: none;
 }
 /* в тёмной теме инверсия: чёрный текст на белом фоне */
 :root[data-theme="dark"] .site-head__title {
   color: #ffffff;
-  background: #000000;
+  background: none;
+  border: 0;
+  /* на тёмном фоне чёрный контур, иначе буквы сливаются с фоном */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
 }
 
 /* Кнопки в шапке */
@@ -224,7 +236,7 @@ body.bg-gray-100 {
 @media (max-width: 520px) {
   .site-head { gap: 0.5rem; margin-bottom: 0.75rem; }
   .site-head__title { font-size: 1.15rem; letter-spacing: 0.2em; padding-left: 0.2em; }
-  .site-avatar { width: 40px; height: 40px; min-width: 40px; border-width: 2px; }
+  .site-avatar { width: 51px; height: 51px; min-width: 51px; border-width: 2px; }
   .resume-btn { padding: 0.5rem 0.9rem; font-size: 0.95rem; }
 }
 @media (max-width: 360px) {
