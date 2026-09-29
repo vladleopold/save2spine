@@ -20,22 +20,30 @@ export const MAX_PLAYING = 7;
 
 const playing = new Set();
 
-// Регистрирует видео как играющее. При превышении лимита выключает самое
-// дальнее от центра экрана — то, что видно хуже всего.
-function register(v) {
+// Резервирует слот под ролик ротации: он уже играет, play() звать нельзя.
+function reserve(v) {
   if (playing.has(v)) return;
   playing.add(v);
-  if (playing.size <= MAX_PLAYING) return;
-  const mid = window.innerHeight / 2;
-  let far = null, farD = -1;
-  for (const el of playing) {
-    if (el === v) continue;
-    const r = el.getBoundingClientRect();
-    if (r.bottom < 0 || r.top > window.innerHeight) continue;  // вне экрана не трогаем
-    const d = Math.abs((r.top + r.bottom) / 2 - mid);
-    if (d > farD) { farD = d; far = el; }
-  }
-  if (far) {
+  enforce();
+}
+
+// Регистрирует видео, запущенное по видимости. Ролик к этому моменту
+// уже играет, поэтому play() не зовём — только занимаем слот.
+function register(v) {
+  reserve(v);
+}
+
+// Вытесняет дальние ролики, пока не уложимся в лимит.
+function enforce() {
+  while (playing.size > MAX_PLAYING) {
+    const mid = window.innerHeight / 2;
+    let far = null, farD = -1;
+    for (const el of playing) {
+      const r = el.getBoundingClientRect();
+      const d = Math.abs((r.top + r.bottom) / 2 - mid);
+      if (d > farD) { farD = d; far = el; }
+    }
+    if (!far) break;
     playing.delete(far);
     // Помечаем вытесненным: иначе опрос в карточке снова включит это
     // видео, оно вытеснит кого-то ещё, и по кругу пойдут play/pause.
@@ -88,8 +96,9 @@ export default function CardRotator({ images, alt, paused }) {
   // Единственная точка запуска. Проверяем само состояние элемента, а не
   // отдельный флаг: флаг рассинхронизировался с реальностью, и видео
   // после первого цикла больше не запускалось.
-  // within — старт из ротации, минус лимит: ролик внутри карточки обязан
-  // доиграть, иначе цепочка 1→2→3 обрывается на первом шаге.
+  // within — старт из ротации. Ролик внутри карточки обязан доиграть, иначе
+  // цепочка 1→2→3 обрывается, но слот он тоже занимает: иначе реестр из
+  // видимых + ролики ротации дают до 15 роликов сразу.
   const playAt = useCallback((i, within = false) => {
     const v = videoRefs.current[i];
     if (!v) return;
@@ -98,6 +107,10 @@ export default function CardRotator({ images, alt, paused }) {
     try {
       v.muted = true;
       const pr = v.play();
+      // Ротация карточки идёт вне реестра: её ролик обязан доиграть,
+      // иначе цепочка 1→2→3 обрывается. Реестр нужен только для
+      // старта по видимости, где роликов много.
+      if (within) { reserve(v); return; }
       if (pr && pr.then) pr.then(() => register(v)).catch(() => {});
       else register(v);
     } catch {}
