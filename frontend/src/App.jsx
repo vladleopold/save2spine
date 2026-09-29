@@ -3,6 +3,7 @@ import { useSwipeable } from 'react-swipeable';
 import { getAspect } from './lib/mediaDims.js';
 import { pickCardType } from './lib/cardTypes.js';
 import Masonry from './lib/Masonry.jsx';
+import SiteHeader from './SiteHeader.jsx';
 
 // Реалистичные частицы: мерцание, переменный ветер, звёздная пыль сверху/сбоку,
 // свайп сдувает с физикой (разлетаются и улетают, новые появляются сбоку)
@@ -443,26 +444,7 @@ export default function App() {
   return (
     <div className="p-4 relative z-10">
       <ParticlesBackground />
-      <div className="gallery-head relative z-10">
-        <img
-          src="/photo-square.jpg"
-          alt="spine animator portfolio"
-          className="gallery-avatar"
-          width={52}
-          height={52}
-        />
-        <div className="gallery-head__actions">
-        <button
-          onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
-          className="theme-toggle"
-          aria-label="Переключить тему"
-          title="Тёмная / светлая тема"
-        >
-          {theme === 'dark' ? '☀️' : '🌙'}
-        </button>
-        <a href="/cv" className="resume-btn">resume</a>
-        </div>
-      </div>
+      <SiteHeader theme={theme} onToggleTheme={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))} />
       {projects.length === 0 ? (
         <p className="col-span-3 text-center">Загрузка проектов...</p>
       ) : (

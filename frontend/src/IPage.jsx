@@ -4,6 +4,7 @@ import { useSwipeable } from 'react-swipeable';
 import { getAspect } from './lib/mediaDims.js';
 import { pickCardType } from './lib/cardTypes.js';
 import Masonry from './lib/Masonry.jsx';
+import SiteHeader from './SiteHeader.jsx';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
@@ -398,20 +399,7 @@ export default function IPage() {
   return (
     <div className="p-4 relative z-10">
       <ParticlesBackground />
-      <div className="gallery-head relative z-10">
-        <h1 className="text-2xl font-bold">portfolio</h1>
-        <div className="gallery-head__actions">
-        <button
-          onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
-          className="theme-toggle"
-          aria-label="Переключить тему"
-          title="Тёмная / светлая тема"
-        >
-          {theme === 'dark' ? '☀️' : '🌙'}
-        </button>
-        <a href="/cv" className="resume-btn">resume</a>
-        </div>
-      </div>
+      <SiteHeader theme={theme} onToggleTheme={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))} />
       {projects.length === 0 ? (
         <p className="col-span-3 text-center">loading...</p>
       ) : (
