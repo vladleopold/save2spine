@@ -33,22 +33,19 @@ function register(v) {
   reserve(v);
 }
 
-// Вытесняет дальние ролики, пока не уложимся в лимит.
+// Вытесняет ролики, пока не уложимся в лимит. Берём самого старого по
+// времени старта: Set хранит порядок вставки, он стабилен, в отличие от
+// getBoundingClientRect — при быстром скролле у всех карточек прямоугольник
+// около нуля, и выбор «самого дальнего от центра» выдавал случайного.
 function enforce() {
   while (playing.size > MAX_PLAYING) {
-    const mid = window.innerHeight / 2;
-    let far = null, farD = -1;
-    for (const el of playing) {
-      const r = el.getBoundingClientRect();
-      const d = Math.abs((r.top + r.bottom) / 2 - mid);
-      if (d > farD) { farD = d; far = el; }
-    }
-    if (!far) break;
-    playing.delete(far);
+    const oldest = playing.values().next().value;
+    if (!oldest) break;
+    playing.delete(oldest);
     // Помечаем вытесненным: иначе опрос в карточке снова включит это
     // видео, оно вытеснит кого-то ещё, и по кругу пойдут play/pause.
-    far.dataset.capped = "1";
-    try { far.pause(); } catch {}
+    oldest.dataset.capped = "1";
+    try { oldest.pause(); } catch {}
   }
 }
 
@@ -107,9 +104,8 @@ export default function CardRotator({ images, alt, paused }) {
     try {
       v.muted = true;
       const pr = v.play();
-      // Ротация карточки идёт вне реестра: её ролик обязан доиграть,
-      // иначе цепочка 1→2→3 обрывается. Реестр нужен только для
-      // старта по видимости, где роликов много.
+      // Ротация карточки слот тоже занимает, но минует проверку capped:
+      // её ролик обязан доиграть, иначе цепочка 1→2→3 обрывается.
       if (within) { reserve(v); return; }
       if (pr && pr.then) pr.then(() => register(v)).catch(() => {});
       else register(v);
