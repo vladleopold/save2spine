@@ -126,8 +126,14 @@ export default function CardRotator({ images, alt, paused }) {
 
     if (idx < count) {
       setAnim(true);
-      setIdx(idx + 1);
-      // новое видео НЕ запускаем здесь — старт будет в onSlideDone
+      const next = idx + 1;
+      setIdx(next);
+      // Старт нового кадра — по завершении переезда. Страхуемся таймером:
+      // onTransitionEnd иногда не приходит (переход без изменения значения,
+      // прерывание анимации), и тогда кадр остался бы остановленным навсегда.
+      // Ровно в этот момент кадр стоит по центру — запускаем его и глушим
+      // предыдущий, который уже ушёл наверх.
+      timers.current.push(setTimeout(() => onSlideDone(), SLIDE_MS + 30));
       return;
     }
 
