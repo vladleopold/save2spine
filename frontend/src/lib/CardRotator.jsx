@@ -4,15 +4,44 @@ export function isWebm(src) {
   return typeof src === 'string' && src.trim() !== '' && src.split('?')[0].split('.').pop().toLowerCase() === 'webm';
 }
 
-export function Media({ src, alt, className, style, loop = false, autoPlay = false, preload = 'none', mediaRef, ...rest }) {
+export function Media({ src, alt, className, style, loop = false, autoPlay = false, preload = 'none', mediaRef, lazy = true, ...rest }) {
   if (isWebm(src)) {
-    // mediaRef вместо ref: ref на <img> дал бы DOM-узел, а не видео
     return (
-      <video ref={mediaRef} src={src} className={className} style={style} autoPlay={autoPlay} muted
+      <video ref={mediaRef} src={src || undefined} className={className} style={style} autoPlay={autoPlay} muted
         loop={loop} playsInline preload={preload} {...rest} />
     );
   }
   return <img src={src} alt={alt} className={className} style={style} {...rest} />;
+}
+
+// Сколько роликов играют одновременно. Больше — картинка рвётся и
+// процессор загружен на 100%, особенно на ноутбуках.
+export const MAX_PLAYING = 7;
+
+const playing = new Set();
+
+// Регистрирует видео как играющее. При превышении лимита выключает самое
+// дальнее от центра экрана — то, что видно хуже всего.
+function register(v) {
+  if (playing.has(v)) return;
+  playing.add(v);
+  if (playing.size <= MAX_PLAYING) return;
+  const mid = window.innerHeight / 2;
+  let far = null, farD = -1;
+  for (const el of playing) {
+    if (el === v) continue;
+    const r = el.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > window.innerHeight) continue;  // вне экрана не трогаем
+    const d = Math.abs((r.top + r.bottom) / 2 - mid);
+    if (d > farD) { farD = d; far = el; }
+  }
+  if (far) {
+    playing.delete(far);
+    // Помечаем вытесненным: иначе опрос в карточке снова включит это
+    // видео, оно вытеснит кого-то ещё, и по кругу пойдут play/pause.
+    far.dataset.capped = "1";
+    try { far.pause(); } catch {}
+  }
 }
 
 const SLIDE_MS = 620;   // длительность переезда кадра
@@ -59,20 +88,29 @@ export default function CardRotator({ images, alt, paused }) {
   // Единственная точка запуска. Проверяем само состояние элемента, а не
   // отдельный флаг: флаг рассинхронизировался с реальностью, и видео
   // после первого цикла больше не запускалось.
-  const playAt = useCallback((i) => {
+  // within — старт из ротации, минус лимит: ролик внутри карточки обязан
+  // доиграть, иначе цепочка 1→2→3 обрывается на первом шаге.
+  const playAt = useCallback((i, within = false) => {
     const v = videoRefs.current[i];
     if (!v) return;
     if (!v.paused) return;          // уже играет — не дёргаем заново
+    if (!within && v.dataset.capped === "1") return;
     try {
       v.muted = true;
       const pr = v.play();
-      if (pr && pr.catch) pr.catch(() => {});
+      if (pr && pr.then) pr.then(() => register(v)).catch(() => {});
+      else register(v);
     } catch {}
   }, []);
 
   const stopAt = useCallback((i) => {
     const v = videoRefs.current[i];
-    if (v && !v.paused) { try { v.pause(); } catch {} }
+    if (!v) return;
+    playing.delete(v);
+    // Карточка ушла из экрана: снимаем метку вытеснения, чтобы при
+    // возвращении видео снова участвовало в лимите.
+    delete v.dataset.capped;
+    if (!v.paused) { try { v.pause(); } catch {} }
   }, []);
 
   // Запуск текущего кадра, когда карточка в зоне видимости.
@@ -88,21 +126,49 @@ export default function CardRotator({ images, alt, paused }) {
         if (!ev) return;
         if (ev.intersectionRatio >= 0.1) {
           const v = videoRefs.current[idx];
-          // preload=none: сначала качаем, потом играем. Иначе play()
-          // упирается в пустой буфер и кадр остаётся остановленным.
-          if (v && v.preload === 'none') {
-            v.preload = 'auto';
+          // Ролик качается только когда карточка в кадре: preload=none
+          // держит сеть закрытой до этого момента.
+          if (v && v.preload === "none") {
+            v.preload = "auto";
             try { v.load(); } catch {}
+            // Качаем сразу все кадры карточки: без них очередь доходит
+            // до неготового ролика и цепочка обрывается.
+            for (let k = 1; k < count; k++) {
+              const nx = videoRefs.current[k];
+              if (nx && nx.preload === "none") {
+                nx.preload = "auto";
+                try { nx.load(); } catch {}
+              }
+            }
           }
           playAt(idx);
         } else {
           stopAt(idx);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0 }
     );
     io.observe(el);
-    return () => io.disconnect();
+
+    // Страховка на случай пропущеного пересечения: раз в 300мс смотрим,
+    // не в кадре ли карточка. Дёшево — только когда в зоне ничего не играет.
+    const poll = setInterval(() => {
+      const cur = videoRefs.current[idx];
+      if (!cur) return;
+      const r = el.getBoundingClientRect();
+      const inView = r.bottom > 0 && r.top < window.innerHeight;
+      if (inView) {
+        if (cur.preload === "none") {
+          cur.preload = "auto";
+          try { cur.load(); } catch {}
+        }
+        if (cur.paused) playAt(idx);
+      } else if (!cur.paused) {
+        stopAt(idx);
+      }
+    }, 300);
+
+    return () => { clearInterval(poll); io.disconnect(); };
   }, [paused, idx, count, playAt, stopAt]);
 
   const onEnded = (i) => {
@@ -121,7 +187,7 @@ export default function CardRotator({ images, alt, paused }) {
       timers.current.push(setTimeout(() => {
         if (seq.current !== my) return;
         stopAt(idx);
-        playAt(next);
+        playAt(next, true);   // внутри карточки: без лимита
       }, SLIDE_MS * START_AT));
       return;
     }
@@ -132,7 +198,7 @@ export default function CardRotator({ images, alt, paused }) {
     timers.current.push(setTimeout(() => {
       if (seq.current !== my) return;
       stopAt(count);
-      playAt(0);
+      playAt(0, true);      // внутри карточки: без лимита
     }, 60));
   };
 
@@ -142,9 +208,18 @@ export default function CardRotator({ images, alt, paused }) {
     : undefined;
 
   if (count === 1) {
+    // mediaRef обязателен: без него videoRefs.current[0] пуст, playAt()
+    // выходит сразу и одиночные видео (88 карточек из 104) не играют.
     return (
       <div ref={wrapRef}>
-        <Media src={images[0]} alt={alt} className="gallery-video" style={mediaStyle(0)} preload="none" />
+        <Media
+          src={images[0]}
+          alt={alt}
+          className="gallery-video"
+          style={mediaStyle(0)}
+          preload="none"
+          mediaRef={(el) => { videoRefs.current[0] = el; }}
+        />
       </div>
     );
   }
