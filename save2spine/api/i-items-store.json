@@ -1,0 +1,9 @@
+[
+  {
+    "id": 1,
+    "title": "I demo 1",
+    "description": "Описание I demo 1",
+    "images": ["/images/giphy/4lOcXKbyMQTHYYHBeg.webm"],
+    "isFullWidth": false
+  }
+]

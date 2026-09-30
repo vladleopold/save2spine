@@ -1,0 +1,1123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --page-bg: #f3f4f6;
+  --page-fg: #111111;
+  --card-bg: #ffffff;
+  --muted-fg: #555555;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page-bg: #000000;
+    --page-fg: #f3f4f6;
+    --card-bg: #111111;
+    --muted-fg: #bbbbbb;
+  }
+}
+:root[data-theme="dark"] {
+  --page-bg: #000000;
+  --page-fg: #f3f4f6;
+  --card-bg: #111111;
+  --muted-fg: #bbbbbb;
+}
+:root[data-theme="light"] {
+  --page-bg: #f3f4f6;
+  --page-fg: #111111;
+  --card-bg: #ffffff;
+  --muted-fg: #555555;
+}
+/* Фон задаём и на html, и на body: иначе при «резиновой» прокрутке
+   (iOS, macOS) и на полосе прокрутки остаётся белый. */
+html {
+  background-color: var(--page-bg);
+}
+body.bg-gray-100 {
+  background-color: var(--page-bg);
+  color: var(--page-fg);
+  min-height: 100vh;
+  margin: 0;
+}
+.article-popup {
+  background-color: var(--card-bg);
+  color: var(--page-fg);
+}
+
+/* Стили для модального окна */
+.popup {
+  position: fixed; /* Фиксированное положение для центрирования */
+  top: 50%; /* Центрирование по вертикали */
+  left: 50%; /* Центрирование по горизонтали */
+  transform: translate(-50%, -50%); /* Сдвиг для точного центрирования */
+  width: 90vw; /* Ширина чуть меньше видимой области */
+  height: 100vh; /* Высота чуть меньше видимой области */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white; /* Белый фон для попапа */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06); /* Тень для попапа */
+  z-index: 1000;
+  overflow: auto; /* Прокрутка для содержимого */
+  border-radius: 8px; /* Скругленные углы */
+}
+
+/* Стили для изображений внутри модального окна */
+.popup img {
+  height: 100%; /* Изображение занимает всю высоту попапа */
+  width: 100%; /* Изображение занимает всю ширину попапа */
+  object-fit: contain; /* Сохраняем пропорции изображения */
+  margin: 0; /* Убираем отступы */
+}
+
+/* Контейнер для изображений */
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Черный фон с прозрачностью 50% */
+  z-index: 999; /* Под попапом */
+}
+
+/* Стили для нового модального окна "страница/статья" */
+.article-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin-left: 10%;
+  margin-right: 10%;
+  width: 80%;
+  height: 100vh; /* Устанавливаем высоту на весь экран */
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  z-index: 1000;
+  overflow-y: auto; /* Включаем вертикальный скролл */
+  padding: 20px;
+}
+
+.article-popup img {
+  width: auto;
+  height: 80vh;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+.article-popup .content {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.article-popup .close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.article-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* ===== Шапка сайта =====
+   Три колонки: аватар слева, SPINE по центру, кнопки справа.
+   SPINE — белый на чёрном, а в тёмной теме инвертируется, чтобы читался
+   и на светлом, и на тёмном фоне. */
+
+.site-head {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 10;
+}
+.site-head__side {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+.site-head__side--right { justify-content: flex-end; }
+.site-head__center { display: flex; justify-content: center; }
+
+/* Аватар: квадратный, БЕЗ круглой обрезки и без рамки —
+   фото показывается целиком, в исходных пропорциях. */
+.site-avatar {
+  display: block;
+  /* +28% к прежним 48px */
+  width: 61px;
+  height: 61px;
+  min-width: 61px;
+  object-fit: cover;
+  object-position: center;
+  /* вписана в круг: круглая маска */
+  border-radius: 50%;
+  /* тонкая зелёная обводка */
+  border: 2px solid #22c55e;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.site-head__title {
+  display: inline-block;
+  font-family: "Noto Sans", system-ui, sans-serif;
+  /* лёгкое начертание — тоньше обычного semibold */
+  font-weight: 300;
+  font-size: 1.4rem;
+  letter-spacing: 0.34em;
+  /* отступ слева компенсирует letter-spacing, чтобы слово было по центру */
+  padding-left: 0.34em;
+  line-height: 1.15;
+  background: none;
+  border: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+  color: #111111;
+  white-space: nowrap;
+  user-select: none;
+}
+/* в тёмной теме инверсия: чёрный текст на белом фоне */
+:root[data-theme="dark"] .site-head__title {
+  color: #ffffff;
+  background: none;
+  border: 0;
+  /* на тёмном фоне чёрный контур, иначе буквы сливаются с фоном */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+/* Кнопки в шапке */
+
+.resume-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.5rem 1.4rem;
+  background: #22c55e;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.05rem;
+  border-radius: 8px;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.12);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background 0.2s;
+}
+.resume-btn:hover { background: #16a34a; }
+
+/* Кнопка Telegram — на зеркале save2spine вместо резюме.
+   Визуально повторяет resume, чтобы шапка выглядела так же. */
+.tg-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.5rem 1.1rem;
+  background: #229ed9;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(34, 158, 217, 0.15);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background 0.2s;
+}
+.tg-btn:hover { background: #1c8cc0; }
+.tg-btn span { line-height: 1; }
+
+@media (max-width: 620px) {
+  .site-head { gap: 0.3rem; margin-bottom: 0.75rem; }
+  .site-head__side { gap: 0.3rem; }
+  .resume-btn { min-height: 44px; padding: 0.5rem 0.75rem; font-size: 0.9rem; }
+  .tg-btn { min-height: 44px; padding: 0.5rem 0.7rem; font-size: 0.85rem; gap: 0.35rem; }
+}
+@media (max-width: 520px) {
+  .site-head { gap: 0.5rem; margin-bottom: 0.75rem; }
+  .site-head__title { font-size: 1.15rem; letter-spacing: 0.2em; padding-left: 0.2em; }
+  .site-avatar { width: 51px; height: 51px; min-width: 51px; border-width: 2px; }
+  .resume-btn { padding: 0.5rem 0.9rem; font-size: 0.95rem; }
+  .tg-btn { padding: 0.5rem 0.7rem; font-size: 0.85rem; gap: 0.35rem; }
+}
+@media (max-width: 360px) {
+  .site-head__title { font-size: 0.82rem; letter-spacing: 0.14em; padding-left: 0.14em; }
+}
+
+/* ===== Masonry-галерея =====
+   Колоночная укладка: каждая колонка заполняется независимо, карточки
+   внутри колонки стоят вплотную (gap задан один раз в Masonry.jsx).
+   Пять размеров карточек — пропорции подобраны под реальное содержимое. */
+.gallery-masonry,
+.masonry-wrap {
+  width: 100%;
+  min-width: 0;
+}
+
+.masonry-col > .masonry-cell {
+  display: block;
+  min-width: 0;
+}
+
+.gallery-card {
+  display: block;
+  width: 100%;
+  aspect-ratio: var(--card-aspect, 1 / 1);
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--card-bg);
+  cursor: pointer;
+  /* изолируем карточку: пересчёты раскладки не затрагивают соседей */
+  contain: layout paint style;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  line-height: normal;
+  font-size: initial;
+}
+
+.gallery-card > * { width: 100%; height: 100%; }
+
+.gallery-masonry .gallery-video,
+.gallery-card img,
+.gallery-card video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  max-width: 100%;
+}
+
+/* Пять размеров — aspect-ratio приходит из cardTypes.js через --card-aspect,
+   здесь страховка на случай, если переменная не задана. */
+.gallery-card--portrait  { --card-aspect: 0.6667; }
+.gallery-card--square    { --card-aspect: 1; }
+.gallery-card--wide      { --card-aspect: 1.3333; }
+.gallery-card--panorama  { --card-aspect: 1.7778; }
+.gallery-card--ultrawide { --card-aspect: 2.3333; }
+
+/* Внутри колоночной укладки ширина уже задана колонкой,
+   поэтому широкие блоки просто занимают всю ширину своей колонки. */
+.gallery-card.full-width-image {
+  grid-column: auto;
+  width: 100%;
+  height: auto;
+}
+
+/* На узких экранах колонка одна — плотность обеспечивается gap. */
+@media (max-width: 640px) {
+  .masonry-col { gap: 10px !important; }
+  .masonry-wrap { --masonry-gap: 10px; }
+}
+@media (max-width: 380px) {
+  .masonry-col { gap: 8px !important; }
+}
+
+.article-popup video {
+  width: 100%;
+  height: auto;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background: #000;
+}
+
+/* Прозрачный тач-плейсхолдер поверх попапа (жесты, не блокирует) */
+.article-popup .touch-placeholder {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Круглая кнопка «копировать ссылку» напротив кнопки закрыть */
+.article-popup .copy-link-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 6;
+}
+
+/* Мобильная адаптивность попапа */
+@media (max-width: 640px) {
+  .article-popup {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+    padding: 12px;
+    border-radius: 0;
+  }
+  .article-popup img,
+  .article-popup video {
+    max-height: 60vh;
+  }
+  .article-popup h2 {
+    font-size: 1.25rem;
+    padding-right: 80px;
+  }
+}
+
+/* ===== CV из архива (Studio) ===== */
+:root {
+  --color-bg: #121412;
+  --color-surface: #1c1f1c;
+  --color-surface-2: #262a26;
+  --color-fg: #f3f4f2;
+  --color-muted: #9aa39a;
+  --color-accent: #53ac56;
+  --color-accent-foreground: #ffffff;
+  --color-border: #2e352e;
+  --color-cv-green: #53ac56;
+  --color-cv-green-line: #45a300;
+  --color-cv-pink: #ff69a2;
+  --color-cv-card: #69a960;
+  --color-cv-ink: #222222;
+  --color-cv-paper: #ffffff;
+  --font-sans: "Noto Sans", "Segoe UI", sans-serif;
+}
+.studio {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  overflow-x: hidden;
+}
+
+.studio-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--color-border);
+  background: rgb(18 20 18 / 0.94);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  flex-shrink: 0;
+  isolation: isolate;
+  pointer-events: auto;
+}
+
+.studio-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  width: min(100%, 420px);
+  position: relative;
+  z-index: 51;
+}
+
+.studio-actions button,
+.studio-pdf {
+  height: 44px;
+  flex: 1;
+  min-width: 0;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-fg);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 52;
+  pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.studio-actions button.on {
+  background: var(--color-cv-green);
+  border-color: var(--color-cv-green);
+  color: #fff;
+}
+
+.studio-pdf {
+  background: var(--color-cv-pink);
+  border-color: var(--color-cv-pink);
+  color: #fff;
+  flex: 3;
+}
+
+.studio-actions .studio-resume {
+  margin-left: 18px;
+  background: #facc15;
+  border-color: #facc15;
+  color: #111;
+}
+
+.studio-back {
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-fg);
+  font-size: 18px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.studio-stage {
+  box-sizing: border-box;
+  padding: 20px 28px 48px;
+  width: min(100%, 880px);
+  margin: 0 auto;
+  overflow-x: hidden;
+  min-width: 0;
+  min-height: 0;
+  flex: 1;
+}
+
+.studio-sheet-wrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.studio-sheet {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+}
+
+.cv-document {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  color: var(--color-cv-ink);
+  font-family: "Noto Sans", sans-serif;
+}
+
+.cv-page {
+  box-sizing: border-box;
+  width: 210mm;
+  height: 297mm;
+  background: var(--color-cv-paper);
+  color: var(--color-cv-ink);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 18px 50px rgb(0 0 0 / 0.35);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.cv-header {
+  box-sizing: border-box;
+  height: 38mm;
+  background: var(--color-cv-green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 12mm 0 9mm;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.cv-photo-wrap {
+  width: 28mm;
+  height: 28mm;
+  margin-right: 6mm;
+  flex-shrink: 0;
+}
+
+.cv-photo {
+  box-sizing: border-box;
+  width: 28mm;
+  height: 28mm;
+  display: block;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.cv-header-copy {
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+  padding-top: 1mm;
+}
+
+.cv-name {
+  margin: 0 0 2mm;
+  font-size: 13pt;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cv-document[lang="uk"] .cv-name {
+  letter-spacing: 0.04em;
+  font-size: 12.5pt;
+}
+
+.cv-document[lang="uk"] .cv-stat-k {
+  letter-spacing: 0.04em;
+}
+
+.cv-document[lang="uk"] .cv-header-meta {
+  gap: 7mm;
+}
+
+.cv-header-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4mm;
+  margin-bottom: 2mm;
+  min-width: 0;
+}
+
+.cv-portfolio-label {
+  font-size: 9.5pt;
+  font-weight: 400;
+}
+
+.cv-portfolio {
+  background: var(--color-cv-pink);
+  color: #fff !important;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 9pt;
+  letter-spacing: 0.01em;
+  padding: 1.3mm 3.8mm 1.5mm;
+  border-radius: 2px;
+  line-height: 1.15;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.cv-header-meta {
+  display: flex;
+  justify-content: flex-end;
+  gap: 11mm;
+  font-size: 10pt;
+  min-width: 0;
+}
+
+.cv-stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1.6mm;
+  white-space: nowrap;
+}
+
+.cv-stat-k {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.cv-stat-v {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.cv-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 58mm minmax(0, 1fr);
+  min-height: 0;
+  min-width: 0;
+}
+
+.cv-sidebar {
+  box-sizing: border-box;
+  padding: 4mm 4mm 3.5mm;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-right: 0.7mm solid var(--color-cv-green);
+  overflow: hidden;
+  min-width: 0;
+}
+
+.cv-contact {
+  font-style: normal;
+  width: 100%;
+  font-size: 7.2pt;
+  line-height: 1.28;
+}
+
+.cv-contact p {
+  margin: 0;
+}
+
+.cv-contact a {
+  color: #1f7a32;
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+  display: block;
+  word-break: break-word;
+}
+
+.cv-contact a[href^="tel"] {
+  color: #e85d04;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.cv-rule {
+  display: block;
+  width: 24mm;
+  height: 0.3mm;
+  background: var(--color-cv-green-line);
+  margin: 2.6mm auto;
+}
+
+.cv-skills {
+  list-style: none;
+  margin: 3.2mm 0 0;
+  padding: 0;
+  width: 100%;
+  font-size: 7.6pt;
+  line-height: 1.55;
+  color: #444;
+}
+
+.cv-skills li {
+  margin: 0.35mm 0;
+}
+
+.cv-skills li:first-child {
+  color: var(--color-cv-ink);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.2mm;
+}
+
+.cv-edu-side {
+  width: 100%;
+  margin-top: auto;
+  padding-top: 4mm;
+  font-size: 7.4pt;
+  line-height: 1.28;
+}
+
+.cv-edu-item {
+  margin-bottom: 4.4mm;
+}
+
+.cv-edu-school {
+  font-weight: 700;
+  margin: 0 0 1.2mm;
+}
+
+.cv-edu-field {
+  margin: 0;
+  color: #e85d04;
+  font-weight: 600;
+}
+
+.cv-main {
+  box-sizing: border-box;
+  padding: 2.2mm 8mm 2.2mm 3.5mm;
+  display: flex;
+  flex-direction: column;
+  gap: 2.2mm;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.cv-card {
+  box-sizing: border-box;
+  border: 0.3mm solid var(--color-cv-card);
+  padding: 1.5mm 4.2mm 1.4mm 3.2mm;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  max-width: 100%;
+  flex: 1;
+}
+
+.cv-card-tall {
+  flex: 1.45;
+}
+
+.cv-role {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
+
+.cv-job-title {
+  margin: 0;
+  font-size: 8.4pt;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #111;
+}
+
+.cv-job-company {
+  margin: 0.3mm 0 0;
+  font-size: 7.6pt;
+  font-weight: 700;
+  color: #333;
+}
+
+.cv-job-dates {
+  margin: 0.4mm 0 0;
+  font-size: 7.2pt;
+  color: var(--color-cv-pink);
+  font-weight: 600;
+}
+
+.cv-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 3mm;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.cv-card-titles {
+  min-width: 0;
+  flex: 1;
+}
+
+.cv-logo-wrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 13mm;
+  max-width: 38mm;
+  overflow: hidden;
+}
+
+.cv-logo {
+  display: block;
+  height: 12mm;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: right center;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.cv-logo-banner {
+  height: 13mm;
+  max-width: 36mm;
+  border-radius: 1.2mm;
+}
+
+.cv-logo-wide {
+  height: 11.5mm;
+  max-width: 36mm;
+}
+
+.cv-logo-mark {
+  height: 12.5mm;
+  max-width: 28mm;
+}
+
+.cv-logo-wrap-retro {
+  width: 36mm;
+}
+
+.cv-bullets {
+  list-style: none;
+  margin: 1mm 0 0;
+  padding: 0 0 0 4.4mm;
+  font-size: 7.3pt;
+  line-height: 1.28;
+  color: #2a2a2a;
+}
+
+.cv-bullets li {
+  position: relative;
+  margin: 0 0 0.35mm;
+}
+
+.cv-bullets li::before {
+  content: "";
+  position: absolute;
+  left: -4mm;
+  top: 0.55mm;
+  width: 1.7mm;
+  height: 1.7mm;
+  box-sizing: border-box;
+  background: transparent;
+  border: 0.38mm solid #222;
+  border-radius: 50%;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.cv-tools {
+  margin: auto 0 0;
+  padding-top: 1.2mm;
+  text-align: right;
+  font-size: 6.4pt;
+  line-height: 1.24;
+  color: #7a7a7a;
+  flex-shrink: 0;
+}
+
+.cv-footer {
+  height: 8mm;
+  background: var(--color-cv-green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.cv-footer p {
+  margin: 0;
+  font-size: 13.5pt;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ats-document {
+  box-sizing: border-box;
+  width: 210mm;
+  min-height: 297mm;
+  max-height: 297mm;
+  overflow: hidden;
+  background: #fff;
+  color: #111;
+  padding: 7mm 14mm 8mm 12mm;
+  font-family: "Noto Sans", "Calibri", "Segoe UI", sans-serif;
+  font-size: 9.5pt;
+  line-height: 1.24;
+  box-shadow: 0 18px 50px rgb(0 0 0 / 0.35);
+  print-color-adjust: exact;
+}
+
+.ats-header h1 {
+  margin: 0;
+  font-size: 16pt;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ats-headline {
+  margin: 1.4mm 0 2.2mm;
+  font-size: 12pt;
+  font-weight: 600;
+  color: #1f7a32;
+}
+
+.ats-contact {
+  margin: 0 0 1mm;
+  font-size: 9.5pt;
+  color: #333;
+}
+
+.ats-document section {
+  margin-top: 1.8mm;
+}
+
+.ats-document h2 {
+  margin: 0 0 2mm;
+  font-size: 11pt;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1f7a32;
+  border-bottom: 0.35mm solid #1f7a32;
+  padding-bottom: 0.7mm;
+}
+
+.ats-document h3 {
+  margin: 0;
+  font-size: 10.5pt;
+  font-weight: 700;
+}
+
+.ats-job {
+  margin: 0 0 2.4mm;
+  page-break-inside: avoid;
+}
+
+.ats-company {
+  margin: 0.2mm 0;
+  font-size: 10.5pt;
+  font-weight: 700;
+}
+
+.ats-meta {
+  margin: 0.2mm 0;
+  font-size: 9.5pt;
+  color: #333;
+}
+
+.ats-document ul {
+  margin: 0.6mm 0 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.ats-document li {
+  margin: 0 0 0.35mm;
+}
+
+body:has(.print-root) {
+  background: #fff;
+}
+
+.print-root {
+  background: #fff;
+}
+
+.print-root .cv-document,
+.print-root .ats-document {
+  box-shadow: none;
+  margin: 0 auto;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  html,
+  body {
+    background: #fff !important;
+    margin: 0;
+    padding: 0;
+  }
+  .studio-bar {
+    display: none !important;
+  }
+  .studio {
+    background: #fff;
+    min-height: 0;
+    overflow: visible;
+  }
+  .studio-stage {
+    padding: 0;
+    width: 210mm;
+    margin: 0;
+    overflow: visible;
+  }
+  .studio-sheet-wrap {
+    height: auto !important;
+    overflow: visible;
+    display: block;
+    position: static;
+  }
+  .studio-sheet {
+    transform: none !important;
+    zoom: 1 !important;
+    width: 210mm !important;
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+  }
+  .cv-document {
+    gap: 0;
+  }
+  .cv-page {
+    width: 210mm;
+    height: 297mm;
+    box-shadow: none;
+    page-break-after: auto;
+    break-after: auto;
+    overflow: hidden;
+    margin: 0 !important;
+  }
+  .ats-document {
+    box-shadow: none;
+    width: 210mm;
+    min-height: 297mm;
+    max-height: 297mm;
+    page-break-after: auto;
+  }
+  .cv-header,
+  .cv-footer {
+    background: #53ac56 !important;
+    color: #fff !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .cv-portfolio {
+    background: #ff69a2 !important;
+    color: #fff !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .cv-photo {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .cv-logo,
+  .cv-logo-wrap,
+  .cv-bullets li::before {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+@media (max-width: 720px) {
+  .studio-bar {
+    padding: 8px 12px;
+  }
+  .studio-actions {
+    width: 100%;
+  }
+  .studio-stage {
+    padding: 12px 16px 36px;
+  }
+}

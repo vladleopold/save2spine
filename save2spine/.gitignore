@@ -1,0 +1,5 @@
+.vercel
+.env*
+frontend/dist/
+node_modules
+*.log
