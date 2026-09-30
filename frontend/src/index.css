@@ -117,14 +117,32 @@ body.bg-gray-100 {
   color: #333;
 }
 
+/* Крестик закрытия: чёрный на светлой подложке, поэтому читается
+   в любой теме. Раньше цвет наследовался от --page-fg и в тёмной
+   теме становился белым — исчезал на белом фоне попапа. */
 .article-popup .close-button {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: none;
-  border: none;
-  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: #111111;
+  background: #ffffff;
+  border: 1px solid #d4d4d8;
+  border-radius: 50%;
+  font-size: 26px;
+  line-height: 1;
   cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.article-popup .close-button:hover {
+  color: #ffffff;
+  background: #111111;
+  border-color: #111111;
 }
 
 .article-popup-overlay {
