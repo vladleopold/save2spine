@@ -7,11 +7,11 @@ import { useEffect, useRef } from 'react';
  * пробуем сразу, а если не вышло — включаем при первом же касании
  * (клик, тап, скролл, клавиша). Кнопки на сайте нет: музыка фоновая.
  *
- * Громкость 0.3 — это на 70% тише исходной записи.
+ * Громкость 0.3 — 30% от исходной записи.
  */
 const VOLUME = 0.3;
 
-export default function BackgroundMusic({ src = '/back_cartoon_burst.ogg' }) {
+export default function BackgroundMusic({ src = '/mesa_under_moonlight.mp3' }) {
   const ref = useRef(null);
 
   useEffect(() => {
