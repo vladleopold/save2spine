@@ -28,10 +28,10 @@ export const profile = {
   telegramUrl: "https://t.me/vladleopold",
   linkedin: "linkedin.com/in/vladyslavchaplygin",
   linkedinUrl: "https://www.linkedin.com/in/vladyslavchaplygin/",
-  portfolio: "spinefolio.vercel.app",
-  portfolioUrl: "https://spinefolio.vercel.app/",
+  portfolio: "save2spine.vercel.app",
+  portfolioUrl: "https://save2spine.vercel.app/",
   yearsExp: "8",
-  yearsSpine: "7",
+  yearsSpine: "6",
   english: {
     en: "English · A2 Pre-Intermediate",
     uk: "англійська · A2 Pre-Intermediate",
@@ -58,46 +58,27 @@ export const skillList = [
 /** Five company blocks. Voki is one role: First 2D Animator, Apr 2018 — Mar 2021. */
 export const jobs = [
   {
-    id: "retro",
-    company: "Retro Style Games",
-    roles: [
-      {
-        title: { en: "Spine 2D Animator", uk: "SPINE 2D ANIMATOR" },
-        start: "2023-07",
-        end: null,
-        tools: "After Effects & Particular RC, SPINE, Flash, Animate, Photoshop",
-        bullets: {
-          en: [
-            "Character rigging and animation.",
-            "Animation of effects, game objects, backgrounds, interfaces.",
-            "Technical development of programmatic animation.",
-          ],
-          uk: [
-            "ріггінг та анімація персонажів.",
-            "анімація ефектів, ігрових об’єктів, фонів, інтерфейсів.",
-            "технічна розробка програмної анімації.",
-          ],
-        },
-      },
-    ],
-  },
-  {
     id: "friends",
     company: "4friends",
     roles: [
       {
-        title: { en: "2D Animator", uk: "2D ANIMATOR" },
-        start: "2021-03",
-        end: "2022-08",
-        tools: "SPINE, Flash, Animate, Unity Animation, VSO Animation, Effects Editor, Pixi.js Particles, Photoshop",
+        title: {
+          en: "First 2D Animation Artist",
+          uk: "FIRST 2D ANIMATION ARTIST",
+        },
+        start: "2021-11",
+        end: "2022-06",
+        tools: "VSO, Unity, Spine",
         bullets: {
           en: [
-            "Slot animation.",
-            "Animation of characters, effects and game objects.",
+            "Provided support for the current top-ranking Gardenscapes project.",
+            "Created animations for special effects, game objects, backgrounds and UI.",
+            "Worked on new Playrix projects.",
           ],
           uk: [
-            "анімація слотів.",
-            "анімація персонажів, ефектів та ігрових об’єктів.",
+            "Підтримка поточного топового проєкту Gardenscapes.",
+            "Створення анімації спецефектів, ігрових об’єктів, фонів та інтерфейсу.",
+            "Робота над новими проєктами Playrix.",
           ],
         },
       },
@@ -108,31 +89,46 @@ export const jobs = [
     company: "Voki Games",
     roles: [
       {
-        title: {
-          en: "First 2D Animator",
-          uk: "ПЕРШИЙ 2D АНІМАТОР",
-        },
-        start: "2018-04",
-        end: "2021-03",
-        tools: "SPINE, Photoshop, Flash, Animate, After Effects, Unity Animation, VSO Animation, Effects Editor, Pixi.js Particles",
+        title: { en: "2D Animation Artist", uk: "2D ANIMATION ARTIST" },
+        start: "2019-12",
+        end: "2020-05",
+        tools: "After Effects, Spine",
         bullets: {
           en: [
-            "Improving Garden Scapes animation.",
-            "Effects, game objects, backgrounds and interfaces.",
-            "Work on the company’s new projects.",
-            "Shader animation.",
-            "Interface animation of pop-ups and dialogues.",
-            "Flash animation for MysteryMatters.",
-            "VSO animation.",
+            "Created shader animations.",
+            "Connected animations directly to the game.",
+            "Developed animations for Playrix games, including the top series about Austin's mansion and the Gardenscapes universe.",
           ],
           uk: [
-            "вдосконалення анімації Garden Scapes.",
-            "ефекти, ігрові об’єкти, фони та інтерфейси.",
-            "робота з новими проектами компанії.",
-            "анімація шейдерів.",
-            "інтерфейсна анімація попапів та розмов.",
-            "flash анімації MysteryMatters.",
-            "VSO анімації.",
+            "Створення анімації шейдерів.",
+            "Пряме підключення анімації до гри.",
+            "Розробка анімації для ігор Playrix, зокрема топової серії про маєток Остіна та всесвіту Gardenscapes.",
+          ],
+        },
+      },
+    ],
+  },
+  {
+    id: "volmi",
+    company: "VOLMI",
+    roles: [
+      {
+        title: { en: "2D Animator", uk: "2D ANIMATOR" },
+        start: "2019-01",
+        end: "2019-09",
+        tools: "After Effects, Spine",
+        bullets: {
+          en: [
+            "Maintained regular communication with clients by phone.",
+            "Created and managed a 2D animation team for demanding clients.",
+            "Estimated team subprojects and improved communication with artists.",
+            "Worked with Stacklogic, LuckyFish, NetGaming and Huuuge Games.",
+          ],
+          uk: [
+            "Підтримання регулярного зв’язку з клієнтами по телефону.",
+            "Створення та керівництво командою 2D-анімації для вимогливих клієнтів.",
+            "Оцінювання підпроєктів команди та покращення комунікації з художниками.",
+            "Робота з Stacklogic, LuckyFish, NetGaming та Huuuge Games.",
           ],
         },
       },
@@ -144,19 +140,21 @@ export const jobs = [
     roles: [
       {
         title: { en: "Technical Artist", uk: "TECHNICAL ARTIST" },
-        start: "2016-09",
-        end: "2017-10",
-        tools: "SPINE, Flash, Animate, Unity Animation, UE Animation, VR animation, Photoshop",
+        start: "2024-09",
+        end: "2025-08",
+        tools: "Unity, Spine",
         bullets: {
           en: [
-            "Animation of full applications.",
-            "Sound effects and AssetBundle generation.",
-            "Cross-platform automated Unity UI systems.",
+            "Built application UI and developed various UI mechanics.",
+            "Created animation and VFX in Unity.",
+            "Developed 2D mini-games in Unity.",
+            "Developed arbitration and advertising integration systems, including SDK and API control automation in C# and Java.",
           ],
           uk: [
-            "анімація цілих застосунків.",
-            "розробка звукових ефектів та генерації AssetBundle.",
-            "кросплатформені автоматизовані системи UI Unity.",
+            "Розробка UI застосунку та різних UI-механік.",
+            "Створення анімації та VFX в Unity.",
+            "Розробка 2D міні-ігор в Unity.",
+            "Розробка систем арбітражу та інтеграції реклами, зокрема автоматизація керування SDK і API на C# та Java.",
           ],
         },
       },
@@ -172,20 +170,46 @@ export const jobs = [
           uk: "2D ANIMATOR, TECHNICAL ARTIST",
         },
         start: "2014-09",
-        end: "2016-01",
-        tools: "After Effects & Particular, Flash, Animate, Pixi.js Particles, Photoshop, SPINE",
+        end: "2017-02",
+        tools: "After Effects, Flash, Animate",
         bullets: {
           en: [
-            "VFX, game objects, backgrounds, interfaces animation.",
-            "Worked as one unit with art and dev.",
-            "Programmatic animation (particle systems).",
-            "Post-production materials for exhibitions.",
+            "Created animation VFX, game objects, backgrounds and interfaces.",
+            "Integrated animations directly into code and prepared animation for production.",
+            "Created software animations using particle systems.",
+            "Created video materials for world exhibitions and conferences.",
           ],
           uk: [
-            "анімація VFX, ігрових об’єктів, фонів, інтерфейсів.",
-            "сукупна робота з арт та дев відділами.",
-            "програмні анімації (particle systems).",
-            "створення пост-продакшн матеріалів для виставок.",
+            "Створення анімації VFX, ігрових об’єктів, фонів та інтерфейсів.",
+            "Інтеграція анімації напряму в код і підготовка анімації до продакшну.",
+            "Створення програмних анімацій з використанням систем часток.",
+            "Створення відеоматеріалів для світових виставок і конференцій.",
+          ],
+        },
+      },
+    ],
+  },
+  {
+    id: "clonefish",
+    company: "Clonefish",
+    roles: [
+      {
+        title: { en: "HTML5 2D Animator", uk: "HTML5 2D ANIMATOR" },
+        start: "2012-12",
+        end: "2014-03",
+        tools: "Flash, After Effects, HTML5, Sprite, Edge Animate",
+        bullets: {
+          en: [
+            "Animated non-game elements, landing pages, banners and interfaces.",
+            "Created animation effects using particle systems.",
+            "Animated characters, special effects, backgrounds and game elements in HTML5.",
+            "Created animations for casual social games.",
+          ],
+          uk: [
+            "Анімація неігрових елементів, лендінгів, банерів та інтерфейсів.",
+            "Створення анімаційних ефектів з використанням систем часток.",
+            "Анімація персонажів, спецефектів, фонів та ігрових елементів у HTML5.",
+            "Створення анімацій для казуальних соціальних ігор.",
           ],
         },
       },
@@ -300,7 +324,13 @@ export function formatDateRange(start, end, lang) {
 }
 
 export function pdfName(view, lang) {
-  const kind = view === "ats" ? "ATS" : "Visual";
+  // view: "visual" | "ats" | "resume_visual" | "resume_ats".
+  // Имена файлов CV не меняем — на них уже ссылается раздача.
+  const isResume = String(view).startsWith("resume_");
+  const isAts = String(view).endsWith("ats");
   const loc = lang === "uk" ? "UA" : "EN";
-  return `Vladislav_Chaplyhin_CV_${kind}_${loc}.pdf`;
+  if (!isResume) {
+    return `Vladislav_Chaplyhin_CV_${isAts ? "ATS" : "Visual"}_${loc}.pdf`;
+  }
+  return `Vladislav_Chaplyhin_Resume_${isAts ? "ATS" : "Visual"}_${loc}.pdf`;
 }

@@ -2,20 +2,28 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { pdfName } from "./cvData.js";
 import { CvDocument } from "./CvDocument.jsx";
 import { AtsDocument } from "./AtsDocument.jsx";
+import { ResumeDocument } from "./ResumeDocument.jsx";
+import { ResumeAts } from "./ResumeAts.jsx";
 
 /** A4 at 96dpi. */
 const PAGE_W = 794;
 const PAGE_H = 1123;
 
-export function Studio() {
+/**
+ * kind="cv" — /cv: визуальное CV и его ATS-версия.
+ * kind="resume" — /resume: расширенное резюме с полными описаниями работ.
+ * Обе страницы устроены одинаково, отличаются только набором документов.
+ */
+export function Studio({ kind = "cv" }) {
   const [lang, setLang] = useState("uk");
-  const [resume, setResume] = useState(false); // false = ATS-документ, true = CV
+  const [resume, setResume] = useState(false); // false = визуальный, true = ATS
   const [scale, setScale] = useState(1);
   const [offsetX, setOffsetX] = useState(0);
   const [sheetH, setSheetH] = useState(PAGE_H);
   const wrapRef = useRef(null);
   const sheetRef = useRef(null);
 
+  const isResume = kind === "resume";
   const view = resume ? "ats" : "visual";
 
   useLayoutEffect(() => {
@@ -40,7 +48,9 @@ export function Studio() {
     return () => ro.disconnect();
   }, [view, lang]);
 
-  const pdfHref = `/cv/${pdfName(view, lang)}`;
+  const pdfHref = isResume
+    ? `/resume/${pdfName("resume_" + view, lang)}`
+    : `/cv/${pdfName(view, lang)}`;
 
   const onPdf = (e) => {
     e.preventDefault();
@@ -56,7 +66,12 @@ export function Studio() {
     <div className="studio">
       <header className="studio-bar">
         <div className="studio-actions">
-          <a className="studio-back" href="/" aria-label="Галерея" title="Галерея">
+          <a
+            className="studio-back"
+            href={isResume ? "/cv" : "/"}
+            aria-label={isResume ? "CV" : "Галерея"}
+            title={isResume ? "CV" : "Галерея"}
+          >
             ←
           </a>
           <button
@@ -81,7 +96,7 @@ export function Studio() {
             aria-pressed={view === "ats"}
             onClick={() => setResume((r) => !r)}
           >
-            {resume ? "CV" : "RESUME"}
+            {resume ? (isResume ? "RESUME" : "CV") : (isResume ? "ATS" : "RESUME")}
           </button>
           <a
             className="studio-pdf"
@@ -110,11 +125,13 @@ export function Studio() {
               transform: `translateX(${offsetX}px) scale(${scale})`,
             }}
           >
-            {view === "visual" ? (
-              <CvDocument lang={lang} />
-            ) : (
-              <AtsDocument lang={lang} />
-            )}
+            {view === "visual"
+              ? isResume
+                ? <ResumeDocument lang={lang} />
+                : <CvDocument lang={lang} />
+              : isResume
+                ? <ResumeAts lang={lang} />
+                : <AtsDocument lang={lang} />}
           </div>
         </div>
       </div>

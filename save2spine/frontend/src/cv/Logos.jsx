@@ -1,9 +1,10 @@
 const LOGOS = {
-  retro: { src: "/logos/rsg.png", alt: "Retro Style Games", kind: "banner" },
   friends: { src: "/logos/friends.png", alt: "4friends", kind: "wide" },
   voki: { src: "/logos/voki.png", alt: "Voki Games", kind: "mark" },
+  volmi: { src: "/logos/volmi.png", alt: "VOLMI", kind: "wide" },
   evoplay: { src: "/logos/evoplay.svg", alt: "Evoplay", kind: "wide" },
   lucky: { src: "/logos/lucky.png", alt: "Lucky Labs", kind: "wide" },
+  clonefish: { src: "/logos/clonefish.png", alt: "Clonefish", kind: "wide" },
 };
 
 export function CompanyLogo({ job }) {

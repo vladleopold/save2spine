@@ -117,14 +117,32 @@ body.bg-gray-100 {
   color: #333;
 }
 
+/* Крестик закрытия: чёрный на светлой подложке, поэтому читается
+   в любой теме. Раньше цвет наследовался от --page-fg и в тёмной
+   теме становился белым — исчезал на белом фоне попапа. */
 .article-popup .close-button {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: none;
-  border: none;
-  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: #111111;
+  background: #ffffff;
+  border: 1px solid #d4d4d8;
+  border-radius: 50%;
+  font-size: 26px;
+  line-height: 1;
   cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.article-popup .close-button:hover {
+  color: #ffffff;
+  background: #111111;
+  border-color: #111111;
 }
 
 .article-popup-overlay {
@@ -536,7 +554,7 @@ body.bg-gray-100 {
 .cv-page {
   box-sizing: border-box;
   width: 210mm;
-  height: 297mm;
+  min-height: 297mm;
   background: var(--color-cv-paper);
   color: var(--color-cv-ink);
   position: relative;
@@ -931,9 +949,10 @@ body.bg-gray-100 {
 .ats-document {
   box-sizing: border-box;
   width: 210mm;
+  /* Высота по содержимому: одних страниц не влезет, а max-height с
+     overflow:hidden молча отрезал бы низ. Несколько листов печатаются
+     по @page, а на экране просто растёт вниз. */
   min-height: 297mm;
-  max-height: 297mm;
-  overflow: hidden;
   background: #fff;
   color: #111;
   padding: 7mm 14mm 8mm 12mm;
@@ -1121,3 +1140,179 @@ body:has(.print-root) {
     padding: 12px 16px 36px;
   }
 }
+
+/* ===== РЕЗЮМЕ (/resume) =====
+   Расширенная версия CV: та же сетка, но с профилем, ключевыми
+   достижениями, полным текстом по работам и дополнительными разделами. */
+
+.rs-document .cv-main { gap: 0; }
+
+/* Заголовок раздела в основной колонке */
+.rs-main-title {
+  margin: 0 0 3mm;
+  padding-bottom: 1.4mm;
+  border-bottom: 0.35mm solid #1f7a32;
+  font-size: 11pt;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1f7a32;
+}
+
+.cv-main > .rs-main-title:not(:first-child) { margin-top: 6mm; }
+
+.rs-summary p,
+.rs-extra p {
+  margin: 0 0 2.6mm;
+  font-size: 9.5pt;
+  line-height: 1.34;
+}
+
+/* Блок в боковой колонке */
+.rs-block { margin-top: 5mm; }
+
+.rs-side-title {
+  margin: 0 0 2mm;
+  font-size: 9pt;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1f7a32;
+}
+
+.rs-highlights {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rs-highlights li {
+  position: relative;
+  margin: 0 0 1.8mm;
+  padding-left: 4mm;
+  font-size: 8.5pt;
+  line-height: 1.3;
+}
+
+.rs-highlights li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1.5mm;
+  width: 1.6mm;
+  height: 1.6mm;
+  border-radius: 50%;
+  background: #1f7a32;
+}
+
+.rs-skill-group { margin: 0 0 2.4mm; }
+
+.rs-skill-label {
+  margin: 0 0 0.4mm;
+  font-size: 8pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #444;
+}
+
+.rs-skill-items {
+  margin: 0;
+  font-size: 8.5pt;
+  line-height: 1.28;
+}
+
+/* Карточка работы */
+.rs-card .rs-intro {
+  margin: 0 0 2.4mm;
+  font-size: 9.5pt;
+  line-height: 1.34;
+}
+
+.rs-tasks-label {
+  margin: 2.4mm 0 1.2mm;
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1f7a32;
+}
+
+.rs-tasks {
+  margin: 0 0 2.2mm;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2mm 1.6mm;
+}
+
+.rs-tasks li {
+  padding: 0.7mm 1.6mm;
+  border-radius: 2mm;
+  background: #eef6f0;
+  font-size: 8pt;
+  line-height: 1.2;
+  color: #1f3d26;
+}
+
+.rs-extra { margin-top: 5mm; }
+
+/* ATS-версия резюме: те же размеры, чуть плотнее, чтобы влезло на A4 */
+.rs-ats { font-size: 8.8pt; line-height: 1.2; }
+.rs-ats .ats-header h1 { font-size: 15pt; }
+.rs-ats .ats-headline { font-size: 11pt; }
+.rs-ats .ats-contact { font-size: 8.8pt; }
+.rs-ats section { margin-top: 1.5mm; }
+.rs-ats h2 { font-size: 10pt; margin-bottom: 1.6mm; }
+.rs-ats h3 { font-size: 9.6pt; }
+.rs-ats .ats-company { font-size: 9.6pt; }
+.rs-ats .ats-meta { font-size: 8.8pt; }
+.rs-ats .ats-job { margin-bottom: 2mm; }
+.rs-ats p { margin: 0.4mm 0; }
+
+/* Страница резюме: контента больше одного листа, поэтому страница растёт,
+   а блоки не разрываются пополам. Печать разбивает @page на листы A4. */
+.rs-page {
+  min-height: 297mm;
+  height: auto;
+  overflow: visible;
+}
+
+.rs-ats { overflow: visible; }
+
+@media print {
+  .rs-page,
+  .rs-ats {
+    min-height: 0;
+    height: auto;
+    overflow: visible;
+  }
+  /* Блоки не должны разрываться между страницами */
+  .rs-card,
+  .rs-summary,
+  .rs-extra,
+  .ats-job {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+/* ATS-версия CV должна помещаться в один лист A4: плотнее интервалы,
+   чтобы ничего не уходило на второй лист. */
+.ats-document:not(.rs-ats) {
+  padding: 6mm 12mm 6mm 10mm;
+  font-size: 9pt;
+  line-height: 1.2;
+}
+.ats-document:not(.rs-ats) .ats-header h1 { font-size: 15pt; }
+.ats-document:not(.rs-ats) .ats-headline { font-size: 11pt; margin: 1mm 0 1.6mm; }
+.ats-document:not(.rs-ats) .ats-contact { font-size: 9pt; }
+.ats-document:not(.rs-ats) section { margin-top: 1.3mm; }
+.ats-document:not(.rs-ats) h2 { font-size: 10pt; margin-bottom: 1.4mm; padding-bottom: 0.5mm; }
+.ats-document:not(.rs-ats) h3 { font-size: 10pt; }
+.ats-document:not(.rs-ats) .ats-company { font-size: 10pt; }
+.ats-document:not(.rs-ats) .ats-meta { font-size: 9pt; }
+.ats-document:not(.rs-ats) .ats-job { margin-bottom: 1.6mm; }
+.ats-document:not(.rs-ats) ul { margin-top: 0.4mm; }
+.ats-document:not(.rs-ats) li { margin-bottom: 0.2mm; }

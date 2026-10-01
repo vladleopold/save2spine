@@ -38,8 +38,11 @@ function ParticlesBackground() {
     });
 
     const COUNT = 70;
+    // fromEdge === undefined — частица появляется сразу в любой точке
+    // экрана. Раньше здесь выбиралась случайная из четырёх сторон, и
+    // половина частиц стартовала за краем (y = -10 / x = -10) — они
+    // «влетали» в кадр с левого верхнего угла при открытии страницы.
     const spawn = (fromEdge) => {
-      const side = fromEdge ?? Math.floor(Math.random() * 4);
       const p = {
         x: Math.random() * width,
         y: Math.random() * height,
@@ -54,9 +57,9 @@ function ParticlesBackground() {
         gustX: 0,
         gustY: 0,
       };
-      if (side === 0) { p.y = -10; p.x = Math.random() * width; } // сверху
-      else if (side === 1) { p.x = -10; p.vx = Math.abs(p.vx) + 0.2; } // слева
-      else if (side === 2) { p.x = width + 10; p.vx = -Math.abs(p.vx) - 0.2; } // справа
+      if (fromEdge === 0) { p.y = -10; p.x = Math.random() * width; } // сверху
+      else if (fromEdge === 1) { p.x = -10; p.vx = Math.abs(p.vx) + 0.2; } // слева
+      else if (fromEdge === 2) { p.x = width + 10; p.vx = -Math.abs(p.vx) - 0.2; } // справа
       return p;
     };
     let particles = Array.from({ length: COUNT }).map(() => spawn());
@@ -117,7 +120,10 @@ function ParticlesBackground() {
         const blink = 0.45 + 0.55 * Math.abs(Math.sin(p.tw));
         const alpha = Math.max(0, Math.min(1, p.life)) * blink;
         if (p.life <= 0 || p.x < -20 || p.x > width + 20 || p.y > height + 20) {
-          particles[i] = spawn();
+          // Возрождение: частица, ушедшая вниз, возвращается сверху.
+          // На старте страницы (выше) зовём spawn() без стороны — тогда
+          // частица появляется сразу в любой точке кадра.
+          particles[i] = spawn(p.y > height + 20 ? 0 : undefined);
           continue;
         }
         const size = p.r * (0.6 + 0.4 * Math.abs(Math.sin(p.tw * 0.7)));

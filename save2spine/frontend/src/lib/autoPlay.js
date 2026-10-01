@@ -80,7 +80,7 @@ function ensureVideoObserver() {
 }
 
 // Зона «близко к экрану»: нужна, чтобы начать качать ролик заранее.
-// Пр��игрывает ли ролик — решает отдельный об�� чатель (см. ensureVideoObserver),
+// Проигрывает ли ролик — решает отдельный наблюдатель (см. ensureVideoObserver),
 // который смотрит на настоящее пересечение с экраном, без запаса.
 function ensureZoneObserver() {
   if (zoneObserver || typeof IntersectionObserver === 'undefined') return zoneObserver;

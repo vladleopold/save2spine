@@ -149,7 +149,7 @@ export default function CardRotator({ images, alt, paused, group = 'gallery' }) 
     : undefined;
 
   if (count === 1) {
-    // Одиночный ролик зациклен: лент�� из одного кадра нет, а без loop видео
+    // Одиночный ролик зациклен: ленты из одного кадра нет, а без loop видео
     // доиграет и навсегда замрёт на последнем кадре.
     return (
       <div ref={wrapRef}>

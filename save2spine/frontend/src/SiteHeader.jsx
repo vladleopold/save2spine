@@ -37,7 +37,10 @@ export default function SiteHeader() {
             <span>t.me/vladleopold</span>
           </a>
         ) : (
-          <a href="/cv" className="resume-btn">resume</a>
+          <>
+            <a href="/cv" className="resume-btn">cv</a>
+            <a href="/resume" className="resume-btn">resume</a>
+          </>
         )}
       </div>
     </header>
