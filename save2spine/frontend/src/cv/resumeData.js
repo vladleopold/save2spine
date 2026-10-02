@@ -50,43 +50,46 @@ export const roleDetails = {
   a51: {
     intro: {
       en: "My current role, and the one where animation and engineering sit side by "
-        + "side. I make the animation for the studio's top-tier casino games — roulettes, "
-        + "blackjack, Plinko and Chicken — so the movement has to read instantly and stay "
-        + "consistent across every game and every screen size. Around that I build "
-        + "application UI and UI mechanics, work on VFX in Unity, and write the arbitration "
-        + "and advertising integration layer with SDK and API automation in C# and Java.",
-      uk: "Моя поточна робота, і та, де анімація та інженерія стоять поруч. Роблю анімацію "
-        + "для топових казино-ігор студії — рулетки, блекджек, Плінко та Чикен — тож рух "
-        + "має читатися миттєво і лишатися однаковим у всіх іграх і на будь-якому екрані. "
-        + "Поряд цим роблю UI застосунку та UI-механіки, працюю над VFX в Unity і пишу шар "
-        + "арбітражу та інтеграції реклами з автоматизацією SDK і API на C# та Java.",
+        + "side. Most of my time goes into Spine: rigging the characters and building "
+        + "the animation for the studio's top-tier casino games — roulettes, blackjack, "
+        + "Plinko and Chicken — where the movement has to read instantly and stay "
+        + "consistent across every game and every screen size. Alongside that I build "
+        + "application UI and UI mechanics, work on VFX in Unity, and write the "
+        + "arbitration and advertising integration layer with SDK and API automation in "
+        + "C# and Java.",
+      uk: "Моя поточна робота, і та, де анімація та інженерія стоять поруч. Більшість "
+        + "часу — це Spine: ригінг персонажів і анімація для топових казино-ігор студії — "
+        + "рулетки, блекджек, Плінко та Чикен — де рух має читатися миттєво і лишатися "
+        + "однаковим у всіх іграх і на будь-якому екрані. Поряд цим роблю UI застосунку та "
+        + "UI-механіки, працюю над VFX в Unity і пишу шар арбітражу та інтеграції реклами "
+        + "з автоматизацією SDK і API на C# та Java.",
     },
     bullets: {
       en: [
-        "Created animation for top-tier casino games: roulettes, blackjack, Plinko and Chicken.",
+        "Produced animation for top-tier casino games in Spine: roulettes, blackjack, Plinko and Chicken.",
+        "Rigged characters and built the skeletal setups the animation runs on.",
         "Built application UI and developed various UI mechanics.",
-        "Created animation and VFX in Unity.",
-        "Developed arbitration and advertising integration systems, including SDK and API control automation in C# and Java.",
+        "Created animation and VFX in Unity, and wrote arbitration and advertising integration with SDK and API automation in C# and Java.",
       ],
       uk: [
-        "Створення анімації для топових казино-ігор: рулетки, блекджек, Плінко та Чикен.",
+        "Виробництво анімації для топових казино-ігор у Spine: рулетки, блекджек, Плінко та Чикен.",
+        "Ригінг персонажів та побудова скелетних основ, на яких тримається анімація.",
         "Розробка UI застосунку та різних UI-механік.",
-        "Створення анімації та VFX в Unity.",
-        "Розробка систем арбітражу та інтеграції реклами, зокрема автоматизація керування SDK і API на C# та Java.",
+        "Створення анімації та VFX в Unity, а також систем арбітражу та інтеграції реклами з автоматизацією SDK і API на C# та Java.",
       ],
     },
     tasks: {
       en: [
-        "Animation for casino games: roulette, blackjack, Plinko, Chicken",
+        "Spine animation for casino games: roulette, blackjack, Plinko, Chicken",
+        "Character rigging and skeletal setup",
         "Application UI and UI mechanics",
-        "Animation and VFX in Unity",
-        "Arbitration and advertising SDK/API automation (C#, Java)",
+        "VFX in Unity, arbitration and advertising SDK/API automation (C#, Java)",
       ],
       uk: [
-        "Анімація для казино-ігор: рулетка, блекджек, Плінко, Чикен",
+        "Анімація у Spine для казино-ігор: рулетка, блекджек, Плінко, Чикен",
+        "Ригінг персонажів та скелетна основа",
         "UI застосунку та UI-механіки",
-        "Анімація та VFX в Unity",
-        "Автоматизація SDK/API для арбітражу та реклами (C#, Java)",
+        "VFX в Unity, автоматизація SDK/API для арбітражу та реклами (C#, Java)",
       ],
     },
   },
