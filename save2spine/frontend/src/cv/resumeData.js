@@ -15,19 +15,7 @@ import { NOW } from "./cvData.js";
 /**
  * Короткое резюме в одному абзаце — те, кто читает по диагонали.
  */
-export const summary = {
-  en: "Senior 2D Spine Animator with eight years of professional experience in "
-    + "animation and game development, and more than six years working directly in "
-    + "Spine. I build character rigs, animate effects and UI, and set up the shader and "
-    + "code work that lets animation react to the game instead of running on a fixed "
-    + "loop. I have worked both hands-on and as the lead of a 2D animation team, and I "
-    + "work in Ukrainian, Russian and English.",
-  uk: "Senior 2D Spine Animator із восьмирічним професійним досвідом в анімації "
-    + "та геймдеві й понад шістьма роками роботи безпосередньо у Spine. Ригую персонажів, "
-    + "анімую ефекти та інтерфейс, налаштовую шейдери й код, щоб анімація реагувала на "
-    + "гру, а не прокручувалася по колу. Працював і руками, і очолював команду 2D-анімації. "
-    + "Працюю українською, російською та англійською.",
-};
+
 
 /**
  * Ключові досягнення — короткі рядки з конкретикою.

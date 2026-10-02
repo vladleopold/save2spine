@@ -1161,7 +1161,6 @@ body:has(.print-root) {
 
 .cv-main > .rs-main-title:not(:first-child) { margin-top: 6mm; }
 
-.rs-summary p,
 .rs-extra p {
   margin: 0 0 2.6mm;
   font-size: 9.5pt;
@@ -1301,18 +1300,46 @@ body:has(.print-root) {
 /* ATS-версия CV должна помещаться в один лист A4: плотнее интервалы,
    чтобы ничего не уходило на второй лист. */
 .ats-document:not(.rs-ats) {
-  padding: 6mm 12mm 6mm 10mm;
-  font-size: 9pt;
-  line-height: 1.2;
+  padding: 5mm 11mm 5mm 9mm;
+  font-size: 8.6pt;
+  line-height: 1.16;
 }
 .ats-document:not(.rs-ats) .ats-header h1 { font-size: 15pt; }
 .ats-document:not(.rs-ats) .ats-headline { font-size: 11pt; margin: 1mm 0 1.6mm; }
 .ats-document:not(.rs-ats) .ats-contact { font-size: 9pt; }
-.ats-document:not(.rs-ats) section { margin-top: 1.3mm; }
-.ats-document:not(.rs-ats) h2 { font-size: 10pt; margin-bottom: 1.4mm; padding-bottom: 0.5mm; }
+.ats-document:not(.rs-ats) section { margin-top: 1mm; }
+.ats-document:not(.rs-ats) h2 { font-size: 9.6pt; margin-bottom: 1mm; padding-bottom: 0.4mm; }
 .ats-document:not(.rs-ats) h3 { font-size: 10pt; }
 .ats-document:not(.rs-ats) .ats-company { font-size: 10pt; }
 .ats-document:not(.rs-ats) .ats-meta { font-size: 9pt; }
-.ats-document:not(.rs-ats) .ats-job { margin-bottom: 1.6mm; }
+.ats-document:not(.rs-ats) .ats-job { margin-bottom: 1.2mm; }
 .ats-document:not(.rs-ats) ul { margin-top: 0.4mm; }
 .ats-document:not(.rs-ats) li { margin-bottom: 0.2mm; }
+
+/* Визуальный CV с семью работами: плотнее, чтобы влезть в один лист A4 */
+.cv-document:not(.rs-document) .cv-main { padding: 1.6mm 6mm 1.6mm 3mm; gap: 1.1mm; }
+/* Карточки не растягиваются: flex:1 делил высоту поровну и пустые
+   места растягивали документ за пределы A4. */
+.cv-document:not(.rs-document) .cv-card,
+.cv-document:not(.rs-document) .cv-card-tall { flex: 0 0 auto; }
+.cv-document:not(.rs-document) .cv-card { padding: 0.7mm 2.6mm 0.7mm 2.4mm; }
+.cv-document:not(.rs-document) .cv-role { flex: 0 0 auto; gap: 0; }
+.cv-document:not(.rs-document) .cv-card-head { margin-bottom: 0.8mm; }
+.cv-document:not(.rs-document) .cv-bullets { margin-top: 1mm; }
+.cv-document:not(.rs-document) .cv-bullets li { margin-bottom: 0.2mm; font-size: 7.1pt; line-height: 1.12; }
+.cv-document:not(.rs-document) .cv-tools { margin-top: 0.4mm; padding-top: 0.4mm; font-size: 6.9pt; }
+.cv-document:not(.rs-document) .cv-job-title { font-size: 9.6pt; }
+.cv-document:not(.rs-document) .cv-job-company { font-size: 8.6pt; }
+.cv-document:not(.rs-document) .cv-job-dates { margin-top: 0.2mm; font-size: 8pt; }
+.cv-document:not(.rs-document) .cv-logo { max-height: 5.6mm; }
+.cv-document:not(.rs-document) .cv-logo-wrap-a51,
+.cv-document:not(.rs-document) .cv-logo-wrap-evoplay,
+.cv-document:not(.rs-document) .cv-logo-wrap-lucky,
+.cv-document:not(.rs-document) .cv-logo-wrap-friends { width: 20mm; }
+
+/* Сайдбар не должен задавать высоту документа: он короче карточек,
+   но растягивался вместе с ними и выталкивал CV за пределы A4. */
+.cv-document:not(.rs-document) .cv-sidebar { align-self: start; }
+.cv-document:not(.rs-document) .cv-card-head { margin-bottom: 0.1mm; }
+.cv-document:not(.rs-document) .cv-bullets { margin-top: 0.7mm; }
+.cv-document:not(.rs-document) .cv-role { gap: 0.2mm; }

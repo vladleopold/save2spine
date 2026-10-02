@@ -10,7 +10,6 @@ import {
   highlights,
   roleDetails,
   skillGroups,
-  summary,
 } from "./resumeData.js";
 
 /**
@@ -48,11 +47,6 @@ export function ResumeAts({ lang }) {
             : `EXP ${profile.yearsExp} years · SPINE ${profile.yearsSpine} years`}
         </p>
       </header>
-
-      <section>
-        <h2>{uk ? "ПРОФІЛЬ" : "PROFILE"}</h2>
-        <p>{summary[lang]}</p>
-      </section>
 
       <section>
         <h2>{uk ? "КЛЮЧОВІ ДОСЯГНЕННЯ" : "KEY HIGHLIGHTS"}</h2>

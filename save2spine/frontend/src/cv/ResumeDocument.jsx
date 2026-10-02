@@ -9,7 +9,6 @@ import {
   highlights,
   roleDetails,
   skillGroups,
-  summary,
 } from "./resumeData.js";
 import { CompanyLogo } from "./Logos.jsx";
 
@@ -121,11 +120,6 @@ export function ResumeDocument({ lang }) {
           </aside>
 
           <div className="cv-main">
-            <section className="rs-summary">
-              <h2 className="rs-main-title">{uk ? "Про себе" : "Profile"}</h2>
-              <p>{summary[lang]}</p>
-            </section>
-
             <h2 className="rs-main-title">{uk ? "Досвід" : "Experience"}</h2>
             {jobs.map((job) => {
               const role = job.roles[0];
