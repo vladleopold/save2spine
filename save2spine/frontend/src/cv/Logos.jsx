@@ -1,4 +1,5 @@
 const LOGOS = {
+  a51: { src: "/logos/a51.png", alt: "A51 Group", kind: "wide" },
   friends: { src: "/logos/friends.png", alt: "4friends", kind: "wide" },
   voki: { src: "/logos/voki.png", alt: "Voki Games", kind: "mark" },
   volmi: { src: "/logos/volmi.png", alt: "VOLMI", kind: "wide" },

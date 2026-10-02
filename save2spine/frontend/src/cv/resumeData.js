@@ -59,6 +59,50 @@ export const highlights = {
  * tasks — окремий блок «що саме робив» для /resume.
  */
 export const roleDetails = {
+  a51: {
+    intro: {
+      en: "This is my current role, and the balance in it has shifted from animation "
+        + "into engineering. I build application UI and UI mechanics, make animation and "
+        + "VFX in Unity, ship small 2D mini-games, and write the arbitration and "
+        + "advertising integration layer — SDK and API automation in C# and Java. It is "
+        + "the most code-heavy work I have done, and where I learned to own a feature "
+        + "from the mechanic through to the build.",
+      uk: "Це моя поточна робота, і в ній баланс змістився від анімації до інженерії. "
+        + "Роблю UI застосунку та UI-механіки, створюю анімацію і VFX в Unity, випускаю "
+        + "невеликі 2D міні-ігри та пишу шар арбітражу й інтеграції реклами — автоматизацію "
+        + "SDK і API на C# та Java. Це найкодовіша робота в моєму досвіді, і саме тут я "
+        + "навчився брати фічу від механіки аж до білда.",
+    },
+    bullets: {
+      en: [
+        "Built application UI and developed various UI mechanics.",
+        "Created animation and VFX in Unity.",
+        "Developed 2D mini-games in Unity.",
+        "Developed arbitration and advertising integration systems, including SDK and API control automation in C# and Java.",
+      ],
+      uk: [
+        "Розробляв UI застосунку та різні UI-механіки.",
+        "Створював анімацію та VFX в Unity.",
+        "Розробляв 2D міні-ігри в Unity.",
+        "Розробляв системи арбітражу та інтеграції реклами, зокрема автоматизацію керування SDK і API на C# та Java.",
+      ],
+    },
+    tasks: {
+      en: [
+        "Application UI and UI mechanics",
+        "Animation and VFX in Unity",
+        "2D mini-games",
+        "Arbitration and advertising SDK/API automation (C#, Java)",
+      ],
+      uk: [
+        "UI застосунку та UI-механіки",
+        "Анімація та VFX в Unity",
+        "2D міні-ігри",
+        "Автоматизація SDK/API для арбітражу та реклами (C#, Java)",
+      ],
+    },
+  },
+
   friends: {
     intro: {
       en: "I joined 4friends as the first animation artist on the Gardenscapes team. "
@@ -183,43 +227,43 @@ export const roleDetails = {
 
   evoplay: {
     intro: {
-      en: "Back at Evoplay the balance shifted from animation into engineering. I built "
-        + "application UI and UI mechanics, made animation and VFX in Unity, shipped small "
-        + "2D mini-games, and wrote the arbitration and advertising integration layer — SDK "
-        + "and API automation in C# and Java. It was the most code-heavy role I have had, "
-        + "and it is where I learned to own a feature from the mechanic to the build.",
-      uk: "Повертаючись до Evoplay, баланс змістився від анімації до інженерії. Я робив UI "
-        + "застосунку та UI-механіки, створював анімацію і VFX в Unity, випускав невеликі 2D "
-        + "міні-ігри та писав шар арбітражу й інтеграції реклами — автоматизацію SDK і API "
-        + "на C# та Java. Це найкодовіша роль у моїй кар’єрі, саме тут я навчився брати "
-        + "фічу від механіки до білда.",
+      en: "My first studio in the games industry, and the role where animation and "
+        + "engineering sat right next to each other. I designed animation for user "
+        + "interfaces, built and adapted Unity mobile applications to layout "
+        + "requirements, audited animation and audio and generated the AssetBundles, and "
+        + "set up automated animation mechanics so the same work carried across projects.",
+      uk: "Моя перша студія в геймдеві, і роль, де анімація та інженерія стояли поруч. "
+        + "Проєктував анімацію для користувацьких інтерфейсів, створював та адаптував "
+        + "мобільні застосунки на Unity за вимогами до макета, робив аудіти анімації та "
+        + "звуку й генерував AssetBundle, а також налаштовував автоматизовані анімаційні "
+        + "механіки, щоб та сама робота переносилася між проєктами.",
     },
     bullets: {
       en: [
-        "Built application UI and developed various UI mechanics.",
-        "Created animation and VFX in Unity.",
-        "Developed 2D mini-games in Unity.",
-        "Developed arbitration and advertising integration systems, including SDK and API control automation in C# and Java.",
+        "Designed animations for user interfaces.",
+        "Built and adapted Unity mobile applications according to layout requirements.",
+        "Performed summary and audio audits and generated AssetBundles.",
+        "Created automated animation mechanics for cross-development.",
       ],
       uk: [
-        "Розробляв UI застосунку та різні UI-механіки.",
-        "Створював анімацію та VFX в Unity.",
-        "Розробляв 2D міні-ігри в Unity.",
-        "Розробляв системи арбітражу та інтеграції реклами, зокрема автоматизацію керування SDK і API на C# та Java.",
+        "Проєктував анімацію для користувацьких інтерфейсів.",
+        "Створював та адаптував мобільні застосунки на Unity за вимогами до макета.",
+        "Робив аудіти анімації та звуку й генерував AssetBundle.",
+        "Розробляв автоматизовані анімаційні механіки для кросплатформенної розробки.",
       ],
     },
     tasks: {
       en: [
-        "Application UI and UI mechanics",
-        "Animation and VFX in Unity",
-        "2D mini-games",
-        "Arbitration and advertising SDK/API automation (C#, Java)",
+        "User interface animation",
+        "Unity mobile applications",
+        "Animation and audio audits, AssetBundles",
+        "Automated animation mechanics",
       ],
       uk: [
-        "UI застосунку та UI-механіки",
-        "Анімація та VFX в Unity",
-        "2D міні-ігри",
-        "Автоматизація SDK/API для арбітражу та реклами (C#, Java)",
+        "Анімація користувацьких інтерфейсів",
+        "Мобільні застосунки на Unity",
+        "Аудити анімації та звуку, AssetBundle",
+        "Автоматизовані анімаційні механіки",
       ],
     },
   },
@@ -342,62 +386,6 @@ export const skillGroups = [
     items: {
       en: ["Blender", "3ds Max", "Maya"],
       uk: ["Blender", "3ds Max", "Maya"],
-    },
-  },
-];
-
-/** Додаткові розділи, яких немає у CV. */
-export const extras = [
-  {
-    id: "about",
-    label: { en: "About me", uk: "Про мене" },
-    paragraphs: {
-      en: [
-        "I am a 2D animator who moved into technical work early, because in game "
-        + "production the animation that looks best is rarely the animation that is "
-        + "cheapest to maintain. I care about rigs that a colleague can pick up, "
-        + "effects that read on a phone screen, and systems that let a small team "
-        + "ship a large amount of content.",
-        "Outside of production I keep working with Spine and shaders, because that "
-        + "is where my curiosity sits. I am comfortable writing the code a feature "
-        + "needs when nobody else on the team wants to, and I am at my best on the "
-        + "projects where animation and tooling have to be solved together.",
-        "I am looking for a senior role in a studio where 2D animation is a core "
-        + "discipline rather than a task passed around, and where the person doing "
-        + "the animation has a real say in how the game feels.",
-      ],
-      uk: [
-        "Я 2D-аніматор, який рано прийшов до технічної роботи, бо в геймдеві анімація, "
-        + "яка виглядає найкраще, рідко є тією, яку найдешевше підтримувати. Мене "
-        + "цікавлять риги, які колега зможе підхопити, ефекти, що читаються на "
-        + "екрані телефона, і системи, з якими невелика команда випускає багато контенту.",
-        "Поза виробництвом я продовжую працювати зі Spine та шейдерами — саме там у мене "
-        + "живе цікавість. Мені комфортно писати код, потрібний фічці, коли ніхто "
-        + "інший у команді не хоче цим займатися, і найкраще я працюю на проєктах, "
-        + "де анімацію та інструменти треба розв’язувати разом.",
-        "Шукаю senior-позицію в студії, де 2D-анімація — це базова дисципліна, а не "
-        + "задача, яку кидають по черзі, і де людина, яка робить анімацію, справді "
-        + "впливає на відчуття від гри.",
-      ],
-    },
-  },
-  {
-    id: "education-extra",
-    label: { en: "Additional training", uk: "Додаткове навчання" },
-    paragraphs: {
-      en: [
-        "Self-directed study of Spine rigging workflow and shader authoring, mostly "
-        + "by rebuilding effects I saw in shipped games and figuring out how they were "
-        + "put together.",
-        "Practical experience with version control and asset pipelines through "
-        + "day-to-day work in studio repositories.",
-      ],
-      uk: [
-        "Самостійне вивчення пайплайну ригінгу у Spine та написання шейдерів — переважно "
-        + "шляхом відтворення ефектів із випущених ігор і розбору того, як вони зібрані.",
-        "Практичний досвід роботи з системами контролю версій та асет-пайплайнами "
-        + "у щоденній роботі в студійних репозиторіях.",
-      ],
     },
   },
 ];

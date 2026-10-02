@@ -6,7 +6,6 @@ import {
   profile,
 } from "./cvData.js";
 import {
-  extras,
   highlights,
   roleDetails,
   skillGroups,
@@ -131,7 +130,7 @@ export function ResumeDocument({ lang }) {
             {jobs.map((job) => {
               const role = job.roles[0];
               const details = roleDetails[job.id];
-              const duration = formatDuration(role.start, role.end, lang);
+              const duration = formatDuration(role.start, role.end, lang, role.duration);
               const tall = details.bullets[lang].length > 4;
               return (
                 <article
@@ -173,15 +172,6 @@ export function ResumeDocument({ lang }) {
                 </article>
               );
             })}
-
-            {extras.map((ex) => (
-              <section key={ex.id} className="rs-extra">
-                <h2 className="rs-main-title">{ex.label[lang]}</h2>
-                {ex.paragraphs[lang].map((p) => (
-                  <p key={p.slice(0, 40)}>{p}</p>
-                ))}
-              </section>
-            ))}
           </div>
         </div>
 

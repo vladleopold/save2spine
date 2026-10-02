@@ -58,6 +58,33 @@ export const skillList = [
 /** Five company blocks. Voki is one role: First 2D Animator, Apr 2018 — Mar 2021. */
 export const jobs = [
   {
+    id: "a51",
+    company: "A51 Group",
+    roles: [
+      {
+        title: { en: "Technical Artist", uk: "TECHNICAL ARTIST" },
+        start: "2024-09",
+        end: "2026-07",
+        duration: { en: "2 years", uk: "2 роки" },
+        tools: "Unity, Spine",
+        bullets: {
+          en: [
+            "Built application UI and developed various UI mechanics.",
+            "Created animation and VFX in Unity.",
+            "Developed 2D mini-games in Unity.",
+            "Developed arbitration and advertising integration systems, including SDK and API control automation in C# and Java.",
+          ],
+          uk: [
+            "Розробка UI застосунку та різних UI-механік.",
+            "Створення анімації та VFX в Unity.",
+            "Розробка 2D міні-ігор в Unity.",
+            "Розробка систем арбітражу та інтеграції реклами, зокрема автоматизація керування SDK і API на C# та Java.",
+          ],
+        },
+      },
+    ],
+  },
+  {
     id: "friends",
     company: "4friends",
     roles: [
@@ -140,21 +167,21 @@ export const jobs = [
     roles: [
       {
         title: { en: "Technical Artist", uk: "TECHNICAL ARTIST" },
-        start: "2024-09",
-        end: "2025-08",
+        start: "2017-09",
+        end: "2018-12",
         tools: "Unity, Spine",
         bullets: {
           en: [
-            "Built application UI and developed various UI mechanics.",
-            "Created animation and VFX in Unity.",
-            "Developed 2D mini-games in Unity.",
-            "Developed arbitration and advertising integration systems, including SDK and API control automation in C# and Java.",
+            "Designed animations for user interfaces.",
+            "Built and adapted Unity mobile applications according to layout requirements.",
+            "Performed summary and audio audits and generated AssetBundles.",
+            "Created automated animation mechanics for cross-development.",
           ],
           uk: [
-            "Розробка UI застосунку та різних UI-механік.",
-            "Створення анімації та VFX в Unity.",
-            "Розробка 2D міні-ігор в Unity.",
-            "Розробка систем арбітражу та інтеграції реклами, зокрема автоматизація керування SDK і API на C# та Java.",
+            "Проєктував анімацію для користувацьких інтерфейсів.",
+            "Створював та адаптував мобільні застосунки на Unity за вимогами до макета.",
+            "Робив аудіти анімації та звуку й генерував AssetBundle.",
+            "Розробляв автоматизовані анімаційні механіки для кросплатформенної розробки.",
           ],
         },
       },
@@ -284,7 +311,10 @@ export function monthCount(start, end) {
   return Math.max(0, end ? diff : diff + 1);
 }
 
-export function formatDuration(start, end, lang) {
+export function formatDuration(start, end, lang, explicit) {
+  // Явная метка длительности важнее расчёта: месяцы между датами округляются
+  // не так, как их считают в резюме (2024-09 — 2026-07 = 22 мес, но пишут «2 роки»).
+  if (explicit) return explicit[lang] || "";
   const total = Math.max(0, monthCount(start, end));
   const years = Math.floor(total / 12);
   const months = total % 12;

@@ -46,7 +46,7 @@ export function AtsDocument({ lang }) {
                 <p className="ats-company">{job.company}</p>
                 <p className="ats-meta">
                   {formatDateRange(role.start, role.end, lang)}{" "}
-                  {formatDuration(role.start, role.end, lang)}
+                  {formatDuration(role.start, role.end, lang, role.duration)}
                   {" · "}
                   {role.tools}
                 </p>

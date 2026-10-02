@@ -3,7 +3,7 @@ import { CompanyLogo } from "./Logos.jsx";
 
 export function JobCard({ job, lang }) {
   const role = job.roles[0];
-  const duration = formatDuration(role.start, role.end, lang);
+  const duration = formatDuration(role.start, role.end, lang, role.duration);
   const tall = role.bullets.en.length > 5;
   return (
     <article className={tall ? "cv-card cv-card-tall" : "cv-card"}>

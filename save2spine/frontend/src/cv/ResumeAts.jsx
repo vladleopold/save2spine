@@ -7,7 +7,6 @@ import {
   skillList,
 } from "./cvData.js";
 import {
-  extras,
   highlights,
   roleDetails,
   skillGroups,
@@ -75,7 +74,7 @@ export function ResumeAts({ lang }) {
               <p className="ats-company">{job.company}</p>
               <p className="ats-meta">
                 {formatDateRange(role.start, role.end, lang)}{" "}
-                {formatDuration(role.start, role.end, lang)}
+                {formatDuration(role.start, role.end, lang, role.duration)}
                 {" · "}
                 {role.tools}
               </p>
@@ -114,17 +113,6 @@ export function ResumeAts({ lang }) {
           </article>
         ))}
       </section>
-
-      {extras
-        .filter((e) => e.id !== "education-extra")
-        .map((ex) => (
-          <section key={ex.id}>
-            <h2>{ex.label[lang].toUpperCase()}</h2>
-            {ex.paragraphs[lang].map((p) => (
-              <p key={p.slice(0, 40)}>{p}</p>
-            ))}
-          </section>
-        ))}
 
       <section>
         <h2>{uk ? "МОВИ" : "LANGUAGES"}</h2>
