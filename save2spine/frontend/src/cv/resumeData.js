@@ -49,43 +49,43 @@ export const highlights = {
 export const roleDetails = {
   a51: {
     intro: {
-      en: "This is my current role, and the balance in it has shifted from animation "
-        + "into engineering. I build application UI and UI mechanics, make animation and "
-        + "VFX in Unity, ship small 2D mini-games, and write the arbitration and "
-        + "advertising integration layer — SDK and API automation in C# and Java. It is "
-        + "the most code-heavy work I have done, and where I learned to own a feature "
-        + "from the mechanic through to the build.",
-      uk: "Це моя поточна робота, і в ній баланс змістився від анімації до інженерії. "
-        + "Роблю UI застосунку та UI-механіки, створюю анімацію і VFX в Unity, випускаю "
-        + "невеликі 2D міні-ігри та пишу шар арбітражу й інтеграції реклами — автоматизацію "
-        + "SDK і API на C# та Java. Це найкодовіша робота в моєму досвіді, і саме тут я "
-        + "навчився брати фічу від механіки аж до білда.",
+      en: "My current role, and the one where animation and engineering sit side by "
+        + "side. I make the animation for the studio's top-tier casino games — roulettes, "
+        + "blackjack, Plinko and Chicken — so the movement has to read instantly and stay "
+        + "consistent across every game and every screen size. Around that I build "
+        + "application UI and UI mechanics, work on VFX in Unity, and write the arbitration "
+        + "and advertising integration layer with SDK and API automation in C# and Java.",
+      uk: "Моя поточна робота, і та, де анімація та інженерія стоять поруч. Роблю анімацію "
+        + "для топових казино-ігор студії — рулетки, блекджек, Плінко та Чикен — тож рух "
+        + "має читатися миттєво і лишатися однаковим у всіх іграх і на будь-якому екрані. "
+        + "Поряд цим роблю UI застосунку та UI-механіки, працюю над VFX в Unity і пишу шар "
+        + "арбітражу та інтеграції реклами з автоматизацією SDK і API на C# та Java.",
     },
     bullets: {
       en: [
+        "Created animation for top-tier casino games: roulettes, blackjack, Plinko and Chicken.",
         "Built application UI and developed various UI mechanics.",
         "Created animation and VFX in Unity.",
-        "Developed 2D mini-games in Unity.",
         "Developed arbitration and advertising integration systems, including SDK and API control automation in C# and Java.",
       ],
       uk: [
-        "Розробляв UI застосунку та різні UI-механіки.",
-        "Створював анімацію та VFX в Unity.",
-        "Розробляв 2D міні-ігри в Unity.",
-        "Розробляв системи арбітражу та інтеграції реклами, зокрема автоматизацію керування SDK і API на C# та Java.",
+        "Створення анімації для топових казино-ігор: рулетки, блекджек, Плінко та Чикен.",
+        "Розробка UI застосунку та різних UI-механік.",
+        "Створення анімації та VFX в Unity.",
+        "Розробка систем арбітражу та інтеграції реклами, зокрема автоматизація керування SDK і API на C# та Java.",
       ],
     },
     tasks: {
       en: [
+        "Animation for casino games: roulette, blackjack, Plinko, Chicken",
         "Application UI and UI mechanics",
         "Animation and VFX in Unity",
-        "2D mini-games",
         "Arbitration and advertising SDK/API automation (C#, Java)",
       ],
       uk: [
+        "Анімація для казино-ігор: рулетка, блекджек, Плінко, Чикен",
         "UI застосунку та UI-механіки",
         "Анімація та VFX в Unity",
-        "2D міні-ігри",
         "Автоматизація SDK/API для арбітражу та реклами (C#, Java)",
       ],
     },

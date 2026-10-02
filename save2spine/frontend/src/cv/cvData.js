@@ -69,15 +69,15 @@ export const jobs = [
         tools: "Unity, Spine",
         bullets: {
           en: [
+            "Created animation for top-tier casino games: roulettes, blackjack, Plinko and Chicken.",
             "Built application UI and developed various UI mechanics.",
             "Created animation and VFX in Unity.",
-            "Developed 2D mini-games in Unity.",
             "Developed arbitration and advertising integration systems, including SDK and API control automation in C# and Java.",
           ],
           uk: [
+            "Створення анімації для топових казино-ігор: рулетки, блекджек, Плінко та Чикен.",
             "Розробка UI застосунку та різних UI-механік.",
             "Створення анімації та VFX в Unity.",
-            "Розробка 2D міні-ігор в Unity.",
             "Розробка систем арбітражу та інтеграції реклами, зокрема автоматизація керування SDK і API на C# та Java.",
           ],
         },
